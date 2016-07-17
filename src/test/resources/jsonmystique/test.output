@@ -1,0 +1,19 @@
+{
+  "ba1": "Bala",
+  "ba2": {
+    "DHeeru": "a"
+  },
+  "ba3": {
+    "ba31": [
+      "Ganesh"
+    ],
+    "ba32": [
+      null,
+      [
+        "test"
+      ]
+    ]
+  },
+  "ba4": "hard",
+  "ba5": "Bala{\"DHeeru\":\"a\"}"
+}

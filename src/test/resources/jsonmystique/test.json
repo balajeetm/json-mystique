@@ -1,0 +1,9 @@
+{
+  "a": {
+    "b": "Bala",
+    "c": {"DHeeru": "a"},
+    "d": {"d1": "Ganesh"}
+  },
+  "e" : [ "test" ],
+  "f" : [ { "f1": "super", "f2": ["trying", "hard"] } ]
+}
