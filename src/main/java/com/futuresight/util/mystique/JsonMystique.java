@@ -6,7 +6,7 @@
 /*
  * Created on 17 Jul, 2016 by balajeetm
  */
-package com.futuresight.utl.mystique;
+package com.futuresight.util.mystique;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,6 +34,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
 /**
  * The Class JsonMystique.
@@ -145,9 +146,16 @@ public class JsonMystique {
 				String convertor = factory.getConvertor(turn.getConvertor());
 				List<String> to = turn.getTo();
 				try {
-					Mystique mystique = factory.getMystique(convertor);
-					List<JsonElement> from = getFields(source, turn.getFrom());
-					JsonElement transform = mystique.transform(from);
+					JsonElement transform = null;
+					String constant = turn.getConstant();
+					if (null != constant) {
+						transform = new JsonPrimitive(constant);
+					}
+					else {
+						Mystique mystique = factory.getMystique(convertor);
+						List<JsonElement> from = getFields(source, turn.getFrom());
+						transform = mystique.transform(from);
+					}
 					result = setField(result, to, transform);
 				}
 				catch (RuntimeException e) {

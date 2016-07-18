@@ -31,9 +31,13 @@
   },
   {
     "from": [
-      [ "a", "b" ], [ "a", "c" ]
+      [ "a", "b" ], [ "a", "d", "d1" ]
     ],
     "to": [ "ba5" ],
     "convertor": "concat"
+  },
+  {
+    "to": [ "ba6", "ba61" ],
+    "constant": "Paneesh"
   }
 ]

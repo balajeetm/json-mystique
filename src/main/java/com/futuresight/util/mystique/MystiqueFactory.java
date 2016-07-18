@@ -1,4 +1,4 @@
-package com.futuresight.utl.mystique;
+package com.futuresight.util.mystique;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import com.futuresight.utl.mystique.Mystique.MystiqueType;
+import com.futuresight.util.mystique.Mystique.MystiqueType;
 
 @Component
 public class MystiqueFactory {

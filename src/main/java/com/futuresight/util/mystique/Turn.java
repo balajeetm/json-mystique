@@ -6,7 +6,7 @@
 /*
  * Created on 17 Jul, 2016 by balajeetm
  */
-package com.futuresight.utl.mystique;
+package com.futuresight.util.mystique;
 
 import java.util.List;
 
@@ -25,6 +25,9 @@ public class Turn {
 
 	/** The convertor. */
 	private String convertor;
+
+	/** The constant. */
+	private String constant;
 
 	/**
 	 * Gets the to.
@@ -78,5 +81,23 @@ public class Turn {
 	 */
 	public void setConvertor(String convertor) {
 		this.convertor = convertor;
+	}
+
+	/**
+	 * Gets the constant.
+	 *
+	 * @return the constant
+	 */
+	public String getConstant() {
+		return constant;
+	}
+
+	/**
+	 * Sets the constant.
+	 *
+	 * @param constant the new constant
+	 */
+	public void setConstant(String constant) {
+		this.constant = constant;
 	}
 }

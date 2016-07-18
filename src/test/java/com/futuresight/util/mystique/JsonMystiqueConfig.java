@@ -6,7 +6,7 @@
 /*
  * Created on 17 Jul, 2016 by balajeetm
  */
-package com.futuresight.utl.mystique;
+package com.futuresight.util.mystique;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +17,6 @@ import org.springframework.context.annotation.Configuration;
  * @author balajeetm
  */
 @Configuration
-@ComponentScan(basePackages = {"com.futuresight.utl.mystique"})
+@ComponentScan(basePackages = {"com.futuresight.util.mystique"})
 public class JsonMystiqueConfig {
 }

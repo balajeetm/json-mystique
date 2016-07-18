@@ -6,7 +6,7 @@
 /*
  * Created on 17 Jul, 2016 by balajeetm
  */
-package com.futuresight.utl.mystique;
+package com.futuresight.util.mystique;
 
 import java.io.InputStreamReader;
 
@@ -23,6 +23,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import com.futuresight.util.mystique.JsonMystique;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 

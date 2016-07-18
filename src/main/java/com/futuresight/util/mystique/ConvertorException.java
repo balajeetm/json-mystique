@@ -6,7 +6,7 @@
 /*
  * Created on 17 Jul, 2016 by balajeetm
  */
-package com.futuresight.utl.mystique;
+package com.futuresight.util.mystique;
 
 /**
  * The Class ConvertorException.
