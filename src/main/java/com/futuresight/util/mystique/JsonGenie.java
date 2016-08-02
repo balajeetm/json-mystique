@@ -291,6 +291,9 @@ public class JsonGenie {
 				field.getAsJsonArray().set(prevIndex, transform);
 			}
 		}
+		else {
+			result = transform;
+		}
 		return result;
 	}
 
@@ -500,11 +503,13 @@ public class JsonGenie {
 	 * @param dependencies the dependencies
 	 */
 	private void updateDependencies(JsonElement source, List<Tarot> deps, JsonObject dependencies) {
-		JsonElement transform = transform(source, deps, dependencies);
-		if (null != transform) {
-			Set<Entry<String, JsonElement>> entrySet = transform.getAsJsonObject().entrySet();
-			for (Entry<String, JsonElement> entry : entrySet) {
-				dependencies.add(entry.getKey(), entry.getValue());
+		if (CollectionUtils.isNotEmpty(deps)) {
+			JsonElement transform = transform(source, deps, dependencies);
+			if (null != transform) {
+				Set<Entry<String, JsonElement>> entrySet = transform.getAsJsonObject().entrySet();
+				for (Entry<String, JsonElement> entry : entrySet) {
+					dependencies.add(entry.getKey(), entry.getValue());
+				}
 			}
 		}
 	}

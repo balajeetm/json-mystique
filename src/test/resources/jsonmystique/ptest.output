@@ -1,4 +1,5 @@
 {
+  "xy1": null,
   "ba1": "Bala",
   "ba2": {
     "DHeeru": "a"
@@ -26,17 +27,23 @@
     "Bala4Bala"
   ],
   "ba8": [
-    {
-      "ba81": "Rag1",
-      "ba82": {
+    null,
+    null
+  ],
+  "ba9": {
+    "Rag1": {
+      "a": "Ragu",
+      "b": "Rag1",
+      "c": {
         "c1": "test1"
       }
     },
-    {
-      "ba81": "Rag2",
-      "ba82": {
+    "Rag2": {
+      "a": "Ragu",
+      "b": "Rag2",
+      "c": {
         "c1": "test2"
       }
     }
-  ]
+  }
 }

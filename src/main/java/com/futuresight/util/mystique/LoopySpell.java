@@ -11,6 +11,7 @@ package com.futuresight.util.mystique;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
@@ -51,12 +52,24 @@ public class LoopySpell implements Spell {
 	 */
 	@Override
 	public JsonElement cast(Mystique mystique) {
-		JsonArray transform = null;
+		JsonElement transform = null;
 		if (CollectionUtils.isNotEmpty(source)) {
-			transform = new JsonArray();
-			JsonArray jsonArray = source.get(0).getAsJsonArray();
-			for (JsonElement jsonElement : jsonArray) {
-				transform.add(mystique.transform(Lists.newArrayList(jsonElement), dependencies, turn));
+			if (StringUtils.startsWith(turn, "map:")) {
+				String key = StringUtils.removeStart(turn, "map:");
+				transform = new JsonObject();
+				JsonArray jsonArray = source.get(0).getAsJsonArray();
+				for (JsonElement jsonElement : jsonArray) {
+					JsonElement itrVal = jsonElement.getAsJsonObject().get(key);
+					transform.getAsJsonObject().add(itrVal.getAsString(), jsonElement);
+				}
+			}
+			else {
+				transform = new JsonArray();
+				JsonArray jsonArray = source.get(0).getAsJsonArray();
+				for (JsonElement jsonElement : jsonArray) {
+					transform.getAsJsonArray().add(
+							mystique.transform(Lists.newArrayList(jsonElement), dependencies, turn));
+				}
 			}
 		}
 		return transform;

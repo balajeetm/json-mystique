@@ -8,23 +8,19 @@
  */
 package com.futuresight.util.mystique;
 
-import java.io.InputStreamReader;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 
 /**
  * The Class JsonMystiqueBDDTest.
@@ -36,20 +32,7 @@ import com.google.gson.JsonParser;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {JsonMystiqueConfig.class})
-public class JsonGenieBDDTest {
-
-	@Autowired
-	private JsonGenie jsonGenie;
-
-	/** The json parser. */
-	private JsonParser jsonParser;
-
-	/**
-	 * Instantiates a new json mystique bdd test.
-	 */
-	public JsonGenieBDDTest() {
-		jsonParser = new JsonParser();
-	}
+public class JsonJacksonConvertorBDDTest {
 
 	/**
 	 * Inits the.
@@ -62,17 +45,18 @@ public class JsonGenieBDDTest {
 	 * Test.
 	 */
 	@Test
-	public void test() {
+	public void jacksonPositiveTest() {
 		try {
-			String locationPattern = "classpath:jsonmystique/ptest.json";
-			String outputPattern = "classpath:jsonmystique/ptest.output";
+			String locationPattern = "classpath:jsonmystique/ptest.mys";
 			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
 			Resource resource = resourceResolver.getResource(locationPattern);
 			String string = IOUtils.toString(resource.getInputStream());
-			Resource outputRes = resourceResolver.getResource(outputPattern);
-			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
-			JsonElement transform = jsonGenie.transform(string, "ptest");
-			Assert.assertEquals(output, transform);
+
+			ConvertorInterface instance = JsonJacksonConvertor.getInstance();
+			List<Tarot> deserializeList = instance.deserializeList(resource.getInputStream(), Tarot.class);
+			List<Tarot> deserializeGroup = instance.deserializeGroup(resource.getInputStream(), List.class,
+					Tarot.class);
+
 		}
 		catch (Exception e) {
 			Assert.fail(e.getMessage());
