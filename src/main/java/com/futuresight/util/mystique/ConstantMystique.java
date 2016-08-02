@@ -10,34 +10,30 @@ package com.futuresight.util.mystique;
 
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonParser;
 
 /**
- * The Class ConcatMystique.
+ * The Class ConstantMystique.
  *
  * @author balajeetm
  */
 @Component
-public class ConcatMystique implements Mystique {
+public class ConstantMystique implements Mystique {
+
+	/** The json parser. */
+	private JsonParser jsonParser = new JsonParser();
 
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.Mystique#transform(java.util.List, com.google.gson.JsonObject, java.lang.String)
 	 */
 	@Override
 	public JsonElement transform(List<JsonElement> source, JsonObject deps, String turn) {
-		StringBuilder stringBuilder = new StringBuilder();
-		if (CollectionUtils.isNotEmpty(source)) {
-			for (JsonElement jsonElement : source) {
-				stringBuilder.append(StringUtils.strip(jsonElement.toString(), "\""));
-			}
-		}
-		return new JsonPrimitive(stringBuilder.toString());
+		return jsonParser.parse(StringUtils.removeStartIgnoreCase(turn, "constant:"));
 	}
 
 }

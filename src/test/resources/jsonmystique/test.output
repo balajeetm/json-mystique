@@ -16,5 +16,27 @@
   },
   "ba4": "hard",
   "ba5": "BalaGanesh",
-  "ba6": {"ba61": "Paneesh"}
+  "ba6": {
+    "ba61": "Paneesh"
+  },
+  "ba7": [
+    "Bala1Bala",
+    "Bala2Bala",
+    "Bala3Bala",
+    "Bala4Bala"
+  ],
+  "ba8": [
+    {
+      "ba81": "Rag1",
+      "ba82": {
+        "c1": "test1"
+      }
+    },
+    {
+      "ba81": "Rag2",
+      "ba82": {
+        "c1": "test2"
+      }
+    }
+  ]
 }

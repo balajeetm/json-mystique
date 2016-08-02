@@ -34,10 +34,28 @@
       [ "a", "b" ], [ "a", "d", "d1" ]
     ],
     "to": [ "ba5" ],
-    "convertor": "concat"
+    "turn": "turn:concat"
   },
   {
     "to": [ "ba6", "ba61" ],
-    "constant": "Paneesh"
+    "turn": "constant:Paneesh"
+  },
+  {
+    "from": [ [ "g", "[*]" ] ],
+    "to": [ "ba7" ],
+    "deps": [
+ 			 {
+    			"from": [
+     			  [ "a", "b" ]
+   				 ],
+    			"to": [ "bala" ]
+  			 }
+  			],
+  	"turn": "bean:com.futuresight.util.mystique.TestMystique"
+  },
+  {
+    "from": [ [ "h", "[*]" ] ],
+    "to": [ "ba8" ],
+  	"turn": "mys:test1"
   }
 ]

@@ -23,7 +23,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import com.futuresight.util.mystique.JsonMystique;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -32,13 +31,15 @@ import com.google.gson.JsonParser;
  *
  * @author balajeetm
  */
+/**
+ * @author balajeetm
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {JsonMystiqueConfig.class})
-public class JsonMystiqueBDDTest {
+public class JsonGenieBDDTest {
 
-	/** The mystique. */
 	@Autowired
-	private JsonMystique mystique;
+	private JsonGenie jsonGenie;
 
 	/** The json parser. */
 	private JsonParser jsonParser;
@@ -46,7 +47,7 @@ public class JsonMystiqueBDDTest {
 	/**
 	 * Instantiates a new json mystique bdd test.
 	 */
-	public JsonMystiqueBDDTest() {
+	public JsonGenieBDDTest() {
 		jsonParser = new JsonParser();
 	}
 
@@ -70,8 +71,8 @@ public class JsonMystiqueBDDTest {
 			String string = IOUtils.toString(resource.getInputStream());
 			Resource outputRes = resourceResolver.getResource(outputPattern);
 			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
-			String transformObjectToString = mystique.transform(string, "test");
-			Assert.assertEquals(output, jsonParser.parse(transformObjectToString));
+			JsonElement transform = jsonGenie.transform(string, "test");
+			Assert.assertEquals(output, transform);
 		}
 		catch (Exception e) {
 			Assert.fail(e.getMessage());
