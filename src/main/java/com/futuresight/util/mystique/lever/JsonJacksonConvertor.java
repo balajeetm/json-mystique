@@ -6,7 +6,7 @@
 /*
  * Created on 17 Jul, 2016 by balajeetm
  */
-package com.futuresight.util.mystique;
+package com.futuresight.util.mystique.lever;
 
 import java.io.InputStream;
 import java.util.Collection;
@@ -40,7 +40,7 @@ public final class JsonJacksonConvertor implements ConvertorInterface {
 	 */
 	@PostConstruct
 	protected void init() {
-		Creator.INSTANCE = new JsonJacksonConvertor();
+		Creator.INSTANCE = this;
 	}
 
 	/**
@@ -305,11 +305,9 @@ public final class JsonJacksonConvertor implements ConvertorInterface {
 		JavaType javaType = null;
 		if (List.class.isAssignableFrom(groupClass)) {
 			javaType = TypeFactory.defaultInstance().constructCollectionType(List.class, elementClass);
-			return javaType;
 		}
-		if (Collection.class.isAssignableFrom(groupClass)) {
+		else if (Collection.class.isAssignableFrom(groupClass)) {
 			javaType = TypeFactory.defaultInstance().constructCollectionType(Collection.class, elementClass);
-			return javaType;
 		}
 		return javaType;
 	}

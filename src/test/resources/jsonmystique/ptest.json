@@ -1,26 +1,82 @@
 {
   "a": {
     "b": "Bala",
-    "c": {"DHeeru": "a"},
-    "d": {"d1": "Ganesh"}
+    "c": {
+      "DHeeru": "a"
+    },
+    "d": {
+      "d1": "Ganesh"
+    }
   },
-  "e" : [ "test" ],
-  "f" : [ { "f1": "super", "f2": ["trying", "hard"] } ],
-  "g" : [ "Bala1", "Bala2", "Bala3", "Bala4" ],
-  "h" : [ 
-	{
-		"a" : "Ragu",
-		"b" : "Rag1",
-		"c" : {
-				"c1" : "test1"
-				}
-	},
-	{
-		"a" : "Ragu",
-		"b" : "Rag2",
-		"c" : {
-				"c1" : "test2"
-				}
-	}   
+  "e": [
+    "test"
+  ],
+  "f": [
+    {
+      "f1": "super",
+      "f2": [
+        "trying",
+        "hard"
+      ]
+    }
+  ],
+  "g": [
+    "Bala1",
+    "Bala2",
+    "Bala3",
+    "Bala4"
+  ],
+  "h": [
+    {
+      "a": "Ragu",
+      "b": "Rag1",
+      "c": {
+        "c1": "test1"
+      }
+    },
+    {
+      "a": "Ragu",
+      "b": "Rag2",
+      "c": {
+        "c1": "test2"
+      }
+    }
+  ],
+  "i": [
+    {
+      "key": "key1",
+      "value": {
+        "name": "KEY1",
+        "type": "simple"
+      }
+    },
+    {
+      "key": "key2",
+      "value": {
+        "name": "KEY2",
+        "type": "simple"
+      }
+    },
+    {
+      "key": "key3",
+      "value": {
+        "name": "KEY3",
+        "type": "complex"
+      }
+    }
+  ],
+  "j": [
+    {
+      "lead": "Bala",
+      "key": {
+        "value": "key1"
+      }
+    },
+    {
+      "lead": "Praj",
+      "key": {
+        "value": "key2"
+      }
+    }
   ]
 }

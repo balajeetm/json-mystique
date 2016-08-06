@@ -28,6 +28,6 @@ public interface Mystique {
 	 * @param turn the turn
 	 * @return the json element
 	 */
-	JsonElement transform(List<JsonElement> source, JsonObject deps, String turn);
+	JsonElement transform(List<JsonElement> source, JsonObject deps, JsonElement turn);
 
 }

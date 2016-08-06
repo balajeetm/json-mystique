@@ -23,13 +23,13 @@ import com.google.gson.JsonObject;
  * @author balajeetm
  */
 @Component
-public class CopyMystique implements Mystique {
+public class CopyMystique extends AbstractMystique {
 
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.Mystique#transform(java.util.List, com.google.gson.JsonObject, java.lang.String)
 	 */
 	@Override
-	public JsonElement transform(List<JsonElement> source, JsonObject deps, String turn) {
+	public JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject turn) {
 		JsonElement transform = null;
 		if (CollectionUtils.isNotEmpty(source)) {
 			if (source.size() > 1) {

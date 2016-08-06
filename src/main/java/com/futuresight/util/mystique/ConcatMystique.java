@@ -24,17 +24,24 @@ import com.google.gson.JsonPrimitive;
  * @author balajeetm
  */
 @Component
-public class ConcatMystique implements Mystique {
+public class ConcatMystique extends AbstractMystique {
 
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.Mystique#transform(java.util.List, com.google.gson.JsonObject, java.lang.String)
 	 */
 	@Override
-	public JsonElement transform(List<JsonElement> source, JsonObject deps, String turn) {
+	public JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject turn) {
 		StringBuilder stringBuilder = new StringBuilder();
 		if (CollectionUtils.isNotEmpty(source)) {
+			JsonElement jsonSep = turn.get("separator");
+			String separator = null == jsonSep ? "" : StringUtils.trimToEmpty(jsonSep.getAsString());
+			int count = 0;
 			for (JsonElement jsonElement : source) {
+				if (count != 0) {
+					stringBuilder.append(separator);
+				}
 				stringBuilder.append(StringUtils.strip(jsonElement.toString(), "\""));
+				count++;
 			}
 		}
 		return new JsonPrimitive(stringBuilder.toString());

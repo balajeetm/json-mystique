@@ -12,7 +12,6 @@ import java.util.List;
 
 import lombok.Data;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 /**
@@ -25,10 +24,10 @@ import com.google.gson.JsonElement;
  * Instantiates a new tarot.
  */
 @Data
-public class Tarot {
+public class TestTarot {
 
 	/** The from. */
-	private JsonArray from;
+	private List<List<String>> from;
 
 	/** The to. */
 	private List<String> to;
@@ -37,6 +36,6 @@ public class Tarot {
 	private JsonElement turn;
 
 	/** The deps. */
-	private List<Tarot> deps;
+	private List<TestTarot> deps;
 
 }

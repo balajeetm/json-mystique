@@ -1,0 +1,15 @@
+[
+{
+	"from": ["lead"],
+	"to": ["leader"]
+}, 
+{
+	"from": ["key", "value"],
+	"to": ["reference"],
+	"turn": {
+		"type": "getFromDeps",
+		"key": ["keyMap"],
+		"value": ["name"]
+	}
+}
+]

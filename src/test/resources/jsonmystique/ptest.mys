@@ -3,7 +3,10 @@
     "from": [
       [ "x", "y" ]
     ],
-    "to": [ "xy1" ]
+    "to": [ "xy1" ],
+    "turn": {
+    	"default": { "prajwal": "bala" }
+    }
   },
   {
     "from": [
@@ -40,11 +43,17 @@
       [ "a", "b" ], [ "a", "d", "d1" ]
     ],
     "to": [ "ba5" ],
-    "turn": "turn:concat"
+    "turn": {
+    	"type": "concat",
+    	"separator": "~"
+    }
   },
   {
     "to": [ "ba6", "ba61" ],
-    "turn": "constant:Paneesh"
+    "turn": {
+    	"type": "constant",
+    	"value": "Paneesh"
+    }
   },
   {
     "from": [ [ "g", "[*]" ] ],
@@ -57,16 +66,61 @@
     			"to": [ "bala" ]
   			 }
   			],
-  	"turn": "bean:com.futuresight.util.mystique.TestMystique"
+  	"turn": {
+  		"type": "bean",
+  		"value": "com.futuresight.util.mystique.TestMystique"
+  	}
   },
   {
     "from": [ [ "h", "[*]" ] ],
     "to": [ "ba8" ],
-  	"turn": "mys:test1"
+  	"turn": {
+  		"type": "mystique",
+  		"value": "ptestsub"
+  	}
   },
   {
-    "from": [ [ "h", "[*]" ] ],
+    "from": [ [ "h" ] ],
     "to": [ "ba9" ],
-  	"turn": "map:b"
+  	"turn": {
+  		"type": "arrayToMap",
+  		"key": ["b"]
+  	}
+  },
+  {
+    "from": [ [ "h" ] ],
+    "to": [ "ba10" ],
+  	"turn": [
+  	{
+  		"type": "arrayToMap",
+  		"key": ["b"],
+  		"value": [ "c" ]
+  	},
+  	{
+  		"type": "testing",
+  		"key": ["b"],
+  		"value": [ "c" ]
+  	}
+  	]
+  },
+  {
+  	"from": [ ["j", "[*]" ] ],
+  	"to": [ "ba11" ],
+  	"turn": {
+  		"type": "mystique",
+  		"value": "pkeysub"
+  	},
+  	"deps": [
+  	{
+  	"from": [ [ "i" ] ],
+    "to": [ "keyMap" ],
+  	"turn":
+  	{
+  		"type": "arrayToMap",
+  		"key": ["key"],
+  		"value": [ "value" ]
+  	}
+  	}
+  	]
   }
 ]

@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 /**
  * A factory for creating Mystique objects.
  *
@@ -42,42 +45,59 @@ public class MystiqueFactory {
 	 * @param turn the turn
 	 * @return the mystique
 	 */
-	public Mystique getMystique(String turn) {
-		turn = StringUtils.trimToEmpty(turn);
+	public Mystique getMystique(JsonElement turn) {
 		Mystique mystique = null;
 		try {
-			if (StringUtils.isEmpty(turn)) {
-				mystique = context.getBean(CopyMystique.class);
-			}
-			else if (StringUtils.startsWithIgnoreCase(turn, "mys:")) {
-				mystique = context.getBean(JsonMystique.class);
-			}
-			else if (StringUtils.startsWithIgnoreCase(turn, "bean:")) {
-				String bean = StringUtils.removeStartIgnoreCase(turn, "bean:");
-				try {
-					mystique = (Mystique) context.getBean(Class.forName(bean));
-				}
-				catch (ClassNotFoundException | ClassCastException e) {
-					logger.error(
-							String.format("Invalid mystique. Error while getting mystique %s : %s", turn,
-									e.getMessage()), e);
-				}
-			}
-			else if (StringUtils.startsWithIgnoreCase(turn, "constant:")) {
-				mystique = context.getBean(ConstantMystique.class);
-			}
-			else if (StringUtils.startsWithIgnoreCase(turn, "turn:")) {
-				String command = StringUtils.removeStartIgnoreCase(turn, "turn:");
-				if ("copy".equalsIgnoreCase(command)) {
-					mystique = context.getBean(CopyMystique.class);
-				}
-				else if ("concat".equalsIgnoreCase(command)) {
-					mystique = context.getBean(ConcatMystique.class);
-				}
+			if (null != turn && turn.isJsonArray()) {
+				mystique = context.getBean(MultiMystique.class);
 			}
 			else {
-				logger.error(String.format("Invalid mystique %s", turn));
+				JsonObject turnObject = null == turn ? null : turn.getAsJsonObject();
+				JsonElement turnTypeEle = null == turnObject ? null : turnObject.get("type");
+				String turnType = (null == turnTypeEle) ? "" : turnTypeEle.getAsString();
+				if (StringUtils.isEmpty(turnType) || StringUtils.equalsIgnoreCase(turnType, MysType.copy.name())) {
+					mystique = context.getBean(CopyMystique.class);
+				}
+				else if (StringUtils.equalsIgnoreCase(turnType, MysType.mystique.name())) {
+					mystique = context.getBean(JsonMystique.class);
+				}
+				else if (StringUtils.equalsIgnoreCase(turnType, MysType.bean.name())) {
+					String bean = StringUtils.trimToEmpty(turnObject.get("value").getAsString());
+					try {
+						mystique = (Mystique) context.getBean(Class.forName(bean));
+					}
+					catch (ClassNotFoundException | ClassCastException e) {
+						logger.error(
+								String.format("Invalid mystique. Error while getting mystique %s : %s", turnObject,
+										e.getMessage()), e);
+					}
+				}
+				else if (StringUtils.equalsIgnoreCase(turnType, MysType.constant.name())) {
+					mystique = context.getBean(ConstantMystique.class);
+				}
+				else if (StringUtils.equalsIgnoreCase(turnType, MysType.concat.name())) {
+					mystique = context.getBean(ConcatMystique.class);
+				}
+				else if (StringUtils.equalsIgnoreCase(turnType, MysType.arrayToMap.name())) {
+					mystique = context.getBean(MapMystique.class);
+				}
+				else if (StringUtils.equalsIgnoreCase(turnType, MysType.getFromDeps.name())) {
+					mystique = context.getBean(GetFromDepsMystique.class);
+				}
+				/*else if (StringUtils.startsWithIgnoreCase(turn, "turn:")) {
+					String command = StringUtils.removeStartIgnoreCase(turn, "turn:");
+					if ("copy".equalsIgnoreCase(command)) {
+						mystique = context.getBean(CopyMystique.class);
+					}
+					else if ("concat".equalsIgnoreCase(command)) {
+						mystique = context.getBean(ConcatMystique.class);
+					}
+				}*/
+				else {
+					logger.error(String.format("Invalid mystique %s", turnObject));
+				}
 			}
+
 		}
 		catch (NoSuchBeanDefinitionException e) {
 			logger.error(String.format("Invalid turn %s defined", turn), e);

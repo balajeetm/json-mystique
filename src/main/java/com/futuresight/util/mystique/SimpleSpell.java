@@ -27,7 +27,7 @@ public class SimpleSpell implements Spell {
 	private JsonObject dependencies;
 
 	/** The turn. */
-	private String turn;
+	private JsonElement turn;
 
 	/**
 	 * Instantiates a new simple spell.
@@ -36,7 +36,7 @@ public class SimpleSpell implements Spell {
 	 * @param dependencies the dependencies
 	 * @param turn the turn
 	 */
-	public SimpleSpell(List<JsonElement> source, JsonObject dependencies, String turn) {
+	public SimpleSpell(List<JsonElement> source, JsonObject dependencies, JsonElement turn) {
 		this.source = source;
 		this.dependencies = dependencies;
 		this.turn = turn;

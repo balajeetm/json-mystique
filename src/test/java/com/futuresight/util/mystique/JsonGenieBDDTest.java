@@ -23,6 +23,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import com.futuresight.util.mystique.config.JsonMystiqueConfig;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -68,15 +69,16 @@ public class JsonGenieBDDTest {
 			String outputPattern = "classpath:jsonmystique/ptest.output";
 			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
 			Resource resource = resourceResolver.getResource(locationPattern);
+
 			String string = IOUtils.toString(resource.getInputStream());
 			Resource outputRes = resourceResolver.getResource(outputPattern);
 			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
-			JsonElement transform = jsonGenie.transform(string, "ptest");
+			JsonElement transform = jsonGenie.transform(string, "ptest1");
 			Assert.assertEquals(output, transform);
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
 	}
-
 }
