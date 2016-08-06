@@ -12,8 +12,6 @@ import java.util.List;
 
 import lombok.Data;
 
-import com.google.gson.JsonElement;
-
 /**
  * The Class Tarot.
  *
@@ -26,14 +24,8 @@ import com.google.gson.JsonElement;
 @Data
 public class TestTarot {
 
-	/** The from. */
-	private List<List<String>> from;
-
 	/** The to. */
 	private List<String> to;
-
-	/** The turn. */
-	private JsonElement turn;
 
 	/** The deps. */
 	private List<TestTarot> deps;
