@@ -84,6 +84,9 @@ public class MystiqueFactory {
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.getFromDeps.name())) {
 					mystique = context.getBean(GetFromDepsMystique.class);
 				}
+				else if (StringUtils.equalsIgnoreCase(turnType, MysType.condition.name())) {
+					mystique = context.getBean(ConditionMystique.class);
+				}
 				/*else if (StringUtils.startsWithIgnoreCase(turn, "turn:")) {
 					String command = StringUtils.removeStartIgnoreCase(turn, "turn:");
 					if ("copy".equalsIgnoreCase(command)) {

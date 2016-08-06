@@ -106,5 +106,13 @@
 			"value": ["value"]
 		}
 	}]
+},
+{
+	"from": ["j", "[*]"],
+	"to": ["ba12"],
+	"turn": {
+		"type": "mystique",
+		"value": "pconditionsub1"
+	}
 }
 ]

@@ -1,0 +1,11 @@
+[
+{
+	"from": ["lead"],
+	"to": [],
+	"turn": {
+		"type": "condition",
+		"value": "Bala",
+		"true": "success"
+	}
+}
+]
