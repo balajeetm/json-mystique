@@ -1,22 +1,131 @@
+/*
+ * Copyright (c) Balajee TM 2016.
+ * All rights reserved.
+ */
+
+/*
+ * Created on 7 Aug, 2016 by balajeetm
+ */
 package com.futuresight.util.mystique;
 
 import java.util.List;
 
-import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public abstract class AbstractMystique implements SimpleMystique {
+/**
+ * The Class AbstractMystique.
+ *
+ * @author balajmoh
+ */
+public abstract class AbstractMystique implements SimpleTurnMystique {
 
-	protected static Gson gson = new Gson();
+	/** The json lever. */
+	@Autowired
+	protected JsonLever jsonLever;
 
-	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject turn) {
+	/** The factory. */
+	@Autowired
+	protected MystiqueFactory factory;
+
+	/* (non-Javadoc)
+	 * @see com.futuresight.util.mystique.SimpleTurnMystique#transform(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonObject, com.google.gson.JsonElement)
+	 */
+	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject turn, JsonElement result) {
 		JsonElement transform = transmute(source, deps, turn);
-		if (null == transform && null != turn) {
-			transform = turn.get("default");
+		if ((null == transform || transform.isJsonNull()) && null != turn) {
+			JsonElement defaultJson = turn.get("default");
+			transform = transformOnCondition(defaultJson, source, deps, result);
+		}
+
+		//set the result
+		JsonArray to = null;
+		Boolean optional = Boolean.FALSE;
+
+		if (null != turn) {
+			JsonElement toJson = turn.get("to");
+			to = null == toJson ? null : toJson.getAsJsonArray();
+			JsonElement optionalElement = turn.get("optional");
+			if (null != optionalElement) {
+				optional = optionalElement.getAsBoolean();
+			}
+		}
+
+		jsonLever.setField(result, to, transform, optional);
+		return transform;
+	}
+
+	/**
+	 * Transform on condition.
+	 *
+	 * @param conditionalJson the conditional json
+	 * @param source the source
+	 * @param deps the deps
+	 * @param result the result
+	 * @return the json element
+	 */
+	protected JsonElement transformOnCondition(JsonElement conditionalJson, List<JsonElement> source, JsonObject deps,
+			JsonElement result) {
+		JsonElement transform = null;
+		if (null != conditionalJson) {
+			JsonObject defaultObj = conditionalJson.getAsJsonObject();
+			if (jsonLever.isNotNull(defaultObj.get("value"))) {
+				transform = defaultObj.get("value");
+			}
+			else {
+				JsonElement defaultTurn = defaultObj.get("turn");
+				if (jsonLever.isNotNull(defaultTurn)) {
+					Mystique mystique = factory.getMystique(defaultTurn);
+					transform = mystique.transform(source, deps, defaultTurn, result);
+				}
+			}
 		}
 		return transform;
 	}
 
+	/**
+	 * Transform on condition.
+	 *
+	 * @param conditionalJson the conditional json
+	 * @param source the source
+	 * @param deps the deps
+	 * @return the json element
+	 */
+	protected JsonElement transformOnCondition(JsonElement conditionalJson, List<JsonElement> source, JsonObject deps) {
+		// Do not update the eventual result
+		return transformOnCondition(conditionalJson, source, deps, null);
+	}
+
+	/**
+	 * Transmute.
+	 *
+	 * @param source the source
+	 * @param deps the deps
+	 * @param turn the turn
+	 * @return the json element
+	 */
 	protected abstract JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject turn);
+
+	/**
+	 * Gets the granular source.
+	 *
+	 * @param source the source
+	 * @param turn the turn
+	 * @return the granular source
+	 */
+	protected JsonElement getGranularSource(JsonElement source, JsonObject turn) {
+		JsonElement from = null != turn ? turn.get("from") : null;
+		JsonElement conditionSource = null;
+		if (jsonLever.isNull(from)) {
+			conditionSource = source;
+		}
+		else {
+			conditionSource = jsonLever.getField(source, from.getAsJsonArray());
+		}
+
+		return conditionSource;
+	}
 }

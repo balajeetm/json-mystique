@@ -54,9 +54,20 @@ public class JsonLever {
 	 *
 	 * @return the json parser
 	 */
+
+	/**
+	 * Gets the json parser.
+	 *
+	 * @return the json parser
+	 */
 	@Getter
 	private JsonParser jsonParser;
 
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
 	@Getter
 	private Gson gson;
 
@@ -154,6 +165,13 @@ public class JsonLever {
 		return field;
 	}
 
+	/**
+	 * Gets the field.
+	 *
+	 * @param source the source
+	 * @param path the path
+	 * @return the field
+	 */
 	public JsonElement getField(JsonElement source, JsonArray path) {
 		JsonElement field = null;
 		try {
@@ -237,6 +255,14 @@ public class JsonLever {
 		return isLoopy;
 	}
 
+	/**
+	 * Gets the field.
+	 *
+	 * @param source the source
+	 * @param fields the fields
+	 * @param path the path
+	 * @return the field
+	 */
 	public Boolean getField(JsonElement source, List<JsonElement> fields, JsonArray path) {
 		Boolean isLoopy = Boolean.FALSE;
 		try {
@@ -284,70 +310,78 @@ public class JsonLever {
 	 * @param result the result
 	 * @param to the to
 	 * @param transform the transform
+	 * @param optional the optional
 	 * @return the json element
 	 */
-	public JsonElement setField(JsonElement result, List<String> to, JsonElement transform) {
-		JsonElement field = result;
-		if (CollectionUtils.isNotEmpty(to)) {
-
-			String previous = null;
-			String current = null;
-			Integer prevIndex = null;
-			Integer currentIndex = null;
-			Iterator<String> iterator = to.iterator();
-			if (iterator.hasNext()) {
-				previous = iterator.next();
-				prevIndex = getIndex(previous);
+	public JsonElement setField(JsonElement result, JsonArray to, JsonElement transform, Boolean optional) {
+		if (optional) {
+			if (null == transform || transform.isJsonNull()) {
+				return result;
 			}
+		}
 
-			while (iterator.hasNext()) {
-				current = iterator.next();
+		if (null != to) {
+			JsonElement field = result;
+			if (to.size() > 0) {
+				String previous = null;
+				String current = null;
+				Integer prevIndex = null;
+				Integer currentIndex = null;
+				Iterator<JsonElement> iterator = to.iterator();
+				if (iterator.hasNext()) {
+					previous = iterator.next().getAsString();
+					prevIndex = getIndex(previous);
+				}
 
-				prevIndex = null != prevIndex ? prevIndex : getIndex(previous);
-				currentIndex = null != currentIndex ? currentIndex : getIndex(current);
+				while (iterator.hasNext()) {
+					current = iterator.next().getAsString();
+
+					prevIndex = null != prevIndex ? prevIndex : getIndex(previous);
+					currentIndex = null != currentIndex ? currentIndex : getIndex(current);
+
+					if (null == prevIndex) {
+						field = getRepleteField(field, JsonType.Object);
+						result = updateResult(result, field);
+
+						if (null == currentIndex) {
+							field = updateFieldValue(field.getAsJsonObject(), previous, JsonType.Object);
+						}
+						else {
+							field = updateFieldValue(field.getAsJsonObject(), previous, JsonType.Array);
+						}
+					}
+					else {
+						field = getRepleteField(field, JsonType.Array);
+						result = updateResult(result, field);
+
+						if (null == currentIndex) {
+							field = updateFieldValue(field.getAsJsonArray(), prevIndex, JsonType.Object);
+						}
+						else {
+							field = updateFieldValue(field.getAsJsonArray(), prevIndex, JsonType.Array);
+						}
+					}
+					previous = current;
+					prevIndex = currentIndex;
+					current = null;
+					currentIndex = null;
+				}
 
 				if (null == prevIndex) {
 					field = getRepleteField(field, JsonType.Object);
 					result = updateResult(result, field);
-
-					if (null == currentIndex) {
-						field = updateFieldValue(field.getAsJsonObject(), previous, JsonType.Object);
-					}
-					else {
-						field = updateFieldValue(field.getAsJsonObject(), previous, JsonType.Array);
-					}
+					field.getAsJsonObject().add(previous, transform);
 				}
 				else {
 					field = getRepleteField(field, JsonType.Array);
 					result = updateResult(result, field);
-
-					if (null == currentIndex) {
-						field = updateFieldValue(field.getAsJsonArray(), prevIndex, JsonType.Object);
-					}
-					else {
-						field = updateFieldValue(field.getAsJsonArray(), prevIndex, JsonType.Array);
-					}
+					updateFieldValue(field.getAsJsonArray(), prevIndex, JsonType.Null);
+					field.getAsJsonArray().set(prevIndex, transform);
 				}
-				previous = current;
-				prevIndex = currentIndex;
-				current = null;
-				currentIndex = null;
-			}
-
-			if (null == prevIndex) {
-				field = getRepleteField(field, JsonType.Object);
-				result = updateResult(result, field);
-				field.getAsJsonObject().add(previous, transform);
 			}
 			else {
-				field = getRepleteField(field, JsonType.Array);
-				result = updateResult(result, field);
-				updateFieldValue(field.getAsJsonArray(), prevIndex, JsonType.Null);
-				field.getAsJsonArray().set(prevIndex, transform);
+				result = transform;
 			}
-		}
-		else {
-			result = transform;
 		}
 		return result;
 	}
@@ -442,6 +476,26 @@ public class JsonLever {
 			field.add(key, value);
 		}
 		return value;
+	}
+
+	/**
+	 * Checks if is null.
+	 *
+	 * @param element the element
+	 * @return the boolean
+	 */
+	public Boolean isNull(JsonElement element) {
+		return null == element || element.isJsonNull();
+	}
+
+	/**
+	 * Checks if is not null.
+	 *
+	 * @param element the element
+	 * @return the boolean
+	 */
+	public Boolean isNotNull(JsonElement element) {
+		return !isNull(element);
 	}
 
 }

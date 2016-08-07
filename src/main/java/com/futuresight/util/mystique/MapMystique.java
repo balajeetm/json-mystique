@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) Balajee TM 2016.
+ * All rights reserved.
+ */
+
+/*
+ * Created on 7 Aug, 2016 by balajeetm
+ */
 package com.futuresight.util.mystique;
 
 import java.util.List;
@@ -12,20 +20,32 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+/**
+ * The Class MapMystique.
+ *
+ * @author balajmoh
+ */
 @Component
 public class MapMystique extends AbstractMystique {
 
+	/** The json lever. */
 	@Autowired
 	private JsonLever jsonLever;
 
+	/** The convertor. */
 	@Autowired
 	private JsonJacksonConvertor convertor;
 
+	/* (non-Javadoc)
+	 * @see com.futuresight.util.mystique.AbstractMystique#transmute(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonObject)
+	 */
 	@Override
 	protected JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject turn) {
 		JsonObject mapJson = new JsonObject();
 		if (CollectionUtils.isNotEmpty(source)) {
-			JsonArray jsonArray = source.get(0).getAsJsonArray();
+			JsonElement elementSource = source.get(0);
+			JsonElement granularSource = getGranularSource(elementSource, turn);
+			JsonArray jsonArray = granularSource.getAsJsonArray();
 
 			JsonElement keyObject = turn.get("key");
 			if (null != keyObject) {

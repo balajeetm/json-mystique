@@ -31,12 +31,15 @@ public class Tarot {
 	private JsonArray from;
 
 	/** The to. */
-	private List<String> to;
+	private JsonArray to;
 
 	/** The turn. */
 	private JsonElement turn;
 
 	/** The deps. */
 	private List<Tarot> deps;
+
+	/** The optional. */
+	private Boolean optional = Boolean.FALSE;
 
 }

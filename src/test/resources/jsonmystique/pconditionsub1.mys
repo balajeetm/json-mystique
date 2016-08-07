@@ -5,7 +5,9 @@
 	"turn": {
 		"type": "condition",
 		"value": "Bala",
-		"true": "success"
+		"true": {
+			"value": "success"		
+		}
 	}
 }
 ]

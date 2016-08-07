@@ -10,7 +10,6 @@ package com.futuresight.util.mystique;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -197,17 +196,18 @@ public class JsonGenie {
 				JsonElement turn = tarot.getTurn();
 				updateDependencies(source, tarot.getDeps(), dependencies);
 				Mystique mystique = factory.getMystique(turn);
-				Spell trick = getSpell(source, tarot.getFrom(), dependencies, turn);
+				Spell trick = getSpell(source, tarot.getFrom(), dependencies, turn, result);
 				JsonElement transform = trick.cast(mystique);
 				//JsonElement transform = mystique.transform(source, tarot.getFrom(), dependencies, turn);
-				List<String> to = tarot.getTo();
+				JsonArray to = tarot.getTo();
+				Boolean optional = tarot.getOptional();
 				try {
-					result = jsonLever.setField(result, to, transform);
+					result = jsonLever.setField(result, to, transform, optional);
 				}
 				catch (RuntimeException e) {
 					logger.error(String.format(
-							"Error transforming input with specification for field %s with convertor %s - %s",
-							Arrays.toString(to.toArray()), mystique, e.getMessage()), e);
+							"Error transforming input with specification for field %s with convertor %s - %s", to,
+							mystique, e.getMessage()), e);
 					continue;
 				}
 			}
@@ -225,9 +225,11 @@ public class JsonGenie {
 	 * @param from the from
 	 * @param dependencies the dependencies
 	 * @param turn the turn
+	 * @param result the result
 	 * @return the spell
 	 */
-	private Spell getSpell(JsonElement source, JsonArray from, JsonObject dependencies, JsonElement turn) {
+	private Spell getSpell(JsonElement source, JsonArray from, JsonObject dependencies, JsonElement turn,
+			JsonElement result) {
 		List<JsonElement> fields = new ArrayList<>();
 		Spell spell = null;
 		if (null != from && from.size() > 0) {
@@ -236,21 +238,21 @@ public class JsonGenie {
 					JsonArray fromArray = jsonElement.getAsJsonArray();
 					Boolean isLoopy = jsonLever.getField(source, fields, fromArray);
 					if (isLoopy) {
-						spell = new LoopySpell(fields, dependencies, turn);
+						spell = new LoopySpell(fields, dependencies, turn, result);
 						break;
 					}
 				}
 				else {
 					Boolean isLoopy = jsonLever.getField(source, fields, from);
 					if (isLoopy) {
-						spell = new LoopySpell(fields, dependencies, turn);
+						spell = new LoopySpell(fields, dependencies, turn, result);
 					}
 					break;
 				}
 			}
 		}
 		if (null == spell) {
-			spell = new SimpleSpell(fields, dependencies, turn);
+			spell = new SimpleSpell(fields, dependencies, turn, result);
 		}
 		return spell;
 	}

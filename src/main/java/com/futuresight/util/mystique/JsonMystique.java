@@ -38,7 +38,8 @@ public class JsonMystique extends AbstractMystique {
 		if (CollectionUtils.isNotEmpty(source)) {
 			String myst = turn.get("value").getAsString();
 			JsonElement jsonElement = source.get(0);
-			transform = jsonGenie.transform(jsonElement, myst, deps);
+			JsonElement granularSource = getGranularSource(jsonElement, turn);
+			transform = jsonGenie.transform(granularSource, myst, deps);
 		}
 		return transform;
 	}

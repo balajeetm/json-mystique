@@ -1,34 +1,29 @@
-[
-{
+[{
 	"from": ["x", "y"],
 	"to": ["xy1"],
 	"turn": {
 		"default": {
-			"prajwal": "bala"
+			"value": {
+				"prajwal": "bala"
+			}
 		}
 	}
-}, 
-{
+}, {
 	"from": ["a", "b"],
 	"to": ["ba1"]
-}, 
-{
+}, {
 	"from": ["a", "c"],
 	"to": ["ba2"]
-}, 
-{
+}, {
 	"from": ["a", "d", "d1"],
 	"to": ["ba3", "ba31", "[0]"]
-}, 
-{
+}, {
 	"from": ["e"],
 	"to": ["ba3", "ba32", "[1]"]
-}, 
-{
+}, {
 	"from": ["f", "[0]", "f2", "[1]"],
 	"to": ["ba4"]
-}, 
-{
+}, {
 	"from": [
 		["a", "b"],
 		["a", "d", "d1"]
@@ -38,15 +33,13 @@
 		"type": "concat",
 		"separator": "~"
 	}
-}, 
-{
+}, {
 	"to": ["ba6", "ba61"],
 	"turn": {
 		"type": "constant",
 		"value": "Paneesh"
 	}
-}, 
-{
+}, {
 	"from": ["g", "[*]"],
 	"to": ["ba7"],
 	"deps": [{
@@ -57,40 +50,33 @@
 		"type": "bean",
 		"value": "com.futuresight.util.mystique.TestMystique"
 	}
-}, 
-{
+}, {
 	"from": ["h", "[*]"],
 	"to": ["ba8"],
 	"turn": {
 		"type": "mystique",
 		"value": "ptestsub1"
 	}
-}, 
-{
+}, {
 	"from": ["h"],
 	"to": ["ba9"],
 	"turn": {
 		"type": "arrayToMap",
 		"key": ["b"]
 	}
-}, 
-{
+}, {
 	"from": ["h"],
 	"to": ["ba10"],
-	"turn": [
-	{
+	"turn": [{
 		"type": "arrayToMap",
 		"key": ["b"],
 		"value": ["c"]
-	}, 
-	{
+	}, {
 		"type": "testing",
 		"key": ["b"],
 		"value": ["c"]
-	}
-	]
-}, 
-{
+	}]
+}, {
 	"from": ["j", "[*]"],
 	"to": ["ba11"],
 	"turn": {
@@ -106,13 +92,52 @@
 			"value": ["value"]
 		}
 	}]
-},
-{
+}, {
 	"from": ["j", "[*]"],
 	"to": ["ba12"],
 	"turn": {
 		"type": "mystique",
 		"value": "pconditionsub1"
 	}
-}
-]
+}, {
+	"from": ["k", "[*]"],
+	"turn": [{
+			"type": "condition",
+			"from": ["rating"],
+			"value": "adult",
+			"false": {
+				"value": null
+			},
+			"optional": true,
+			"to": ["adult"]
+		}, {
+			"type": "condition",
+			"from": ["rating"],
+			"value": "erotic",
+			"false": {
+				"value": null
+			},
+			"optional": true,
+			"to": ["erotic"]
+		}, {
+			"type": "condition",
+			"from": ["rating"],
+			"value": "horror",
+			"false": {
+				"value": null
+			},
+			"true": {
+				"turn": {
+					"from": ["key"]
+				}
+			},
+			"optional": true,
+			"to": ["horror"]
+		},
+
+		{
+			"from": ["key", "value"],
+			"to": ["action"]
+		}
+	]
+}]

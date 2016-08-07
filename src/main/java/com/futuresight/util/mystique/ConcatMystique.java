@@ -37,10 +37,12 @@ public class ConcatMystique extends AbstractMystique {
 			String separator = null == jsonSep ? "" : StringUtils.trimToEmpty(jsonSep.getAsString());
 			int count = 0;
 			for (JsonElement jsonElement : source) {
+
+				JsonElement granularSource = getGranularSource(jsonElement, turn);
 				if (count != 0) {
 					stringBuilder.append(separator);
 				}
-				stringBuilder.append(StringUtils.strip(jsonElement.toString(), "\""));
+				stringBuilder.append(StringUtils.strip(granularSource.toString(), "\""));
 				count++;
 			}
 		}

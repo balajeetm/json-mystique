@@ -70,5 +70,13 @@
       "leader":"Praj",
       "reference":"KEY2"
     }],
-  "ba12": [ "success", false ]
+  "ba12":[
+    "success",
+    false],
+  "adult":true,
+  "action":"ACTION MOVIE",
+  "horror":{
+    "value":"HORROR MOVIE"
+  },
+  "erotic":true
 }

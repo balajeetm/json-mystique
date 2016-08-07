@@ -78,5 +78,31 @@
         "value": "key2"
       }
     }
+  ],
+  "k": [
+    {
+      "rating": "adult",
+      "key": {
+        "value": "ADULT"
+      }
+    },
+    {
+      "rating": "action",
+      "key": {
+        "value": "ACTION MOVIE"
+      }
+    },
+    {
+      "rating": "horror",
+      "key": {
+        "value": "HORROR MOVIE"
+      }
+    },
+    {
+      "rating": "erotic",
+      "key": {
+        "value": "EROTIC"
+      }
+    }
   ]
 }

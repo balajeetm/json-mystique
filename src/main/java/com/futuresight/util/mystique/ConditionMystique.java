@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) Balajee TM 2016.
+ * All rights reserved.
+ */
+
+/*
+ * Created on 7 Aug, 2016 by balajeetm
+ */
 package com.futuresight.util.mystique;
 
 import java.util.List;
@@ -11,15 +19,25 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+/**
+ * The Class ConditionMystique.
+ *
+ * @author balajmoh
+ */
 @Component
 public class ConditionMystique extends AbstractMystique {
 
+	/** The json lever. */
 	@Autowired
 	private JsonLever jsonLever;
 
+	/** The convertor. */
 	@Autowired
 	private JsonJacksonConvertor convertor;
 
+	/* (non-Javadoc)
+	 * @see com.futuresight.util.mystique.AbstractMystique#transmute(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonObject)
+	 */
 	@Override
 	protected JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject turn) {
 		JsonElement transform = null;
@@ -29,15 +47,25 @@ public class ConditionMystique extends AbstractMystique {
 			elementSource = source.get(0);
 		}
 		JsonElement value = turn.get("value");
-		Boolean equals = isEquals(elementSource, value);
+		JsonElement granularSource = getGranularSource(elementSource, turn);
+		Boolean equals = isEquals(granularSource, value);
 		JsonElement jsonElement = turn.get(String.valueOf(equals));
 		if (null == jsonElement) {
-			jsonElement = new JsonPrimitive(equals);
+			transform = new JsonPrimitive(equals);
 		}
-		transform = jsonElement;
+		else {
+			transform = transformOnCondition(jsonElement, source, deps);
+		}
 		return transform;
 	}
 
+	/**
+	 * Checks if is equals.
+	 *
+	 * @param var1 the var1
+	 * @param var2 the var2
+	 * @return the boolean
+	 */
 	private Boolean isEquals(JsonElement var1, JsonElement var2) {
 		Boolean isEqual = Boolean.FALSE;
 

@@ -49,7 +49,7 @@ public class MystiqueFactory {
 		Mystique mystique = null;
 		try {
 			if (null != turn && turn.isJsonArray()) {
-				mystique = context.getBean(MultiMystique.class);
+				mystique = context.getBean(MultiTurnMystique.class);
 			}
 			else {
 				JsonObject turnObject = null == turn ? null : turn.getAsJsonObject();
