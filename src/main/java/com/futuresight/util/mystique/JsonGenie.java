@@ -190,19 +190,20 @@ public class JsonGenie {
 	 * @return the json element
 	 */
 	private JsonElement transform(JsonElement source, List<Tarot> tarotList, JsonObject dependencies) {
-		JsonElement result = null;
+		JsonObject resultWrapper = new JsonObject();
+		resultWrapper.add("result", null);
 		if (CollectionUtils.isNotEmpty(tarotList)) {
 			for (Tarot tarot : tarotList) {
 				JsonElement turn = tarot.getTurn();
 				updateDependencies(source, tarot.getDeps(), dependencies);
 				Mystique mystique = factory.getMystique(turn);
-				Spell trick = getSpell(source, tarot.getFrom(), dependencies, turn, result);
+				Spell trick = getSpell(source, tarot.getFrom(), dependencies, turn, resultWrapper);
 				JsonElement transform = trick.cast(mystique);
 				//JsonElement transform = mystique.transform(source, tarot.getFrom(), dependencies, turn);
 				JsonArray to = tarot.getTo();
 				Boolean optional = tarot.getOptional();
 				try {
-					result = jsonLever.setField(result, to, transform, optional);
+					resultWrapper = jsonLever.setField(resultWrapper, to, transform, optional);
 				}
 				catch (RuntimeException e) {
 					logger.error(String.format(
@@ -215,7 +216,7 @@ public class JsonGenie {
 		else {
 			logger.error(String.format("Invalid tarots. Tarots cannot be empty"));
 		}
-		return result;
+		return resultWrapper.get("result");
 	}
 
 	/**
@@ -229,7 +230,7 @@ public class JsonGenie {
 	 * @return the spell
 	 */
 	private Spell getSpell(JsonElement source, JsonArray from, JsonObject dependencies, JsonElement turn,
-			JsonElement result) {
+			JsonObject resultWrapper) {
 		List<JsonElement> fields = new ArrayList<>();
 		Spell spell = null;
 		if (null != from && from.size() > 0) {
@@ -238,21 +239,21 @@ public class JsonGenie {
 					JsonArray fromArray = jsonElement.getAsJsonArray();
 					Boolean isLoopy = jsonLever.getField(source, fields, fromArray);
 					if (isLoopy) {
-						spell = new LoopySpell(fields, dependencies, turn, result);
+						spell = new LoopySpell(fields, dependencies, turn, resultWrapper);
 						break;
 					}
 				}
 				else {
 					Boolean isLoopy = jsonLever.getField(source, fields, from);
 					if (isLoopy) {
-						spell = new LoopySpell(fields, dependencies, turn, result);
+						spell = new LoopySpell(fields, dependencies, turn, resultWrapper);
 					}
 					break;
 				}
 			}
 		}
 		if (null == spell) {
-			spell = new SimpleSpell(fields, dependencies, turn, result);
+			spell = new SimpleSpell(fields, dependencies, turn, resultWrapper);
 		}
 		return spell;
 	}
@@ -267,7 +268,7 @@ public class JsonGenie {
 	private void updateDependencies(JsonElement source, List<Tarot> deps, JsonObject dependencies) {
 		if (CollectionUtils.isNotEmpty(deps)) {
 			JsonElement transform = transform(source, deps, dependencies);
-			if (null != transform) {
+			if (jsonLever.isNotNull(transform)) {
 				Set<Entry<String, JsonElement>> entrySet = transform.getAsJsonObject().entrySet();
 				for (Entry<String, JsonElement> entry : entrySet) {
 					dependencies.add(entry.getKey(), entry.getValue());

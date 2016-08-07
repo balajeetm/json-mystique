@@ -1,12 +1,12 @@
 [{
 	"from": ["x", "y"],
-	"to": ["xy1"],
 	"turn": {
 		"default": {
 			"value": {
 				"prajwal": "bala"
 			}
-		}
+		},
+		"to": ["xy1"] 
 	}
 }, {
 	"from": ["a", "b"],

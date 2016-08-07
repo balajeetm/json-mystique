@@ -34,11 +34,11 @@ public abstract class AbstractMystique implements SimpleTurnMystique {
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.SimpleTurnMystique#transform(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonObject, com.google.gson.JsonElement)
 	 */
-	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject turn, JsonElement result) {
+	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject turn, JsonObject resultWrapper) {
 		JsonElement transform = transmute(source, deps, turn);
 		if ((null == transform || transform.isJsonNull()) && null != turn) {
 			JsonElement defaultJson = turn.get("default");
-			transform = transformOnCondition(defaultJson, source, deps, result);
+			transform = transformOnCondition(defaultJson, source, deps, resultWrapper);
 		}
 
 		//set the result
@@ -54,7 +54,7 @@ public abstract class AbstractMystique implements SimpleTurnMystique {
 			}
 		}
 
-		jsonLever.setField(result, to, transform, optional);
+		jsonLever.setField(resultWrapper, to, transform, optional);
 		return transform;
 	}
 
@@ -68,18 +68,19 @@ public abstract class AbstractMystique implements SimpleTurnMystique {
 	 * @return the json element
 	 */
 	protected JsonElement transformOnCondition(JsonElement conditionalJson, List<JsonElement> source, JsonObject deps,
-			JsonElement result) {
+			JsonObject resultWrapper) {
 		JsonElement transform = null;
 		if (null != conditionalJson) {
 			JsonObject defaultObj = conditionalJson.getAsJsonObject();
-			if (jsonLever.isNotNull(defaultObj.get("value"))) {
+			//Should not be null, can be json null
+			if (null != defaultObj.get("value")) {
 				transform = defaultObj.get("value");
 			}
 			else {
 				JsonElement defaultTurn = defaultObj.get("turn");
 				if (jsonLever.isNotNull(defaultTurn)) {
 					Mystique mystique = factory.getMystique(defaultTurn);
-					transform = mystique.transform(source, deps, defaultTurn, result);
+					transform = mystique.transform(source, deps, defaultTurn, resultWrapper);
 				}
 			}
 		}
@@ -96,7 +97,7 @@ public abstract class AbstractMystique implements SimpleTurnMystique {
 	 */
 	protected JsonElement transformOnCondition(JsonElement conditionalJson, List<JsonElement> source, JsonObject deps) {
 		// Do not update the eventual result
-		return transformOnCondition(conditionalJson, source, deps, null);
+		return transformOnCondition(conditionalJson, source, deps, new JsonObject());
 	}
 
 	/**

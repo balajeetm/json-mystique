@@ -313,14 +313,14 @@ public class JsonLever {
 	 * @param optional the optional
 	 * @return the json element
 	 */
-	public JsonElement setField(JsonElement result, JsonArray to, JsonElement transform, Boolean optional) {
+	public JsonObject setField(JsonObject resultWrapper, JsonArray to, JsonElement transform, Boolean optional) {
 		if (optional) {
 			if (null == transform || transform.isJsonNull()) {
-				return result;
+				return resultWrapper;
 			}
 		}
-
 		if (null != to) {
+			JsonElement result = resultWrapper.get("result");
 			JsonElement field = result;
 			if (to.size() > 0) {
 				String previous = null;
@@ -382,8 +382,9 @@ public class JsonLever {
 			else {
 				result = transform;
 			}
+			resultWrapper.add("result", result);
 		}
-		return result;
+		return resultWrapper;
 	}
 
 	/**
@@ -394,7 +395,7 @@ public class JsonLever {
 	 * @return the replete field
 	 */
 	public JsonElement getRepleteField(JsonElement field, JsonType type) {
-		if (field == null) {
+		if (isNull(field)) {
 			field = getNewElement(type);
 		}
 		return field;
@@ -435,7 +436,7 @@ public class JsonLever {
 	 * @return the json element
 	 */
 	private JsonElement updateResult(JsonElement result, JsonElement field) {
-		if (null == result) {
+		if (isNull(result)) {
 			result = field;
 		}
 		return result;

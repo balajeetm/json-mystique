@@ -24,9 +24,9 @@ public interface SimpleTurnMystique extends Mystique {
 	 * @see com.futuresight.util.mystique.Mystique#transform(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonElement, com.google.gson.JsonElement)
 	 */
 	@Override
-	default JsonElement transform(List<JsonElement> source, JsonObject deps, JsonElement turn, JsonElement result) {
+	default JsonElement transform(List<JsonElement> source, JsonObject deps, JsonElement turn, JsonObject resultWrapper) {
 		JsonObject turnObject = (null == turn) ? null : turn.getAsJsonObject();
-		return transform(source, deps, turnObject, result);
+		return transform(source, deps, turnObject, resultWrapper);
 	}
 
 	/**
@@ -38,6 +38,6 @@ public interface SimpleTurnMystique extends Mystique {
 	 * @param result the result
 	 * @return the json element
 	 */
-	JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject turn, JsonElement result);
+	JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject turn, JsonObject resultWrapper);
 
 }

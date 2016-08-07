@@ -34,7 +34,7 @@ public class LoopySpell implements Spell {
 	private JsonElement turn;
 
 	/** The result. */
-	private JsonElement result;
+	private JsonObject resultWrapper;
 
 	/**
 	 * Instantiates a new loopy spell.
@@ -44,11 +44,11 @@ public class LoopySpell implements Spell {
 	 * @param turn the turn
 	 * @param result the result
 	 */
-	public LoopySpell(List<JsonElement> source, JsonObject dependencies, JsonElement turn, JsonElement result) {
+	public LoopySpell(List<JsonElement> source, JsonObject dependencies, JsonElement turn, JsonObject resultWrapper) {
 		this.source = source;
 		this.dependencies = dependencies;
 		this.turn = turn;
-		this.result = result;
+		this.resultWrapper = resultWrapper;
 	}
 
 	/* (non-Javadoc)
@@ -62,7 +62,7 @@ public class LoopySpell implements Spell {
 			JsonArray jsonArray = source.get(0).getAsJsonArray();
 			for (JsonElement jsonElement : jsonArray) {
 				transform.getAsJsonArray().add(
-						mystique.transform(Lists.newArrayList(jsonElement), dependencies, turn, result));
+						mystique.transform(Lists.newArrayList(jsonElement), dependencies, turn, resultWrapper));
 			}
 		}
 		return transform;

@@ -30,7 +30,7 @@ public class SimpleSpell implements Spell {
 	private JsonElement turn;
 
 	/** The result. */
-	private JsonElement result;
+	private JsonObject resultWrapper;
 
 	/**
 	 * Instantiates a new simple spell.
@@ -40,11 +40,11 @@ public class SimpleSpell implements Spell {
 	 * @param turn the turn
 	 * @param result the result
 	 */
-	public SimpleSpell(List<JsonElement> source, JsonObject dependencies, JsonElement turn, JsonElement result) {
+	public SimpleSpell(List<JsonElement> source, JsonObject dependencies, JsonElement turn, JsonObject resultWrapper) {
 		this.source = source;
 		this.dependencies = dependencies;
 		this.turn = turn;
-		this.result = result;
+		this.resultWrapper = resultWrapper;
 	}
 
 	/* (non-Javadoc)
@@ -52,7 +52,7 @@ public class SimpleSpell implements Spell {
 	 */
 	@Override
 	public JsonElement cast(Mystique mystique) {
-		return mystique.transform(source, dependencies, turn, result);
+		return mystique.transform(source, dependencies, turn, resultWrapper);
 	}
 
 }

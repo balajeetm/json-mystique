@@ -33,12 +33,12 @@ public class MultiTurnMystique implements Mystique {
 	 * @see com.futuresight.util.mystique.Mystique#transform(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonElement, com.google.gson.JsonElement)
 	 */
 	@Override
-	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonElement turn, JsonElement result) {
-		JsonArray jsonArray = turn.getAsJsonArray();
+	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonElement turn, JsonObject resultWrapper) {
+		JsonArray turnArray = turn.getAsJsonArray();
 		JsonElement transform = null;
-		for (JsonElement object : jsonArray) {
-			Mystique mystique = factory.getMystique(object);
-			transform = mystique.transform(source, deps, object, result);
+		for (JsonElement turnObject : turnArray) {
+			Mystique mystique = factory.getMystique(turnObject);
+			transform = mystique.transform(source, deps, turnObject, resultWrapper);
 			if (null != transform && !transform.isJsonNull()) {
 				break;
 			}
