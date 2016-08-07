@@ -116,9 +116,15 @@ public class JsonGenie {
 		return transform(inputJson, specName, new JsonObject());
 	}
 
-	public JsonElement transform(String inputJson, String specName, JsonObject deps) {
-		JsonElement source = jsonLever.getJsonParser().parse(inputJson);
-		return transform(source, specName, deps);
+	/**
+	 * Transform.
+	 *
+	 * @param source the source
+	 * @param specName the spec name
+	 * @return the json element
+	 */
+	public JsonElement transform(JsonElement source, String specName) {
+		return transform(source, specName, new JsonObject());
 	}
 
 	/**
@@ -129,29 +135,8 @@ public class JsonGenie {
 	 * @return the string
 	 */
 	public String transformToString(String inputJson, String specName) {
-		JsonElement transform = transform(inputJson, specName);
+		JsonElement transform = transform(inputJson, specName, new JsonObject());
 		return String.valueOf(transform);
-	}
-
-	public JsonElement transform(JsonElement source, String specName) {
-		return transform(source, specName, new JsonObject());
-	}
-
-	/**
-	 * Transform.
-	 *
-	 * @param source the source
-	 * @param specName the spec name
-	 * @return the json element
-	 */
-	public JsonElement transform(JsonElement source, String specName, JsonObject deps) {
-		List<Tarot> tarotList = tarots.get(specName);
-		JsonObject dependencies = null == deps ? new JsonObject() : deps;
-		JsonElement transform = transform(source, tarotList, dependencies);
-		if (null == transform) {
-			logger.error(String.format("Invalid spec %s. No tarots for spec %s", specName, specName));
-		}
-		return transform;
 	}
 
 	/**
@@ -162,8 +147,39 @@ public class JsonGenie {
 	 * @return the string
 	 */
 	public String transformToString(JsonElement source, String specName) {
-		JsonElement transform = transform(source, specName);
+		JsonElement transform = transform(source, specName, new JsonObject());
 		return String.valueOf(transform);
+	}
+
+	/**
+	 * Transform.
+	 *
+	 * @param inputJson the input json
+	 * @param specName the spec name
+	 * @param deps the deps
+	 * @return the json element
+	 */
+	public JsonElement transform(String inputJson, String specName, JsonObject deps) {
+		JsonElement source = jsonLever.getJsonParser().parse(inputJson);
+		return transform(source, specName, deps);
+	}
+
+	/**
+	 * Transform.
+	 *
+	 * @param source the source
+	 * @param specName the spec name
+	 * @param deps the deps
+	 * @return the json element
+	 */
+	public JsonElement transform(JsonElement source, String specName, JsonObject deps) {
+		List<Tarot> tarotList = tarots.get(specName);
+		JsonObject dependencies = null == deps ? new JsonObject() : deps;
+		JsonElement transform = transform(source, tarotList, dependencies);
+		if (null == transform) {
+			logger.error(String.format("Invalid spec %s. No tarots for spec %s", specName, specName));
+		}
+		return transform;
 	}
 
 	/**
@@ -211,24 +227,6 @@ public class JsonGenie {
 	 * @param turn the turn
 	 * @return the spell
 	 */
-	private Spell getSpell(JsonElement source, List<List<String>> from, JsonObject dependencies, JsonElement turn) {
-		List<JsonElement> fields = new ArrayList<>();
-		Spell spell = null;
-		if (CollectionUtils.isNotEmpty(from)) {
-			for (List<String> path : from) {
-				Boolean isLoopy = jsonLever.getField(source, fields, path);
-				if (isLoopy) {
-					spell = new LoopySpell(fields, dependencies, turn);
-					break;
-				}
-			}
-		}
-		if (null == spell) {
-			spell = new SimpleSpell(fields, dependencies, turn);
-		}
-		return spell;
-	}
-
 	private Spell getSpell(JsonElement source, JsonArray from, JsonObject dependencies, JsonElement turn) {
 		List<JsonElement> fields = new ArrayList<>();
 		Spell spell = null;
