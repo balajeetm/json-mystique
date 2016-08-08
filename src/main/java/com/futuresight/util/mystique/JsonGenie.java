@@ -233,23 +233,28 @@ public class JsonGenie {
 			JsonObject resultWrapper) {
 		List<JsonElement> fields = new ArrayList<>();
 		Spell spell = null;
-		if (null != from && from.size() > 0) {
-			for (JsonElement jsonElement : from) {
-				if (jsonElement.isJsonArray()) {
-					JsonArray fromArray = jsonElement.getAsJsonArray();
-					Boolean isLoopy = jsonLever.getField(source, fields, fromArray);
-					if (isLoopy) {
-						spell = new LoopySpell(fields, dependencies, turn, resultWrapper);
+		if (null != from) {
+			if (from.size() > 0) {
+				for (JsonElement jsonElement : from) {
+					if (jsonElement.isJsonArray()) {
+						JsonArray fromArray = jsonElement.getAsJsonArray();
+						Boolean isLoopy = jsonLever.getField(source, fields, fromArray);
+						if (isLoopy) {
+							spell = new LoopySpell(fields, dependencies, turn, resultWrapper);
+							break;
+						}
+					}
+					else {
+						Boolean isLoopy = jsonLever.getField(source, fields, from);
+						if (isLoopy) {
+							spell = new LoopySpell(fields, dependencies, turn, resultWrapper);
+						}
 						break;
 					}
 				}
-				else {
-					Boolean isLoopy = jsonLever.getField(source, fields, from);
-					if (isLoopy) {
-						spell = new LoopySpell(fields, dependencies, turn, resultWrapper);
-					}
-					break;
-				}
+			}
+			else {
+				jsonLever.getField(source, fields, from);
 			}
 		}
 		if (null == spell) {

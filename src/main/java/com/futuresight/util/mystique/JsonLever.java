@@ -8,7 +8,6 @@
  */
 package com.futuresight.util.mystique;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -16,7 +15,6 @@ import java.util.regex.Pattern;
 
 import lombok.Getter;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -131,47 +129,6 @@ public class JsonLever {
 	 * @param path the path
 	 * @return the field
 	 */
-	public JsonElement getField(JsonElement source, List<String> path) {
-		JsonElement field = null;
-		try {
-			field = source;
-			if (CollectionUtils.isNotEmpty(path)) {
-				for (String key : path) {
-					Integer index = getIndex(key);
-					/**
-					 * This means, the path refers to a json object
-					 * field
-					 **/
-					if (null == index) {
-						field = field.getAsJsonObject().get(key);
-					}
-					else {
-						/** Get the field from the array **/
-						field = field.getAsJsonArray().get(index);
-					}
-				}
-			}
-		}
-		/**
-		 * Would throw an exception for any invalid path, which is
-		 * logged and ignored
-		 **/
-		catch (RuntimeException e) {
-			logger.warn(
-					String.format("Error getting field from source for %s - %s. Skipping the same",
-							Arrays.deepToString(path.toArray()), e.getMessage()), e);
-			field = null;
-		}
-		return field;
-	}
-
-	/**
-	 * Gets the field.
-	 *
-	 * @param source the source
-	 * @param path the path
-	 * @return the field
-	 */
 	public JsonElement getField(JsonElement source, JsonArray path) {
 		JsonElement field = null;
 		try {
@@ -215,77 +172,31 @@ public class JsonLever {
 	 * @param path the path
 	 * @return the field
 	 */
-	public Boolean getField(JsonElement source, List<JsonElement> fields, List<String> path) {
-		Boolean isLoopy = Boolean.FALSE;
-		try {
-			JsonElement field = source;
-			if (CollectionUtils.isNotEmpty(path)) {
-				for (String key : path) {
-					if (isLoopy(key)) {
-						isLoopy = Boolean.TRUE;
-						fields.clear();
-					}
-					else {
-						Integer index = getIndex(key);
-						/**
-						 * This means, the path refers to a json object
-						 * field
-						 **/
-						if (null == index) {
-							field = field.getAsJsonObject().get(key);
-						}
-						else {
-							/** Get the field from the array **/
-							field = field.getAsJsonArray().get(index);
-						}
-					}
-				}
-				fields.add(field);
-			}
-		}
-		/**
-		 * Would throw an exception for any invalid path, which is
-		 * logged and ignored
-		 **/
-		catch (RuntimeException e) {
-			logger.warn(
-					String.format("Error getting field from source for %s - %s. Skipping the same",
-							Arrays.deepToString(path.toArray()), e.getMessage()), e);
-		}
-		return isLoopy;
-	}
-
-	/**
-	 * Gets the field.
-	 *
-	 * @param source the source
-	 * @param fields the fields
-	 * @param path the path
-	 * @return the field
-	 */
 	public Boolean getField(JsonElement source, List<JsonElement> fields, JsonArray path) {
 		Boolean isLoopy = Boolean.FALSE;
 		try {
 			JsonElement field = source;
-			if (null != path && path.size() > 0) {
-				for (JsonElement keyElement : path) {
-					String key = keyElement.getAsString();
-					if (isLoopy(key)) {
-						isLoopy = Boolean.TRUE;
-						fields.clear();
-					}
-					else {
-						Integer index = getIndex(key);
-						/**
-						 * This means, the path refers to a json object
-						 * field
-						 **/
-						if (null == index) {
-							field = field.getAsJsonObject().get(key);
+			if (null != path) {
+				if (path.size() > 0) {
+					for (JsonElement keyElement : path) {
+						String key = keyElement.getAsString();
+						if (isLoopy(key)) {
+							isLoopy = Boolean.TRUE;
+							fields.clear();
 						}
 						else {
-							/** Get the field from the array **/
-							field = field.getAsJsonArray().get(index);
+							Integer index = getIndex(key);
+							/**
+							 * This means, the path refers to a json object
+							 * field
+							 **/
+							if (null == index) {
+								field = field.getAsJsonObject().get(key);
+							}
+							else {
+								/** Get the field from the array **/
+								field = field.getAsJsonArray().get(index);
+							}
 						}
 					}
 				}
