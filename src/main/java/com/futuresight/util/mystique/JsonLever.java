@@ -456,7 +456,11 @@ public class JsonLever {
 				field.get(i);
 			}
 			catch (IndexOutOfBoundsException e) {
-				field.add(getNewElement(type));
+				JsonType newType = JsonType.Null;
+				if (i == index) {
+					newType = type;
+				}
+				field.add(getNewElement(newType));
 			}
 		}
 		return field.get(index);

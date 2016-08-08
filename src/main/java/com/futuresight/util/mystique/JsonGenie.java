@@ -60,7 +60,7 @@ public class JsonGenie {
 	/**
 	 * Instantiates a new json genie.
 	 */
-	public JsonGenie() {
+	private JsonGenie() {
 		tarots = new HashMap<String, List<Tarot>>();
 	}
 

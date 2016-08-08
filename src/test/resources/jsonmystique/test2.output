@@ -1,0 +1,18 @@
+{
+  "backpack": {
+    "shirt": {
+      "color": "red",
+      "size": "40"
+    },
+    "trouser": {
+      "color": "blue",
+      "length": "39"
+    },
+    "handtowel": [
+      null,
+      {
+        "color": "white"
+      }
+    ]
+  }
+}

@@ -81,4 +81,44 @@ public class JsonGenieBDDTest {
 			Assert.fail(e.getMessage());
 		}
 	}
+
+	@Test
+	public void test1() {
+		try {
+			String inputPattern = "classpath:jsonmystique/test1.input";
+			String outputPattern = "classpath:jsonmystique/test1.output";
+			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+			Resource resource = resourceResolver.getResource(inputPattern);
+
+			String string = IOUtils.toString(resource.getInputStream());
+			Resource outputRes = resourceResolver.getResource(outputPattern);
+			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
+			JsonElement transform = jsonGenie.transform(string, "test1");
+			Assert.assertEquals(output, transform);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Test
+	public void test2() {
+		try {
+			String inputPattern = "classpath:jsonmystique/test2.input";
+			String outputPattern = "classpath:jsonmystique/test2.output";
+			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+			Resource resource = resourceResolver.getResource(inputPattern);
+
+			String string = IOUtils.toString(resource.getInputStream());
+			Resource outputRes = resourceResolver.getResource(outputPattern);
+			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
+			JsonElement transform = jsonGenie.transform(string, "test2");
+			Assert.assertEquals(output, transform);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
+	}
 }
