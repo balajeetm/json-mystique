@@ -34,16 +34,14 @@ public class ConcatMystique extends AbstractMystique {
 		StringBuilder stringBuilder = new StringBuilder();
 		if (CollectionUtils.isNotEmpty(source)) {
 			JsonElement jsonSep = turn.get("separator");
-			String separator = null == jsonSep ? "" : StringUtils.trimToEmpty(jsonSep.getAsString());
-			int count = 0;
-			for (JsonElement jsonElement : source) {
-
+			String separator = jsonLever.isNull(jsonSep) ? "" : StringUtils.trimToEmpty(jsonSep.getAsString());
+			for (int count = 0; count < source.size(); count++) {
+				JsonElement jsonElement = source.get(count);
 				JsonElement granularSource = getGranularSource(jsonElement, turn);
 				if (count != 0) {
 					stringBuilder.append(separator);
 				}
 				stringBuilder.append(StringUtils.strip(granularSource.toString(), "\""));
-				count++;
 			}
 		}
 		return new JsonPrimitive(stringBuilder.toString());

@@ -28,10 +28,6 @@ import com.google.gson.JsonObject;
 @Component
 public class MapMystique extends AbstractMystique {
 
-	/** The json lever. */
-	@Autowired
-	private JsonLever jsonLever;
-
 	/** The convertor. */
 	@Autowired
 	private JsonJacksonConvertor convertor;
@@ -44,17 +40,19 @@ public class MapMystique extends AbstractMystique {
 		JsonObject mapJson = new JsonObject();
 		if (CollectionUtils.isNotEmpty(source)) {
 			JsonElement elementSource = source.get(0);
+			turn = jsonLever.isNotNull(turn) ? turn : new JsonObject();
 			JsonElement granularSource = getGranularSource(elementSource, turn);
-			JsonArray jsonArray = granularSource.getAsJsonArray();
+			JsonArray jsonArray = jsonLever.isNotNull(granularSource) && granularSource.isJsonArray() ? granularSource
+					.getAsJsonArray() : new JsonArray();
 
 			JsonElement keyObject = turn.get("key");
-			if (null != keyObject) {
+			if (jsonLever.isNotNull(keyObject) && keyObject.isJsonArray()) {
 				JsonElement valueObject = turn.get("value");
-				valueObject = (null == valueObject) ? new JsonArray() : valueObject;
+				valueObject = jsonLever.isNull(valueObject) ? new JsonArray() : valueObject;
 				for (JsonElement jsonElement : jsonArray) {
 					JsonElement keyField = jsonLever.getField(jsonElement, keyObject.getAsJsonArray());
-					String key = (null != keyField && keyField.isJsonPrimitive()) ? StringUtils.trimToEmpty(keyField
-							.getAsString()) : null;
+					String key = (jsonLever.isNotNull(keyField) && keyField.isJsonPrimitive()) ? StringUtils
+							.trimToEmpty(keyField.getAsString()) : null;
 					JsonElement valueField = jsonLever.getField(jsonElement, valueObject.getAsJsonArray());
 					mapJson.add(key, valueField);
 				}

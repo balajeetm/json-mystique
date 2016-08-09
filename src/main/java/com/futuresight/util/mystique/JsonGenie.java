@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
@@ -112,7 +113,8 @@ public class JsonGenie {
 	 * @return the json element
 	 */
 	public JsonElement transform(String inputJson, String specName) {
-		return transform(inputJson, specName, new JsonObject());
+		JsonElement source = jsonLever.getJsonParser().parse(inputJson);
+		return transform(source, specName);
 	}
 
 	/**
@@ -124,30 +126,6 @@ public class JsonGenie {
 	 */
 	public JsonElement transform(JsonElement source, String specName) {
 		return transform(source, specName, new JsonObject());
-	}
-
-	/**
-	 * Transform to string.
-	 *
-	 * @param inputJson the input json
-	 * @param specName the spec name
-	 * @return the string
-	 */
-	public String transformToString(String inputJson, String specName) {
-		JsonElement transform = transform(inputJson, specName, new JsonObject());
-		return String.valueOf(transform);
-	}
-
-	/**
-	 * Transform to string.
-	 *
-	 * @param source the source
-	 * @param specName the spec name
-	 * @return the string
-	 */
-	public String transformToString(JsonElement source, String specName) {
-		JsonElement transform = transform(source, specName, new JsonObject());
-		return String.valueOf(transform);
 	}
 
 	/**
@@ -175,10 +153,56 @@ public class JsonGenie {
 		List<Tarot> tarotList = tarots.get(specName);
 		JsonObject dependencies = null == deps ? new JsonObject() : deps;
 		JsonElement transform = transform(source, tarotList, dependencies);
-		if (null == transform) {
-			logger.error(String.format("Invalid spec %s. No tarots for spec %s", specName, specName));
+		if (jsonLever.isNull(transform)) {
+			logger.info(String.format("Transformed value for spec %s is null", specName));
 		}
 		return transform;
+	}
+
+	/**
+	 * Transform to string.
+	 *
+	 * @param inputJson the input json
+	 * @param specName the spec name
+	 * @return the string
+	 */
+	public String transformToString(String inputJson, String specName) {
+		return String.valueOf(transform(inputJson, specName));
+	}
+
+	/**
+	 * Transform to string.
+	 *
+	 * @param inputJson the input json
+	 * @param specName the spec name
+	 * @param deps the deps
+	 * @return the string
+	 */
+	public String transformToString(String inputJson, String specName, JsonObject deps) {
+		return String.valueOf(transform(inputJson, specName, deps));
+	}
+
+	/**
+	 * Transform to string.
+	 *
+	 * @param source the source
+	 * @param specName the spec name
+	 * @return the string
+	 */
+	public String transformToString(JsonElement source, String specName) {
+		return String.valueOf(transform(source, specName));
+	}
+
+	/**
+	 * Transform to string.
+	 *
+	 * @param source the source
+	 * @param specName the spec name
+	 * @param deps the deps
+	 * @return the string
+	 */
+	public String transformToString(JsonElement source, String specName, JsonObject deps) {
+		return String.valueOf(transform(source, specName, deps));
 	}
 
 	/**
@@ -191,30 +215,30 @@ public class JsonGenie {
 	 */
 	private JsonElement transform(JsonElement source, List<Tarot> tarotList, JsonObject dependencies) {
 		JsonObject resultWrapper = new JsonObject();
-		resultWrapper.add("result", null);
+		resultWrapper.add("result", JsonNull.INSTANCE);
 		if (CollectionUtils.isNotEmpty(tarotList)) {
 			for (Tarot tarot : tarotList) {
-				JsonElement turn = tarot.getTurn();
 				updateDependencies(source, tarot.getDeps(), dependencies);
-				Mystique mystique = factory.getMystique(turn);
-				Spell trick = getSpell(source, tarot.getFrom(), dependencies, turn, resultWrapper);
-				JsonElement transform = trick.cast(mystique);
-				//JsonElement transform = mystique.transform(source, tarot.getFrom(), dependencies, turn);
-				JsonArray to = tarot.getTo();
-				Boolean optional = tarot.getOptional();
+				JsonElement turn = tarot.getTurn();
 				try {
+					Mystique mystique = factory.getMystique(turn);
+					Spell spell = getSpell(source, tarot.getFrom(), dependencies, turn, resultWrapper);
+					JsonElement transform = spell.cast(mystique);
+					JsonArray to = tarot.getTo();
+					Boolean optional = tarot.getOptional();
+
 					resultWrapper = jsonLever.setField(resultWrapper, to, transform, optional);
 				}
 				catch (RuntimeException e) {
-					logger.error(String.format(
-							"Error transforming input with specification for field %s with convertor %s - %s", to,
-							mystique, e.getMessage()), e);
+					logger.info(
+							String.format("Error transforming input with specification for turn %s - %s", turn,
+									e.getMessage()), e);
 					continue;
 				}
 			}
 		}
 		else {
-			logger.error(String.format("Invalid tarots. Tarots cannot be empty"));
+			logger.info(String.format("Invalid tarots. Tarots cannot be empty"));
 		}
 		return resultWrapper.get("result");
 	}
@@ -226,41 +250,54 @@ public class JsonGenie {
 	 * @param from the from
 	 * @param dependencies the dependencies
 	 * @param turn the turn
-	 * @param result the result
+	 * @param resultWrapper the result wrapper
 	 * @return the spell
 	 */
 	private Spell getSpell(JsonElement source, JsonArray from, JsonObject dependencies, JsonElement turn,
 			JsonObject resultWrapper) {
 		List<JsonElement> fields = new ArrayList<>();
 		Spell spell = null;
-		if (null != from) {
-			if (from.size() > 0) {
-				for (JsonElement jsonElement : from) {
+		Boolean isFromLoopy = getFields(source, dependencies, from, fields);
+		//Ideally isDeps should never be loopy
+		if (isFromLoopy) {
+			spell = new LoopySpell(fields, dependencies, turn, resultWrapper);
+		}
+		else {
+			spell = new SimpleSpell(fields, dependencies, turn, resultWrapper);
+		}
+		return spell;
+	}
+
+	/**
+	 * Gets the fields.
+	 *
+	 * @param source the source
+	 * @param dependencies the dependencies
+	 * @param path the path
+	 * @param fields the fields
+	 * @return the fields
+	 */
+	private Boolean getFields(JsonElement source, JsonObject dependencies, JsonArray path, List<JsonElement> fields) {
+		Boolean isLoopy = Boolean.FALSE;
+		if (null != path) {
+			if (path.size() > 0) {
+				for (JsonElement jsonElement : path) {
 					if (jsonElement.isJsonArray()) {
 						JsonArray fromArray = jsonElement.getAsJsonArray();
-						Boolean isLoopy = jsonLever.getField(source, fields, fromArray);
-						if (isLoopy) {
-							spell = new LoopySpell(fields, dependencies, turn, resultWrapper);
-							break;
-						}
+						isLoopy = isLoopy || jsonLever.getField(source, dependencies, fields, fromArray);
+						//Once isloopy, the loop doesn't execute anymore
 					}
 					else {
-						Boolean isLoopy = jsonLever.getField(source, fields, from);
-						if (isLoopy) {
-							spell = new LoopySpell(fields, dependencies, turn, resultWrapper);
-						}
+						isLoopy = isLoopy || jsonLever.getField(source, dependencies, fields, path);
 						break;
 					}
 				}
 			}
 			else {
-				jsonLever.getField(source, fields, from);
+				isLoopy = isLoopy || jsonLever.getField(source, dependencies, fields, path);
 			}
 		}
-		if (null == spell) {
-			spell = new SimpleSpell(fields, dependencies, turn, resultWrapper);
-		}
-		return spell;
+		return isLoopy;
 	}
 
 	/**
@@ -272,12 +309,17 @@ public class JsonGenie {
 	 */
 	private void updateDependencies(JsonElement source, List<Tarot> deps, JsonObject dependencies) {
 		if (CollectionUtils.isNotEmpty(deps)) {
-			JsonElement transform = transform(source, deps, dependencies);
-			if (jsonLever.isNotNull(transform)) {
-				Set<Entry<String, JsonElement>> entrySet = transform.getAsJsonObject().entrySet();
-				for (Entry<String, JsonElement> entry : entrySet) {
-					dependencies.add(entry.getKey(), entry.getValue());
+			try {
+				JsonElement transform = transform(source, deps, dependencies);
+				if (jsonLever.isNotNull(transform)) {
+					Set<Entry<String, JsonElement>> entrySet = transform.getAsJsonObject().entrySet();
+					for (Entry<String, JsonElement> entry : entrySet) {
+						dependencies.add(entry.getKey(), entry.getValue());
+					}
 				}
+			}
+			catch (RuntimeException e) {
+				logger.info(String.format("Could not update dependencies : %s", e.getMessage()));
 			}
 		}
 	}

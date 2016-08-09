@@ -1,82 +1,72 @@
 {
-  "xy1":{
-    "prajwal":"bala"
-  },
-  "ba1":"Bala",
-  "ba2":{
-    "DHeeru":"a"
-  },
-  "ba3":{
-    "ba31":[
-      "Ganesh"],
-    "ba32":[
-      null,
-      [
-        "test"]]
-  },
-  "ba4":"hard",
-  "ba5":"Bala~Ganesh",
-  "ba6":{
-    "ba61":"Paneesh"
-  },
-  "ba7":[
-    "Bala1Bala",
-    "Bala2Bala",
-    "Bala3Bala",
-    "Bala4Bala"],
-  "ba8":[
-    {
-      "ba81":"Rag1",
-      "ba82":{
-        "c1":"test1"
-      }
-    },
-    {
-      "ba81":"Rag2",
-      "ba82":{
-        "c1":"test2"
-      }
-    }],
-  "ba9":{
-    "Rag1":{
-      "a":"Ragu",
-      "b":"Rag1",
-      "c":{
-        "c1":"test1"
-      }
-    },
-    "Rag2":{
-      "a":"Ragu",
-      "b":"Rag2",
-      "c":{
-        "c1":"test2"
-      }
-    }
-  },
-  "ba10":{
-    "Rag1":{
-      "c1":"test1"
-    },
-    "Rag2":{
-      "c1":"test2"
-    }
-  },
-  "ba11":[
-    {
-      "leader":"Bala",
-      "reference":"KEY1"
-    },
-    {
-      "leader":"Praj",
-      "reference":"KEY2"
-    }],
-  "ba12":[
-    "success",
-    false],
-  "adult":true,
-  "action":"ACTION MOVIE",
-  "horror":{
-    "value":"HORROR MOVIE"
-  },
-  "erotic":true
+	"xy1": {
+		"prajwal": "bala"
+	},
+	"ba1": "Bala",
+	"ba2": {
+		"DHeeru": "a"
+	},
+	"ba3": {
+		"ba31": ["Ganesh"],
+		"ba32": [null, ["test"]]
+	},
+	"ba4": "hard",
+	"ba5": "Bala~Ganesh",
+	"ba6": {
+		"ba61": "Paneesh"
+	},
+	"ba7": ["Bala1Bala", "Bala2Bala", "Bala3Bala", "Bala4Bala"],
+	"ba8": [{
+		"ba81": "Rag1",
+		"ba82": {
+			"c1": "test1"
+		}
+	}, {
+		"ba81": "Rag2",
+		"ba82": {
+			"c1": "test2"
+		}
+	}],
+	"ba9": {
+		"Rag1": {
+			"a": "Ragu",
+			"b": "Rag1",
+			"c": {
+				"c1": "test1"
+			}
+		},
+		"Rag2": {
+			"a": "Ragu",
+			"b": "Rag2",
+			"c": {
+				"c1": "test2"
+			}
+		}
+	},
+	"ba10": {
+		"Rag1": {
+			"c1": "test1"
+		},
+		"Rag2": {
+			"c1": "test2"
+		}
+	},
+	"ba11": [{
+		"leader": "Bala",
+		"reference": "KEY1"
+	}, {
+		"leader": "Praj",
+		"reference": "KEY2"
+	}],
+	"ba12": ["success", false],
+	"adult": true,
+	"action": "ACTION MOVIE",
+	"horror": {
+		"value": "HORROR MOVIE"
+	},
+	"erotic": true,
+	"ba13": {
+		"name": "KEY1",
+		"type": "simple"
+	}
 }

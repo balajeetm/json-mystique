@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 
 /**
@@ -36,7 +37,8 @@ public abstract class AbstractMystique implements SimpleTurnMystique {
 	 */
 	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject turn, JsonObject resultWrapper) {
 		JsonElement transform = transmute(source, deps, turn);
-		if ((null == transform || transform.isJsonNull()) && null != turn) {
+		Boolean isTurn = jsonLever.isNotNull(turn);
+		if (jsonLever.isNull(transform) && isTurn) {
 			JsonElement defaultJson = turn.get("default");
 			transform = transformOnCondition(defaultJson, source, deps, resultWrapper);
 		}
@@ -45,9 +47,9 @@ public abstract class AbstractMystique implements SimpleTurnMystique {
 		JsonArray to = null;
 		Boolean optional = Boolean.FALSE;
 
-		if (null != turn) {
+		if (isTurn) {
 			JsonElement toJson = turn.get("to");
-			to = null == toJson ? null : toJson.getAsJsonArray();
+			to = jsonLever.isNull(toJson) ? null : toJson.getAsJsonArray();
 			JsonElement optionalElement = turn.get("optional");
 			if (null != optionalElement) {
 				optional = optionalElement.getAsBoolean();
@@ -69,8 +71,8 @@ public abstract class AbstractMystique implements SimpleTurnMystique {
 	 */
 	protected JsonElement transformOnCondition(JsonElement conditionalJson, List<JsonElement> source, JsonObject deps,
 			JsonObject resultWrapper) {
-		JsonElement transform = null;
-		if (null != conditionalJson) {
+		JsonElement transform = JsonNull.INSTANCE;
+		if (jsonLever.isNotNull(conditionalJson)) {
 			JsonObject defaultObj = conditionalJson.getAsJsonObject();
 			//Should not be null, can be json null
 			if (null != defaultObj.get("value")) {
@@ -118,8 +120,8 @@ public abstract class AbstractMystique implements SimpleTurnMystique {
 	 * @return the granular source
 	 */
 	protected JsonElement getGranularSource(JsonElement source, JsonObject turn) {
-		JsonElement from = null != turn ? turn.get("from") : null;
-		JsonElement conditionSource = null;
+		JsonElement from = jsonLever.isNotNull(turn) ? turn.get("from") : JsonNull.INSTANCE;
+		JsonElement conditionSource = JsonNull.INSTANCE;
 		if (jsonLever.isNull(from)) {
 			conditionSource = source;
 		}

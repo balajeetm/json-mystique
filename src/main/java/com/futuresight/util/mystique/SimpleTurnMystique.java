@@ -25,7 +25,7 @@ public interface SimpleTurnMystique extends Mystique {
 	 */
 	@Override
 	default JsonElement transform(List<JsonElement> source, JsonObject deps, JsonElement turn, JsonObject resultWrapper) {
-		JsonObject turnObject = (null == turn) ? null : turn.getAsJsonObject();
+		JsonObject turnObject = (null == turn || turn.isJsonNull()) ? null : turn.getAsJsonObject();
 		return transform(source, deps, turnObject, resultWrapper);
 	}
 

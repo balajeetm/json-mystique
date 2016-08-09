@@ -15,6 +15,7 @@ import org.apache.commons.collections.CollectionUtils;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 
 /**
@@ -56,7 +57,7 @@ public class LoopySpell implements Spell {
 	 */
 	@Override
 	public JsonElement cast(Mystique mystique) {
-		JsonElement transform = null;
+		JsonElement transform = JsonNull.INSTANCE;
 		if (CollectionUtils.isNotEmpty(source)) {
 			transform = new JsonArray();
 			JsonArray jsonArray = source.get(0).getAsJsonArray();

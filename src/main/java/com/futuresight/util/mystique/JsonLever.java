@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -133,7 +134,7 @@ public class JsonLever {
 		JsonElement field = null;
 		try {
 			field = source;
-			if (null != path && path.size() > 0) {
+			if (null != path) {
 				for (JsonElement jsonElement : path) {
 					String key = jsonElement.isJsonPrimitive() ? jsonElement.getAsString() : null;
 					Integer index = getIndex(key);
@@ -172,32 +173,43 @@ public class JsonLever {
 	 * @param path the path
 	 * @return the field
 	 */
-	public Boolean getField(JsonElement source, List<JsonElement> fields, JsonArray path) {
+	public Boolean getField(JsonElement source, JsonObject dependencies, List<JsonElement> fields, JsonArray path) {
 		Boolean isLoopy = Boolean.FALSE;
 		try {
 			JsonElement field = source;
 			if (null != path) {
 				if (path.size() > 0) {
-					for (JsonElement keyElement : path) {
-						String key = keyElement.getAsString();
-						if (isLoopy(key)) {
-							isLoopy = Boolean.TRUE;
-							fields.clear();
-						}
-						else {
-							Integer index = getIndex(key);
-							/**
-							 * This means, the path refers to a json object
-							 * field
-							 **/
-							if (null == index) {
-								field = field.getAsJsonObject().get(key);
+					try {
+						for (int count = 0; count < path.size(); count++) {
+							String key = path.get(count).getAsString();
+							if (count == 0 && "@deps".equals(key)) {
+								field = dependencies;
+								continue;
+							}
+							if (isLoopy(key)) {
+								isLoopy = Boolean.TRUE;
+								fields.clear();
+								break;
 							}
 							else {
-								/** Get the field from the array **/
-								field = field.getAsJsonArray().get(index);
+								Integer index = getIndex(key);
+								/**
+								 * This means, the path refers to a json object
+								 * field
+								 **/
+								if (null == index) {
+									field = field.getAsJsonObject().get(key);
+								}
+								else {
+									/** Get the field from the array **/
+									field = field.getAsJsonArray().get(index);
+								}
 							}
 						}
+					}
+					catch (IllegalStateException e) {
+						logger.info(String.format("Invalid json path %s for %s : %s", path, source, e.getMessage()), e);
+						field = JsonNull.INSTANCE;
 					}
 				}
 				fields.add(field);
@@ -226,11 +238,11 @@ public class JsonLever {
 	 */
 	public JsonObject setField(JsonObject resultWrapper, JsonArray to, JsonElement transform, Boolean optional) {
 		if (optional) {
-			if (null == transform || transform.isJsonNull()) {
+			if (isNull(transform)) {
 				return resultWrapper;
 			}
 		}
-		if (null != to) {
+		if (isNotNull(to)) {
 			JsonElement result = resultWrapper.get("result");
 			JsonElement field = result;
 			if (to.size() > 0) {
@@ -305,7 +317,7 @@ public class JsonLever {
 	 * @param type the type
 	 * @return the replete field
 	 */
-	public JsonElement getRepleteField(JsonElement field, JsonType type) {
+	private JsonElement getRepleteField(JsonElement field, JsonType type) {
 		if (isNull(field)) {
 			field = getNewElement(type);
 		}
@@ -318,7 +330,7 @@ public class JsonLever {
 	 * @param type the type
 	 * @return the new element
 	 */
-	public JsonElement getNewElement(JsonType type) {
+	private JsonElement getNewElement(JsonType type) {
 		JsonElement element = null;
 		switch (type) {
 		case Array:

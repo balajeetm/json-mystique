@@ -11,6 +11,7 @@ package com.futuresight.util.mystique;
 import java.util.List;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 
 /**
@@ -52,7 +53,7 @@ public class SimpleSpell implements Spell {
 	 */
 	@Override
 	public JsonElement cast(Mystique mystique) {
-		return mystique.transform(source, dependencies, turn, resultWrapper);
+		return null != mystique ? mystique.transform(source, dependencies, turn, resultWrapper) : JsonNull.INSTANCE;
 	}
 
 }

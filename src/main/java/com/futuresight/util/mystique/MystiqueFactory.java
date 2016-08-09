@@ -33,6 +33,9 @@ public class MystiqueFactory {
 	@Autowired
 	private ApplicationContext context;
 
+	@Autowired
+	private JsonLever jsonLever;
+
 	/**
 	 * Instantiates a new mystique factory.
 	 */
@@ -48,13 +51,18 @@ public class MystiqueFactory {
 	public Mystique getMystique(JsonElement turn) {
 		Mystique mystique = null;
 		try {
-			if (null != turn && turn.isJsonArray()) {
+
+			if (jsonLever.isNull(turn)) {
+				mystique = context.getBean(CopyMystique.class);
+			}
+			else if (turn.isJsonArray()) {
 				mystique = context.getBean(MultiTurnMystique.class);
 			}
 			else {
-				JsonObject turnObject = null == turn ? null : turn.getAsJsonObject();
-				JsonElement turnTypeEle = null == turnObject ? null : turnObject.get("type");
-				String turnType = (null == turnTypeEle) ? "" : turnTypeEle.getAsString();
+				String turnType = null;
+				JsonObject turnObject = turn.getAsJsonObject();
+				JsonElement turnTypeEle = turnObject.get("type");
+				turnType = (jsonLever.isNotNull(turnTypeEle)) ? turnTypeEle.getAsString() : "";
 				if (StringUtils.isEmpty(turnType) || StringUtils.equalsIgnoreCase(turnType, MysType.copy.name())) {
 					mystique = context.getBean(CopyMystique.class);
 				}
@@ -87,15 +95,6 @@ public class MystiqueFactory {
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.condition.name())) {
 					mystique = context.getBean(ConditionMystique.class);
 				}
-				/*else if (StringUtils.startsWithIgnoreCase(turn, "turn:")) {
-					String command = StringUtils.removeStartIgnoreCase(turn, "turn:");
-					if ("copy".equalsIgnoreCase(command)) {
-						mystique = context.getBean(CopyMystique.class);
-					}
-					else if ("concat".equalsIgnoreCase(command)) {
-						mystique = context.getBean(ConcatMystique.class);
-					}
-				}*/
 				else {
 					logger.error(String.format("Invalid mystique %s", turnObject));
 				}

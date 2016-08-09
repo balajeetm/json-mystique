@@ -27,10 +27,6 @@ import com.google.gson.JsonPrimitive;
 @Component
 public class ConditionMystique extends AbstractMystique {
 
-	/** The json lever. */
-	@Autowired
-	private JsonLever jsonLever;
-
 	/** The convertor. */
 	@Autowired
 	private JsonJacksonConvertor convertor;
@@ -46,11 +42,12 @@ public class ConditionMystique extends AbstractMystique {
 			//key1
 			elementSource = source.get(0);
 		}
+		turn = jsonLever.isNull(turn) ? new JsonObject() : turn;
 		JsonElement value = turn.get("value");
 		JsonElement granularSource = getGranularSource(elementSource, turn);
 		Boolean equals = isEquals(granularSource, value);
 		JsonElement jsonElement = turn.get(String.valueOf(equals));
-		if (null == jsonElement) {
+		if (jsonLever.isNull(jsonElement)) {
 			transform = new JsonPrimitive(equals);
 		}
 		else {
@@ -68,14 +65,12 @@ public class ConditionMystique extends AbstractMystique {
 	 */
 	private Boolean isEquals(JsonElement var1, JsonElement var2) {
 		Boolean isEqual = Boolean.FALSE;
-
-		if (var1 == null && var2 == null) {
+		if (jsonLever.isNull(var1) && jsonLever.isNull(var2)) {
 			isEqual = Boolean.TRUE;
 		}
-		else if (var1 != null) {
+		else if (jsonLever.isNotNull(var1)) {
 			isEqual = var1.equals(var2);
 		}
-
 		return isEqual;
 	}
 }

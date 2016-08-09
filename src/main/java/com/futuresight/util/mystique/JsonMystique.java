@@ -36,10 +36,14 @@ public class JsonMystique extends AbstractMystique {
 	public JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject turn) {
 		JsonElement transform = null;
 		if (CollectionUtils.isNotEmpty(source)) {
-			String myst = turn.get("value").getAsString();
-			JsonElement jsonElement = source.get(0);
-			JsonElement granularSource = getGranularSource(jsonElement, turn);
-			transform = jsonGenie.transform(granularSource, myst, deps);
+			turn = jsonLever.isNull(turn) ? new JsonObject() : turn;
+			JsonElement value = turn.get("value");
+			if (jsonLever.isNotNull(value) && value.isJsonPrimitive()) {
+				String myst = value.getAsString();
+				JsonElement jsonElement = source.get(0);
+				JsonElement granularSource = getGranularSource(jsonElement, turn);
+				transform = jsonGenie.transform(granularSource, myst, deps);
+			}
 		}
 		return transform;
 	}
