@@ -9,6 +9,7 @@
 package com.futuresight.util.mystique;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,9 +87,11 @@ public class JsonGenie {
 				if (resource.exists()) {
 					String specName = FilenameUtils.removeExtension(resource.getFilename());
 					try {
+						@SuppressWarnings("serial")
+						Type type = new TypeToken<List<Tarot>>() {
+						}.getType();
 						List<Tarot> fromJson = jsonLever.getGson().fromJson(
-								IOUtils.toString(resource.getInputStream()), new TypeToken<List<Tarot>>() {
-								}.getType());
+								IOUtils.toString(resource.getInputStream()), type);
 						tarots.put(specName, fromJson);
 					}
 					catch (JsonSyntaxException | IOException exception) {

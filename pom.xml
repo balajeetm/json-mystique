@@ -160,9 +160,49 @@
 						<downloadJavadocs>true</downloadJavadocs>
 					</configuration>
 				</plugin>
+				<plugin>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.10.4</version>
+					<configuration>
+						<links>
+							<!-- these links need to be internal as build machines may not have 
+								internet access -->
+							<!-- Note: these could be made relative by using linkoffline if we 
+								where to use site mirroring -->
+							<link>
+								http://maven-doc.nds.com/javadoc/j2se/1.7.0_u05/api
+							</link>
+							<link>http://maven-doc.nds.com/javadoc/j2ee/6.0</link>
+							<link>http://maven-doc.nds.com/javadoc/spring/3.2.1/api</link>
+						</links>
+						<linksource>true</linksource>
+						<version />
+						<author />
+					</configuration>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
+
+	<profiles>
+		<profile>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<properties>
+				<additionalparam>-Xdoclint:none</additionalparam>
+			</properties>
+		</profile>
+	</profiles>
 
 	<properties>
 		<javaVersion>1.8</javaVersion>

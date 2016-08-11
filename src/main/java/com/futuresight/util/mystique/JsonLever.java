@@ -8,6 +8,10 @@
  */
 package com.futuresight.util.mystique;
 
+import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,15 +19,21 @@ import java.util.regex.Pattern;
 
 import lombok.Getter;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
 /**
  * The Class JsonLever.
@@ -90,7 +100,22 @@ public class JsonLever {
 		indexPattern = Pattern.compile(indexPat);
 		loopyPattern = Pattern.compile(loopyPat);
 		jsonParser = new JsonParser();
-		gson = new Gson();
+		GsonBuilder builder = new GsonBuilder();
+		builder.setDateFormat(DateFormat.LONG, DateFormat.LONG);
+		builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+
+			@Override
+			public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+					throws JsonParseException {
+				Date date = null;
+				if (null != json && json.isJsonPrimitive()) {
+					date = new Date(json.getAsJsonPrimitive().getAsLong());
+				}
+				return date;
+			}
+
+		});
+		gson = builder.create();
 	}
 
 	/**
@@ -424,6 +449,26 @@ public class JsonLever {
 	 */
 	public Boolean isNotNull(JsonElement element) {
 		return !isNull(element);
+	}
+
+	public JsonElement getFormattedDate(Date date, JsonElement outFormat) {
+		JsonElement output;
+		String formatString = isNotNull(outFormat) && outFormat.isJsonPrimitive() ? StringUtils.trimToEmpty(
+				outFormat.getAsString()).toLowerCase() : "long";
+		switch (formatString) {
+		case "long":
+			output = new JsonPrimitive(date.getTime());
+			break;
+
+		case "string":
+			output = new JsonPrimitive(String.valueOf(date.getTime()));
+			break;
+
+		default:
+			output = new JsonPrimitive(new SimpleDateFormat(formatString).format(date));
+			break;
+		}
+		return output;
 	}
 
 }

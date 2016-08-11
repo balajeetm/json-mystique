@@ -17,19 +17,29 @@ public enum MysType {
 
 	/** The copy. */
 	copy,
+
 	/** The mystique. */
 	mystique,
+
 	/** The bean. */
 	bean,
+
 	/** The constant. */
 	constant,
+
 	/** The concat. */
 	concat,
+
 	/** The array to map. */
 	arrayToMap,
+
 	/** The get from deps. */
 	getFromDeps,
+
 	/** The condition. */
-	condition
+	condition,
+
+	/** The date convertor. */
+	dateConvertor
 
 }

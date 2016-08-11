@@ -11,8 +11,10 @@ package com.futuresight.util.mystique;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.futuresight.util.mystique.lever.JsonJacksonConvertor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -23,7 +25,11 @@ import com.google.gson.JsonPrimitive;
  * @author balajmoh
  */
 @Component
-public class ConditionMystique extends AbstractMystique {
+public class UtilityMystique extends AbstractMystique {
+
+	/** The convertor. */
+	@Autowired
+	private JsonJacksonConvertor convertor;
 
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.AbstractMystique#transmute(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonObject)

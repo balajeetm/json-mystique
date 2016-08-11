@@ -9,8 +9,10 @@
 package com.futuresight.util.mystique;
 
 import java.io.InputStreamReader;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +26,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import com.futuresight.util.mystique.config.JsonMystiqueConfig;
+import com.futuresight.util.mystique.lever.ConvertorInterface;
+import com.futuresight.util.mystique.lever.GsonJacksonConvertor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -74,6 +78,11 @@ public class JsonGenieBDDTest {
 			Resource outputRes = resourceResolver.getResource(outputPattern);
 			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
 			JsonElement transform = jsonGenie.transform(string, "ptest1");
+			Boolean transformSuccess = transform != null && !transform.isJsonNull() && transform.isJsonObject();
+			Assert.assertTrue(transformSuccess);
+			JsonElement jsonElement = transform.getAsJsonObject().get("ba14");
+			transform.getAsJsonObject().remove("ba14");
+			Assert.assertTrue(null != jsonElement && !jsonElement.isJsonNull());
 			Assert.assertEquals(output, transform);
 		}
 		catch (Exception e) {
@@ -119,6 +128,29 @@ public class JsonGenieBDDTest {
 		catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Test
+	public void chumma() {
+		try {
+			String locationPattern = "classpath:jsonmystique/*.abc";
+			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+			Resource[] resources = null;
+			resources = resourceResolver.getResources(locationPattern);
+			if (!ArrayUtils.isEmpty(resources)) {
+				Resource resource = resources[0];
+				if (resource.exists()) {
+					ConvertorInterface instance = GsonJacksonConvertor.getInstance();
+					List<Chumma> deserializeList = instance.deserializeList(resource.getInputStream(), Chumma.class);
+					for (Chumma chumma : deserializeList) {
+						System.out.println("oh");
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			System.err.println("A");
 		}
 	}
 }
