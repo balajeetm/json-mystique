@@ -141,7 +141,7 @@ public final class JsonJacksonConvertor implements ConvertorInterface {
 	 * 
 	 * @return the object mapper
 	 */
-	private ObjectMapper getObjectMapper() {
+	public ObjectMapper getObjectMapper() {
 		if (null == objectMapper) {
 			objectMapper = new ObjectMapper();
 

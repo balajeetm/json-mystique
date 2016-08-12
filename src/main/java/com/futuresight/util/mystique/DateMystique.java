@@ -34,7 +34,7 @@ public class DateMystique extends AbstractMystique {
 		turn = jsonLever.isNull(turn) ? new JsonObject() : turn;
 		JsonElement granularSource = getGranularSource(elementSource, turn);
 
-		MystFunction function = factory.getFunction(turn.get("action"));
+		MystFunction function = factory.getDateFunction(turn.get("action"));
 		return function.execute(granularSource, turn);
 	}
 }

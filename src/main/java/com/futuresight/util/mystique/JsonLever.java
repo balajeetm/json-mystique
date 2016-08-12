@@ -8,7 +8,6 @@
  */
 package com.futuresight.util.mystique;
 
-import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,21 +16,22 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.PostConstruct;
+
 import lombok.Getter;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.futuresight.util.mystique.lever.JsonGsonConvertor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
@@ -57,6 +57,11 @@ public class JsonLever {
 
 	/** The pattern. */
 	private Pattern loopyPattern;
+
+	@Autowired
+	private JsonGsonConvertor gsonConvertor;
+
+	private static JsonLever INSTANCE;
 
 	/**
 	 * Gets the json parser.
@@ -100,22 +105,23 @@ public class JsonLever {
 		indexPattern = Pattern.compile(indexPat);
 		loopyPattern = Pattern.compile(loopyPat);
 		jsonParser = new JsonParser();
-		GsonBuilder builder = new GsonBuilder();
-		builder.setDateFormat(DateFormat.LONG, DateFormat.LONG);
-		builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.setDateFormat(DateFormat.LONG, DateFormat.LONG);
+		gson = gsonBuilder.create();
+	}
 
-			@Override
-			public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-					throws JsonParseException {
-				Date date = null;
-				if (null != json && json.isJsonPrimitive()) {
-					date = new Date(json.getAsJsonPrimitive().getAsLong());
-				}
-				return date;
-			}
+	@PostConstruct
+	private void init() {
+		INSTANCE = this;
+	}
 
-		});
-		gson = builder.create();
+	/**
+	 * Gets the single instance of JsonJacksonConvertor.
+	 *
+	 * @return single instance of JsonJacksonConvertor
+	 */
+	public static JsonLever getInstance() {
+		return INSTANCE;
 	}
 
 	/**
@@ -479,6 +485,14 @@ public class JsonLever {
 		return null == element || element.isJsonNull();
 	}
 
+	public Boolean isJsonPrimitive(JsonElement element) {
+		return isNotNull(element) && element.isJsonPrimitive();
+	}
+
+	public String getStringFromJson(JsonElement element, String defaultStr) {
+		return isJsonPrimitive(element) ? element.getAsString() : defaultStr;
+	}
+
 	/**
 	 * Checks if is not null.
 	 *
@@ -487,6 +501,14 @@ public class JsonLever {
 	 */
 	public Boolean isNotNull(JsonElement element) {
 		return !isNull(element);
+	}
+
+	public Boolean isJsonObject(JsonElement element) {
+		return isNotNull(element) && element.isJsonObject();
+	}
+
+	public Boolean isJsonArray(JsonElement element) {
+		return isNotNull(element) && element.isJsonArray();
 	}
 
 	public JsonElement getFormattedDate(Date date, JsonElement outFormat) {

@@ -12,16 +12,28 @@ import static com.google.gson.internal.$Gson$Preconditions.checkArgument;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Getter;
+
 import org.springframework.stereotype.Component;
 
-import com.futuresight.util.mystique.JsonLever;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 /**
  * The Class GsonJacksonConvertor.
@@ -29,18 +41,18 @@ import com.google.gson.JsonElement;
  * @author balajmoh
  */
 @Component
-public class GsonJacksonConvertor implements ConvertorInterface {
-
-	@Autowired
-	private JsonLever jsonLever;
+public class JsonGsonConvertor implements ConvertorInterface {
 
 	/** The gson. */
 	private Gson gson;
 
+	@Getter
+	private GsonBuilder gsonBuilder;
+
 	/**
 	 * Instantiates a new gson jackson convertor.
 	 */
-	private GsonJacksonConvertor() {
+	private JsonGsonConvertor() {
 	}
 
 	/**
@@ -49,7 +61,37 @@ public class GsonJacksonConvertor implements ConvertorInterface {
 	@PostConstruct
 	protected void init() {
 		Creator.INSTANCE = this;
-		gson = jsonLever.getGson();
+		gsonBuilder = new GsonBuilder();
+		gsonBuilder.setDateFormat(DateFormat.LONG, DateFormat.LONG);
+		gsonBuilder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+
+			@Override
+			public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+					throws JsonParseException {
+				Date date = null;
+				if (null != json && json.isJsonPrimitive()) {
+					date = new Date(json.getAsJsonPrimitive().getAsLong());
+				}
+				return date;
+			}
+
+		});
+		gsonBuilder.registerTypeAdapter(XMLGregorianCalendar.class, new JsonSerializer<XMLGregorianCalendar>() {
+
+			@Override
+			public JsonElement serialize(XMLGregorianCalendar src, Type typeOfSrc, JsonSerializationContext context) {
+				Date date = null;
+				if (null != src) {
+					date = src.toGregorianCalendar().getTime();
+				}
+				return new JsonPrimitive(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(date));
+			}
+		});
+		updateGson();
+	}
+
+	public void updateGson() {
+		gson = gsonBuilder.create();
 	}
 
 	/**
@@ -69,7 +111,7 @@ public class GsonJacksonConvertor implements ConvertorInterface {
 	private static class Creator {
 
 		/** The instance. */
-		public static ConvertorInterface INSTANCE = new GsonJacksonConvertor();
+		public static ConvertorInterface INSTANCE = new JsonGsonConvertor();
 	}
 
 	/* (non-Javadoc)

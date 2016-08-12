@@ -27,7 +27,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import com.futuresight.util.mystique.config.JsonMystiqueConfig;
 import com.futuresight.util.mystique.lever.ConvertorInterface;
-import com.futuresight.util.mystique.lever.GsonJacksonConvertor;
+import com.futuresight.util.mystique.lever.JsonGsonConvertor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -141,7 +141,7 @@ public class JsonGenieBDDTest {
 			if (!ArrayUtils.isEmpty(resources)) {
 				Resource resource = resources[0];
 				if (resource.exists()) {
-					ConvertorInterface instance = GsonJacksonConvertor.getInstance();
+					ConvertorInterface instance = JsonGsonConvertor.getInstance();
 					List<Chumma> deserializeList = instance.deserializeList(resource.getInputStream(), Chumma.class);
 					for (Chumma chumma : deserializeList) {
 						System.out.println("oh");

@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -43,7 +44,7 @@ public class GetFromDepsMystique extends AbstractMystique {
 			JsonElement key = turn.get("key");
 			JsonElement value = turn.get("value");
 			JsonArray keyPath = jsonLever.isNull(key) ? new JsonArray() : key.getAsJsonArray();
-			JsonArray valuePath = jsonLever.isNull(value) ? new JsonArray() : value.getAsJsonArray();
+			JsonElement valuePath = jsonLever.isNull(value) ? new JsonArray() : value;
 
 			//keymap
 			JsonElement field = jsonLever.getField(deps, keyPath);
@@ -51,8 +52,41 @@ public class GetFromDepsMystique extends AbstractMystique {
 
 			String asString = jsonLever.isNull(granularSource) ? null : granularSource.getAsString();
 			JsonElement actualElement = map.get(asString);
-			transform = jsonLever.getField(actualElement, valuePath);
+			transform = test(actualElement, valuePath, deps);
 		}
 		return transform;
+	}
+
+	private JsonElement test(JsonElement source, JsonElement valueObject, JsonObject deps) {
+		JsonElement finalValue = null;
+		if (valueObject.isJsonArray()) {
+			JsonArray valueArray = valueObject.getAsJsonArray();
+			if (valueArray.size() == 0) {
+				finalValue = jsonLever.getField(source, valueArray);
+			}
+			else {
+				for (JsonElement valuePath : valueArray) {
+					if (valuePath.isJsonArray()) {
+						finalValue = new JsonObject();
+						for (JsonElement path : valueArray) {
+							JsonArray pathArray = path.getAsJsonArray();
+							JsonElement subset = jsonLever.getField(source, pathArray);
+							jsonLever.setField(finalValue.getAsJsonObject(), pathArray, subset);
+						}
+						finalValue = finalValue.getAsJsonObject().get("result");
+					}
+					else {
+						finalValue = jsonLever.getField(source, valueArray);
+						break;
+					}
+				}
+			}
+		}
+		else {
+			// This is a turn
+			Mystique mystique = factory.getMystique(valueObject);
+			finalValue = mystique.transform(Lists.newArrayList(source), deps, valueObject, new JsonObject());
+		}
+		return finalValue;
 	}
 }

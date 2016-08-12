@@ -38,8 +38,8 @@ public class MultiTurnMystique implements Mystique {
 	 */
 	@Override
 	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonElement turn, JsonObject resultWrapper) {
-		JsonArray turnArray = jsonLever.isNotNull(turn) && turn.isJsonArray() ? turn.getAsJsonArray()
-				: new JsonArray();
+
+		JsonArray turnArray = jsonLever.isJsonArray(turn) ? turn.getAsJsonArray() : new JsonArray();
 		JsonElement transform = JsonNull.INSTANCE;
 		for (JsonElement turnObject : turnArray) {
 			Mystique mystique = factory.getMystique(turnObject);

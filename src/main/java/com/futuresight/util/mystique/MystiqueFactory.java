@@ -98,6 +98,9 @@ public class MystiqueFactory {
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.dateConvertor.name())) {
 					mystique = context.getBean(DateMystique.class);
 				}
+				else if (StringUtils.equalsIgnoreCase(turnType, MysType.stringUtils.name())) {
+					mystique = context.getBean(StringUtilsMystique.class);
+				}
 				else {
 					logger.error(String.format("Invalid mystique %s", turnObject));
 				}
@@ -111,7 +114,7 @@ public class MystiqueFactory {
 		return mystique;
 	}
 
-	public MystFunction getFunction(JsonElement actionJson) {
+	public MystFunction getDateFunction(JsonElement actionJson) {
 		String action = jsonLever.isNotNull(actionJson) && actionJson.isJsonPrimitive() ? StringUtils.trimToEmpty(
 				actionJson.getAsString()).toLowerCase() : "now";
 		MystFunction mystFunction = null;

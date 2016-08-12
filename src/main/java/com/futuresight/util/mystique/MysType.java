@@ -40,6 +40,8 @@ public enum MysType {
 	condition,
 
 	/** The date convertor. */
-	dateConvertor
+	dateConvertor,
 
+	/** The string utils. */
+	stringUtils
 }
