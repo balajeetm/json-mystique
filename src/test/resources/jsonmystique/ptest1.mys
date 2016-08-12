@@ -66,6 +66,17 @@
 	}
 }, {
 	"from": ["h"],
+	"to": ["ba9.0"],
+	"turn": {
+		"type": "arrayToMap",
+		"key": ["b"],
+		"value": [
+			["a"],
+			["c", "c1"]
+		]
+	}
+}, {
+	"from": ["h"],
 	"to": ["ba10"],
 	"turn": [{
 		"type": "arrayToMap",
@@ -156,5 +167,11 @@
 		"action": "transform",
 		"informat": "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
 		"outformat": "yyyy-MM-dd"
+	}
+}, {
+	"to": ["ba16"],
+	"from": ["xyz"],
+	"turn": {
+		"type": "condition"
 	}
 }]

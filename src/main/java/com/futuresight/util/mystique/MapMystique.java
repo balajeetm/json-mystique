@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.futuresight.util.mystique.lever.JsonJacksonConvertor;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -53,8 +54,39 @@ public class MapMystique extends AbstractMystique {
 					JsonElement keyField = jsonLever.getField(jsonElement, keyObject.getAsJsonArray());
 					String key = (jsonLever.isNotNull(keyField) && keyField.isJsonPrimitive()) ? StringUtils
 							.trimToEmpty(keyField.getAsString()) : null;
-					JsonElement valueField = jsonLever.getField(jsonElement, valueObject.getAsJsonArray());
-					mapJson.add(key, valueField);
+
+					JsonElement finalValue = null;
+
+					if (valueObject.isJsonArray()) {
+						JsonArray valueArray = valueObject.getAsJsonArray();
+						if (valueArray.size() == 0) {
+							finalValue = jsonLever.getField(jsonElement, valueArray);
+						}
+						else {
+							for (JsonElement valuePath : valueArray) {
+								if (valuePath.isJsonArray()) {
+									finalValue = new JsonObject();
+									for (JsonElement path : valueArray) {
+										JsonArray pathArray = path.getAsJsonArray();
+										JsonElement subset = jsonLever.getField(jsonElement, pathArray);
+										jsonLever.setField(finalValue.getAsJsonObject(), pathArray, subset);
+									}
+									finalValue = finalValue.getAsJsonObject().get("result");
+								}
+								else {
+									finalValue = jsonLever.getField(jsonElement, valueArray);
+									break;
+								}
+							}
+						}
+					}
+					else {
+						// This is a turn
+						Mystique mystique = factory.getMystique(valueObject);
+						finalValue = mystique.transform(Lists.newArrayList(jsonElement), deps, valueObject,
+								new JsonObject());
+					}
+					mapJson.add(key, finalValue);
 				}
 			}
 		}

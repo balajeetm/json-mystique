@@ -50,20 +50,18 @@ public class ConditionMystique extends AbstractMystique {
 		return transform;
 	}
 
-	/**
-	 * Checks if is equals.
-	 *
-	 * @param var1 the var1
-	 * @param var2 the var2
-	 * @return the boolean
-	 */
-	private Boolean isEquals(JsonElement var1, JsonElement var2) {
+	private Boolean isEquals(JsonElement source, JsonElement expected) {
 		Boolean isEqual = Boolean.FALSE;
-		if (jsonLever.isNull(var1) && jsonLever.isNull(var2)) {
-			isEqual = Boolean.TRUE;
+		if (null == expected) {
+			if (jsonLever.isNotNull(source)) {
+				isEqual = Boolean.TRUE;
+			}
 		}
-		else if (jsonLever.isNotNull(var1)) {
-			isEqual = var1.equals(var2);
+		else {
+			if (jsonLever.isNull(source) && expected.isJsonNull()) {
+				isEqual = Boolean.TRUE;
+			}
+			isEqual = expected.equals(source);
 		}
 		return isEqual;
 	}

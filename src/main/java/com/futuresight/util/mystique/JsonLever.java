@@ -190,6 +190,40 @@ public class JsonLever {
 		return field;
 	}
 
+	public JsonElement getField(JsonElement source, List<String> path) {
+		JsonElement field = null;
+		try {
+			field = source;
+			if (null != path) {
+				for (String key : path) {
+					Integer index = getIndex(key);
+					/**
+					 * This means, the path refers to a json object
+					 * field
+					 **/
+					if (null == index) {
+						field = field.getAsJsonObject().get(key);
+					}
+					else {
+						/** Get the field from the array **/
+						field = field.getAsJsonArray().get(index);
+					}
+				}
+			}
+		}
+		/**
+		 * Would throw an exception for any invalid path, which is
+		 * logged and ignored
+		 **/
+		catch (RuntimeException e) {
+			logger.warn(
+					String.format("Error getting field from source for %s - %s. Skipping the same", path,
+							e.getMessage()), e);
+			field = null;
+		}
+		return field;
+	}
+
 	/**
 	 * Gets the field.
 	 *
@@ -333,6 +367,10 @@ public class JsonLever {
 			resultWrapper.add("result", result);
 		}
 		return resultWrapper;
+	}
+
+	public JsonObject setField(JsonObject resultWrapper, JsonArray to, JsonElement transform) {
+		return setField(resultWrapper, to, transform, Boolean.FALSE);
 	}
 
 	/**
