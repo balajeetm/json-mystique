@@ -710,7 +710,7 @@ public class JsonLever {
 	public JsonArray newJsonArray(String... path) {
 		JsonArray output = new JsonArray();
 		for (String string : path) {
-			output.add(string);
+			output.add(new JsonPrimitive(string));
 		}
 		return output;
 	}
