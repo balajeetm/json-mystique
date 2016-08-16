@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -30,6 +29,8 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
+import com.futuresight.util.mystique.lever.MysCon;
+import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -218,19 +219,19 @@ public class JsonGenie {
 	 */
 	private JsonElement transform(JsonElement source, List<Tarot> tarotList, JsonObject dependencies) {
 		JsonObject resultWrapper = new JsonObject();
-		resultWrapper.add("result", JsonNull.INSTANCE);
+		resultWrapper.add(MysCon.RESULT, JsonNull.INSTANCE);
 		if (CollectionUtils.isNotEmpty(tarotList)) {
 			for (Tarot tarot : tarotList) {
 				updateDependencies(source, tarot.getDeps(), dependencies);
-				JsonElement turn = tarot.getTurn();
+				JsonObject aces = tarot.getAces();
+				updateAces(source, aces, dependencies);
+				JsonObject turn = tarot.getTurn();
 				try {
 					Mystique mystique = factory.getMystique(turn);
-					Spell spell = getSpell(source, tarot.getFrom(), dependencies, turn, resultWrapper);
+					Spell spell = getSpell(source, tarot.getFrom(), dependencies, aces, turn, resultWrapper);
 					JsonElement transform = spell.cast(mystique);
-					JsonArray to = tarot.getTo();
-					Boolean optional = tarot.getOptional();
-
-					resultWrapper = jsonLever.setField(resultWrapper, to, transform, optional);
+					resultWrapper = jsonLever.setField(resultWrapper, tarot.getTo(), transform, aces,
+							tarot.getOptional());
 				}
 				catch (RuntimeException e) {
 					logger.info(
@@ -243,7 +244,7 @@ public class JsonGenie {
 		else {
 			logger.info(String.format("Invalid tarots. Tarots cannot be empty"));
 		}
-		return resultWrapper.get("result");
+		return resultWrapper.get(MysCon.RESULT);
 	}
 
 	/**
@@ -252,22 +253,18 @@ public class JsonGenie {
 	 * @param source the source
 	 * @param from the from
 	 * @param dependencies the dependencies
+	 * @param aces the aces
 	 * @param turn the turn
 	 * @param resultWrapper the result wrapper
 	 * @return the spell
 	 */
-	private Spell getSpell(JsonElement source, JsonArray from, JsonObject dependencies, JsonElement turn,
-			JsonObject resultWrapper) {
+	private Spell getSpell(JsonElement source, JsonArray from, JsonObject dependencies, JsonObject aces,
+			JsonObject turn, JsonObject resultWrapper) {
 		List<JsonElement> fields = new ArrayList<>();
-		Spell spell = null;
-		Boolean isFromLoopy = getFields(source, dependencies, from, fields);
+		Boolean isFromLoopy = getFields(source, dependencies, aces, from, fields);
 		//Ideally isDeps should never be loopy
-		if (isFromLoopy) {
-			spell = new LoopySpell(fields, dependencies, turn, resultWrapper);
-		}
-		else {
-			spell = new SimpleSpell(fields, dependencies, turn, resultWrapper);
-		}
+		Spell spell = isFromLoopy ? new LoopySpell(fields, dependencies, aces, turn, resultWrapper) : new SimpleSpell(
+				fields, dependencies, aces, turn, resultWrapper);
 		return spell;
 	}
 
@@ -276,28 +273,30 @@ public class JsonGenie {
 	 *
 	 * @param source the source
 	 * @param dependencies the dependencies
+	 * @param aces the aces
 	 * @param path the path
 	 * @param fields the fields
 	 * @return the fields
 	 */
-	private Boolean getFields(JsonElement source, JsonObject dependencies, JsonArray path, List<JsonElement> fields) {
+	private Boolean getFields(JsonElement source, JsonObject dependencies, JsonObject aces, JsonArray path,
+			List<JsonElement> fields) {
 		Boolean isLoopy = Boolean.FALSE;
 		if (null != path) {
 			if (path.size() > 0) {
 				for (JsonElement jsonElement : path) {
 					if (jsonElement.isJsonArray()) {
 						JsonArray fromArray = jsonElement.getAsJsonArray();
-						isLoopy = isLoopy || jsonLever.getField(source, dependencies, fields, fromArray);
+						isLoopy = isLoopy || jsonLever.updateFields(source, dependencies, aces, fields, fromArray);
 						//Once isloopy, the loop doesn't execute anymore
 					}
 					else {
-						isLoopy = isLoopy || jsonLever.getField(source, dependencies, fields, path);
+						isLoopy = isLoopy || jsonLever.updateFields(source, dependencies, aces, fields, path);
 						break;
 					}
 				}
 			}
 			else {
-				isLoopy = isLoopy || jsonLever.getField(source, dependencies, fields, path);
+				isLoopy = isLoopy || jsonLever.updateFields(source, dependencies, aces, fields, path);
 			}
 		}
 		return isLoopy;
@@ -313,16 +312,36 @@ public class JsonGenie {
 	private void updateDependencies(JsonElement source, List<Tarot> deps, JsonObject dependencies) {
 		if (CollectionUtils.isNotEmpty(deps)) {
 			try {
-				JsonElement transform = transform(source, deps, dependencies);
-				if (jsonLever.isNotNull(transform)) {
-					Set<Entry<String, JsonElement>> entrySet = transform.getAsJsonObject().entrySet();
-					for (Entry<String, JsonElement> entry : entrySet) {
+				JsonObject transformJson = jsonLever.getAsJsonObject(transform(source, deps, dependencies));
+				if (null != transformJson) {
+					for (Entry<String, JsonElement> entry : transformJson.entrySet()) {
 						dependencies.add(entry.getKey(), entry.getValue());
 					}
 				}
 			}
 			catch (RuntimeException e) {
 				logger.info(String.format("Could not update dependencies : %s", e.getMessage()));
+			}
+		}
+	}
+
+	/**
+	 * Update aces.
+	 *
+	 * @param source the source
+	 * @param aces the aces
+	 * @param dependencies the dependencies
+	 */
+	private void updateAces(JsonElement source, JsonObject aces, JsonObject dependencies) {
+		if (jsonLever.isNotNull(aces)) {
+			for (Entry<String, JsonElement> entry : aces.entrySet()) {
+				JsonObject value = jsonLever.getAsJsonObject(entry.getValue());
+				//Null check required, since for all other purposes, no turn means a default turn. In this case, turn needs to be executed only if it is explicitly specified
+				Mystique mystique = null != value ? factory.getMystique(value) : null;
+				if (null != mystique) {
+					entry.setValue(mystique.transform(Lists.newArrayList(source), dependencies, aces, value,
+							new JsonObject()));
+				}
 			}
 		}
 	}

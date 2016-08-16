@@ -29,7 +29,7 @@ public class CopyMystique extends AbstractMystique {
 	 * @see com.futuresight.util.mystique.Mystique#transform(java.util.List, com.google.gson.JsonObject, java.lang.String)
 	 */
 	@Override
-	public JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject turn) {
+	public JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn) {
 		JsonElement transform = null;
 		if (CollectionUtils.isNotEmpty(source)) {
 			if (source.size() > 1) {

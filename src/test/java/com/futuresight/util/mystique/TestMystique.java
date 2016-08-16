@@ -24,13 +24,14 @@ import com.google.gson.JsonPrimitive;
  * @author balajeetm
  */
 @Component
-public class TestMystique implements SimpleTurnMystique {
+public class TestMystique implements Mystique {
 
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.Mystique#transform(java.util.List, com.google.gson.JsonObject, java.lang.String)
 	 */
 	@Override
-	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject turn, JsonObject resultWrapper) {
+	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn,
+			JsonObject resultWrapper) {
 		JsonElement transform = null;
 		if (CollectionUtils.isNotEmpty(source)) {
 			JsonElement jsonElement = source.get(0);

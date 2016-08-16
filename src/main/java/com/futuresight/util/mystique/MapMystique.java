@@ -10,13 +10,11 @@ package com.futuresight.util.mystique;
 
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.futuresight.util.mystique.lever.JsonJacksonConvertor;
-import com.google.common.collect.Lists;
+import com.futuresight.util.mystique.lever.MysCon;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -37,59 +35,29 @@ public class MapMystique extends AbstractMystique {
 	 * @see com.futuresight.util.mystique.AbstractMystique#transmute(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonObject)
 	 */
 	@Override
-	protected JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject turn) {
+	protected JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn) {
 		JsonObject mapJson = new JsonObject();
-		if (CollectionUtils.isNotEmpty(source)) {
-			JsonElement elementSource = source.get(0);
-			turn = jsonLever.isNotNull(turn) ? turn : new JsonObject();
+		JsonElement elementSource = jsonLever.getFirst(source);
+
+		if (null != elementSource) {
+			turn = jsonLever.getAsJsonObject(turn, new JsonObject());
 			JsonElement granularSource = getGranularSource(elementSource, turn);
-			JsonArray jsonArray = jsonLever.isNotNull(granularSource) && granularSource.isJsonArray() ? granularSource
-					.getAsJsonArray() : new JsonArray();
+			JsonArray inputArray = jsonLever.getAsJsonArray(granularSource, new JsonArray());
+			JsonArray keyArray = jsonLever.getAsJsonArray(turn.get(MysCon.KEY));
+			if (jsonLever.isNotNull(keyArray)) {
+				JsonElement valueElement = turn.get(MysCon.VALUE);
+				valueElement = jsonLever.isNull(valueElement) ? new JsonArray() : valueElement;
 
-			JsonElement keyObject = turn.get("key");
-			if (jsonLever.isNotNull(keyObject) && keyObject.isJsonArray()) {
-				JsonElement valueObject = turn.get("value");
-				valueObject = jsonLever.isNull(valueObject) ? new JsonArray() : valueObject;
-				for (JsonElement jsonElement : jsonArray) {
-					JsonElement keyField = jsonLever.getField(jsonElement, keyObject.getAsJsonArray());
-					String key = (jsonLever.isNotNull(keyField) && keyField.isJsonPrimitive()) ? StringUtils
-							.trimToEmpty(keyField.getAsString()) : null;
+				for (JsonElement jsonElement : inputArray) {
+					JsonElement keyField = jsonLever.getField(jsonElement, keyArray);
+					String key = jsonLever.getAsString(keyField, MysCon.EMPTY);
 
-					JsonElement finalValue = null;
-
-					if (valueObject.isJsonArray()) {
-						JsonArray valueArray = valueObject.getAsJsonArray();
-						if (valueArray.size() == 0) {
-							finalValue = jsonLever.getField(jsonElement, valueArray);
-						}
-						else {
-							for (JsonElement valuePath : valueArray) {
-								if (valuePath.isJsonArray()) {
-									finalValue = new JsonObject();
-									for (JsonElement path : valueArray) {
-										JsonArray pathArray = path.getAsJsonArray();
-										JsonElement subset = jsonLever.getField(jsonElement, pathArray);
-										jsonLever.setField(finalValue.getAsJsonObject(), pathArray, subset);
-									}
-									finalValue = finalValue.getAsJsonObject().get("result");
-								}
-								else {
-									finalValue = jsonLever.getField(jsonElement, valueArray);
-									break;
-								}
-							}
-						}
-					}
-					else {
-						// This is a turn
-						Mystique mystique = factory.getMystique(valueObject);
-						finalValue = mystique.transform(Lists.newArrayList(jsonElement), deps, valueObject,
-								new JsonObject());
-					}
+					JsonElement finalValue = jsonLever.getSubset(jsonElement, deps, aces, valueElement);
 					mapJson.add(key, finalValue);
 				}
 			}
 		}
+
 		return mapJson;
 	}
 }

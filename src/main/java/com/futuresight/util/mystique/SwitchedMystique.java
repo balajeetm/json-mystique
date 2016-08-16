@@ -13,6 +13,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.futuresight.util.mystique.lever.MysCon;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -24,7 +25,7 @@ import com.google.gson.JsonObject;
  * @author balajmoh
  */
 @Component
-public class MultiTurnMystique implements Mystique {
+public class SwitchedMystique implements Mystique {
 
 	/** The factory. */
 	@Autowired
@@ -37,17 +38,22 @@ public class MultiTurnMystique implements Mystique {
 	 * @see com.futuresight.util.mystique.Mystique#transform(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonElement, com.google.gson.JsonElement)
 	 */
 	@Override
-	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonElement turn, JsonObject resultWrapper) {
+	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn,
+			JsonObject resultWrapper) {
 
-		JsonArray turnArray = jsonLever.isJsonArray(turn) ? turn.getAsJsonArray() : new JsonArray();
 		JsonElement transform = JsonNull.INSTANCE;
+		turn = jsonLever.getAsJsonObject(turn, new JsonObject());
+		JsonArray turnArray = jsonLever.getAsJsonArray(turn.get(MysCon.TURNS), new JsonArray());
 		for (JsonElement turnObject : turnArray) {
-			Mystique mystique = factory.getMystique(turnObject);
-			if (null != mystique) {
-				transform = mystique.transform(source, deps, turnObject, resultWrapper);
-			}
-			if (jsonLever.isNotNull(transform)) {
-				break;
+			if (jsonLever.isJsonObject(turnObject)) {
+				JsonObject asJsonObject = turnObject.getAsJsonObject();
+				Mystique mystique = factory.getMystique(asJsonObject);
+				if (null != mystique) {
+					transform = mystique.transform(source, deps, aces, asJsonObject, resultWrapper);
+				}
+				if (jsonLever.isNotNull(transform)) {
+					break;
+				}
 			}
 		}
 		return transform;

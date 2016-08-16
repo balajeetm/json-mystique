@@ -13,7 +13,7 @@ import java.util.List;
 import lombok.Data;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 /**
  * The Class Tarot.
@@ -34,12 +34,20 @@ public class Tarot {
 	private JsonArray to;
 
 	/** The turn. */
-	private JsonElement turn;
+	private JsonObject turn;
+
+	/** The optional. */
+	private Boolean optional = Boolean.FALSE;
 
 	/** The deps. */
 	private List<Tarot> deps;
 
-	/** The optional. */
-	private Boolean optional = Boolean.FALSE;
+	/**
+	 * The aces.
+	 * Is a map of turns. More like pre-processing of data for efficiency
+	 * Each field in the json object corresponds to a turn, which is executed
+	 * and saved in the ace
+	 */
+	private JsonObject aces;
 
 }

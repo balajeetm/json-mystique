@@ -43,5 +43,9 @@ public enum MysType {
 	dateConvertor,
 
 	/** The string utils. */
-	stringUtils
+	stringUtils,
+
+	switched,
+
+	chain
 }

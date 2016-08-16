@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.futuresight.util.mystique.lever.MysCon;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -16,8 +17,8 @@ public class NowFunction implements MystFunction {
 
 	@Override
 	public JsonElement execute(JsonElement source, JsonObject turn) {
-		turn = jsonLever.isNotNull(turn) && turn.isJsonObject() ? turn : new JsonObject();
-		JsonElement outFormat = turn.get("outformat");
+		turn = jsonLever.getAsJsonObject(turn, new JsonObject());
+		String outFormat = jsonLever.getAsString(turn.get(MysCon.OUTFORMAT), MysCon.LONG);
 		return jsonLever.getFormattedDate(new Date(), outFormat);
 	}
 

@@ -10,11 +10,11 @@ package com.futuresight.util.mystique;
 
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
+import com.futuresight.util.mystique.lever.MysCon;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 
 /**
@@ -26,15 +26,14 @@ import com.google.gson.JsonObject;
 public class DateMystique extends AbstractMystique {
 
 	@Override
-	protected JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject turn) {
-		JsonElement elementSource = JsonNull.INSTANCE;
-		if (CollectionUtils.isNotEmpty(source)) {
-			elementSource = source.get(0);
-		}
-		turn = jsonLever.isNull(turn) ? new JsonObject() : turn;
+	protected JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn) {
+		JsonElement elementSource = jsonLever.getFirst(source);
+		turn = jsonLever.getAsJsonObject(turn, new JsonObject());
 		JsonElement granularSource = getGranularSource(elementSource, turn);
 
-		MystFunction function = factory.getDateFunction(turn.get("action"));
+		String action = StringUtils.trimToEmpty(jsonLever.getAsString(turn.get(MysCon.ACTION), MysCon.NOW))
+				.toLowerCase();
+		MystFunction function = factory.getDateFunction(action);
 		return function.execute(granularSource, turn);
 	}
 }

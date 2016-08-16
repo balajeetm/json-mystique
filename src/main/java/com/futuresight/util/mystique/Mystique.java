@@ -25,10 +25,12 @@ public interface Mystique {
 	 *
 	 * @param source the source
 	 * @param deps the deps
+	 * @param aces the aces
 	 * @param turn the turn
-	 * @param result the result
+	 * @param resultWrapper the result wrapper
 	 * @return the json element
 	 */
-	JsonElement transform(List<JsonElement> source, JsonObject deps, JsonElement turn, JsonObject resultWrapper);
+	JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn,
+			JsonObject resultWrapper);
 
 }

@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import com.google.gson.JsonElement;
+import com.futuresight.util.mystique.lever.MysCon;
 import com.google.gson.JsonObject;
 
 /**
@@ -33,6 +33,7 @@ public class MystiqueFactory {
 	@Autowired
 	private ApplicationContext context;
 
+	/** The json lever. */
 	@Autowired
 	private JsonLever jsonLever;
 
@@ -48,21 +49,15 @@ public class MystiqueFactory {
 	 * @param turn the turn
 	 * @return the mystique
 	 */
-	public Mystique getMystique(JsonElement turn) {
+	public Mystique getMystique(JsonObject turn) {
 		Mystique mystique = null;
 		try {
 
 			if (jsonLever.isNull(turn)) {
 				mystique = context.getBean(CopyMystique.class);
 			}
-			else if (turn.isJsonArray()) {
-				mystique = context.getBean(MultiTurnMystique.class);
-			}
 			else {
-				String turnType = null;
-				JsonObject turnObject = turn.getAsJsonObject();
-				JsonElement turnTypeEle = turnObject.get("type");
-				turnType = (jsonLever.isNotNull(turnTypeEle)) ? turnTypeEle.getAsString() : "";
+				String turnType = jsonLever.getAsString(turn.get(MysCon.TYPE), MysCon.EMPTY);
 				if (StringUtils.isEmpty(turnType) || StringUtils.equalsIgnoreCase(turnType, MysType.copy.name())) {
 					mystique = context.getBean(CopyMystique.class);
 				}
@@ -70,13 +65,13 @@ public class MystiqueFactory {
 					mystique = context.getBean(JsonMystique.class);
 				}
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.bean.name())) {
-					String bean = StringUtils.trimToEmpty(turnObject.get("value").getAsString());
+					String bean = jsonLever.getAsString(turn.get(MysCon.VALUE), MysCon.EMPTY);
 					try {
 						mystique = (Mystique) context.getBean(Class.forName(bean));
 					}
 					catch (ClassNotFoundException | ClassCastException e) {
 						logger.error(
-								String.format("Invalid mystique. Error while getting mystique %s : %s", turnObject,
+								String.format("Invalid mystique. Error while getting mystique %s : %s", turn,
 										e.getMessage()), e);
 					}
 				}
@@ -101,8 +96,14 @@ public class MystiqueFactory {
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.stringUtils.name())) {
 					mystique = context.getBean(StringUtilsMystique.class);
 				}
+				else if (StringUtils.equalsIgnoreCase(turnType, MysType.switched.name())) {
+					mystique = context.getBean(SwitchedMystique.class);
+				}
+				else if (StringUtils.equalsIgnoreCase(turnType, MysType.chain.name())) {
+					mystique = context.getBean(ChainMystique.class);
+				}
 				else {
-					logger.error(String.format("Invalid mystique %s", turnObject));
+					logger.error(String.format("Invalid mystique %s", turn));
 				}
 			}
 
@@ -114,17 +115,21 @@ public class MystiqueFactory {
 		return mystique;
 	}
 
-	public MystFunction getDateFunction(JsonElement actionJson) {
-		String action = jsonLever.isNotNull(actionJson) && actionJson.isJsonPrimitive() ? StringUtils.trimToEmpty(
-				actionJson.getAsString()).toLowerCase() : "now";
+	/**
+	 * Gets the date function.
+	 *
+	 * @param actionJson the action json
+	 * @return the date function
+	 */
+	public MystFunction getDateFunction(String action) {
 		MystFunction mystFunction = null;
 		try {
 			switch (action) {
-			case "transform":
+			case MysCon.TRANSFORM:
 				mystFunction = context.getBean(TransformFunction.class);
 				break;
 
-			case "now":
+			case MysCon.NOW:
 				mystFunction = context.getBean(NowFunction.class);
 				break;
 

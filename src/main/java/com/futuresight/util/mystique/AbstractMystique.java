@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.futuresight.util.mystique.lever.MysCon;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -22,7 +23,7 @@ import com.google.gson.JsonObject;
  *
  * @author balajmoh
  */
-public abstract class AbstractMystique implements SimpleTurnMystique {
+public abstract class AbstractMystique implements Mystique {
 
 	/** The json lever. */
 	@Autowired
@@ -35,28 +36,23 @@ public abstract class AbstractMystique implements SimpleTurnMystique {
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.SimpleTurnMystique#transform(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonObject, com.google.gson.JsonElement)
 	 */
-	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject turn, JsonObject resultWrapper) {
-		JsonElement transform = transmute(source, deps, turn);
-		Boolean isTurn = jsonLever.isNotNull(turn);
-		if (jsonLever.isNull(transform) && isTurn) {
-			JsonElement defaultJson = turn.get("default");
-			transform = transformOnCondition(defaultJson, source, deps, resultWrapper);
-		}
+	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn,
+			JsonObject resultWrapper) {
+		JsonElement transform = transmute(source, deps, aces, turn);
 
-		//set the result
-		JsonArray to = null;
-		Boolean optional = Boolean.FALSE;
-
-		if (isTurn) {
-			JsonElement toJson = turn.get("to");
-			to = jsonLever.isNull(toJson) ? null : toJson.getAsJsonArray();
-			JsonElement optionalElement = turn.get("optional");
-			if (null != optionalElement) {
-				optional = optionalElement.getAsBoolean();
+		if (jsonLever.isNotNull(turn)) {
+			if (jsonLever.isNull(transform)) {
+				JsonObject defaultJson = jsonLever.getAsJsonObject(turn.get(MysCon.DEFAULT));
+				transform = transformToDefault(defaultJson, source, deps, aces);
 			}
+
+			//set the result
+			JsonArray to = jsonLever.getAsJsonArray(turn.get(MysCon.TO));
+			Boolean optional = jsonLever.getAsBoolean(turn.get(MysCon.OPTIONAL), Boolean.FALSE);
+
+			jsonLever.setField(resultWrapper, to, transform, aces, optional);
 		}
 
-		jsonLever.setField(resultWrapper, to, transform, optional);
 		return transform;
 	}
 
@@ -69,20 +65,20 @@ public abstract class AbstractMystique implements SimpleTurnMystique {
 	 * @param result the result
 	 * @return the json element
 	 */
-	protected JsonElement transformOnCondition(JsonElement conditionalJson, List<JsonElement> source, JsonObject deps,
-			JsonObject resultWrapper) {
+	protected JsonElement transformToDefault(JsonObject conditionalJson, List<JsonElement> source, JsonObject deps,
+			JsonObject aces, JsonObject resultWrapper) {
 		JsonElement transform = JsonNull.INSTANCE;
 		if (jsonLever.isNotNull(conditionalJson)) {
-			JsonObject defaultObj = conditionalJson.getAsJsonObject();
 			//Should not be null, can be json null
-			if (null != defaultObj.get("value")) {
-				transform = defaultObj.get("value");
+			JsonElement value = conditionalJson.get(MysCon.VALUE);
+			if (null != value) {
+				transform = value;
 			}
 			else {
-				JsonElement defaultTurn = defaultObj.get("turn");
+				JsonObject defaultTurn = jsonLever.getAsJsonObject(conditionalJson.get(MysCon.TURN));
 				if (jsonLever.isNotNull(defaultTurn)) {
 					Mystique mystique = factory.getMystique(defaultTurn);
-					transform = mystique.transform(source, deps, defaultTurn, resultWrapper);
+					transform = mystique.transform(source, deps, aces, defaultTurn, resultWrapper);
 				}
 			}
 		}
@@ -97,9 +93,10 @@ public abstract class AbstractMystique implements SimpleTurnMystique {
 	 * @param deps the deps
 	 * @return the json element
 	 */
-	protected JsonElement transformOnCondition(JsonElement conditionalJson, List<JsonElement> source, JsonObject deps) {
+	protected JsonElement transformToDefault(JsonObject conditionalJson, List<JsonElement> source, JsonObject deps,
+			JsonObject aces) {
 		// Do not update the eventual result
-		return transformOnCondition(conditionalJson, source, deps, new JsonObject());
+		return transformToDefault(conditionalJson, source, deps, aces, new JsonObject());
 	}
 
 	/**
@@ -110,7 +107,8 @@ public abstract class AbstractMystique implements SimpleTurnMystique {
 	 * @param turn the turn
 	 * @return the json element
 	 */
-	protected abstract JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject turn);
+	protected abstract JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject aces,
+			JsonObject turn);
 
 	/**
 	 * Gets the granular source.
@@ -120,15 +118,8 @@ public abstract class AbstractMystique implements SimpleTurnMystique {
 	 * @return the granular source
 	 */
 	protected JsonElement getGranularSource(JsonElement source, JsonObject turn) {
-		JsonElement from = jsonLever.isNotNull(turn) ? turn.get("from") : JsonNull.INSTANCE;
-		JsonElement conditionSource = JsonNull.INSTANCE;
-		if (jsonLever.isNull(from)) {
-			conditionSource = source;
-		}
-		else {
-			conditionSource = jsonLever.getField(source, from.getAsJsonArray());
-		}
-
+		JsonArray from = jsonLever.isNotNull(turn) ? jsonLever.getAsJsonArray(turn.get(MysCon.FROM)) : null;
+		JsonElement conditionSource = jsonLever.isNull(from) ? source : jsonLever.getField(source, from);
 		return conditionSource;
 	}
 }
