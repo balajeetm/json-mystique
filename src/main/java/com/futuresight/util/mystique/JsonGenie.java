@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
 
@@ -30,7 +29,6 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
 import com.futuresight.util.mystique.lever.MysCon;
-import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -154,9 +152,13 @@ public class JsonGenie {
 	 * @return the json element
 	 */
 	public JsonElement transform(JsonElement source, String specName, JsonObject deps) {
+		return transform(source, specName, deps, null);
+	}
+
+	protected JsonElement transform(JsonElement source, String specName, JsonObject deps, JsonObject aces) {
 		List<Tarot> tarotList = tarots.get(specName);
 		JsonObject dependencies = null == deps ? new JsonObject() : deps;
-		JsonElement transform = transform(source, tarotList, dependencies);
+		JsonElement transform = transform(source, tarotList, dependencies, aces);
 		if (jsonLever.isNull(transform)) {
 			logger.info(String.format("Transformed value for spec %s is null", specName));
 		}
@@ -209,6 +211,10 @@ public class JsonGenie {
 		return String.valueOf(transform(source, specName, deps));
 	}
 
+	private JsonElement transform(JsonElement source, List<Tarot> tarotList, JsonObject dependencies) {
+		return transform(source, tarotList, dependencies, null);
+	}
+
 	/**
 	 * Transform.
 	 *
@@ -217,14 +223,16 @@ public class JsonGenie {
 	 * @param dependencies the dependencies
 	 * @return the json element
 	 */
-	private JsonElement transform(JsonElement source, List<Tarot> tarotList, JsonObject dependencies) {
+	private JsonElement transform(JsonElement source, List<Tarot> tarotList, JsonObject dependencies,
+			JsonObject parentAces) {
 		JsonObject resultWrapper = new JsonObject();
 		resultWrapper.add(MysCon.RESULT, JsonNull.INSTANCE);
 		if (CollectionUtils.isNotEmpty(tarotList)) {
 			for (Tarot tarot : tarotList) {
 				updateDependencies(source, tarot.getDeps(), dependencies);
 				JsonObject aces = tarot.getAces();
-				updateAces(source, aces, dependencies);
+				jsonLever.getUpdatedAces(source, aces, dependencies);
+				jsonLever.simpleMerge(parentAces, aces);
 				JsonObject turn = tarot.getTurn();
 				try {
 					Mystique mystique = factory.getMystique(turn);
@@ -312,36 +320,12 @@ public class JsonGenie {
 	private void updateDependencies(JsonElement source, List<Tarot> deps, JsonObject dependencies) {
 		if (CollectionUtils.isNotEmpty(deps)) {
 			try {
-				JsonObject transformJson = jsonLever.getAsJsonObject(transform(source, deps, dependencies));
-				if (null != transformJson) {
-					for (Entry<String, JsonElement> entry : transformJson.entrySet()) {
-						dependencies.add(entry.getKey(), entry.getValue());
-					}
-				}
+				JsonObject transformJson = jsonLever.getAsJsonObject(transform(source, deps, dependencies),
+						new JsonObject());
+				jsonLever.simpleMerge(transformJson, dependencies);
 			}
 			catch (RuntimeException e) {
 				logger.info(String.format("Could not update dependencies : %s", e.getMessage()));
-			}
-		}
-	}
-
-	/**
-	 * Update aces.
-	 *
-	 * @param source the source
-	 * @param aces the aces
-	 * @param dependencies the dependencies
-	 */
-	private void updateAces(JsonElement source, JsonObject aces, JsonObject dependencies) {
-		if (jsonLever.isNotNull(aces)) {
-			for (Entry<String, JsonElement> entry : aces.entrySet()) {
-				JsonObject value = jsonLever.getAsJsonObject(entry.getValue());
-				//Null check required, since for all other purposes, no turn means a default turn. In this case, turn needs to be executed only if it is explicitly specified
-				Mystique mystique = null != value ? factory.getMystique(value) : null;
-				if (null != mystique) {
-					entry.setValue(mystique.transform(Lists.newArrayList(source), dependencies, aces, value,
-							new JsonObject()));
-				}
 			}
 		}
 	}

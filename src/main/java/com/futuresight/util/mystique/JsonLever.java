@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -475,6 +476,26 @@ public class JsonLever {
 		return setField(resultWrapper, to, transform, aces, Boolean.FALSE);
 	}
 
+	protected JsonObject getUpdatedAces(JsonElement source, JsonObject aces, JsonObject dependencies, JsonObject updated) {
+		if (isNotNull(aces)) {
+			for (Entry<String, JsonElement> entry : aces.entrySet()) {
+				JsonObject value = getAsJsonObject(entry.getValue());
+				//Null check required, since for all other purposes, no turn means a default turn. In this case, turn needs to be executed only if it is explicitly specified
+				Mystique mystique = null != value ? factory.getMystique(value) : null;
+				if (null != mystique) {
+					JsonElement transform = mystique.transform(Lists.newArrayList(source), dependencies, aces, value,
+							new JsonObject());
+					updated.add(entry.getKey(), transform);
+				}
+			}
+		}
+		return updated;
+	}
+
+	protected JsonObject getUpdatedAces(JsonElement source, JsonObject aces, JsonObject dependencies) {
+		return getUpdatedAces(source, aces, dependencies, aces);
+	}
+
 	/**
 	 * Gets the replete field.
 	 *
@@ -767,6 +788,15 @@ public class JsonLever {
 			break;
 		}
 		return output;
+	}
+
+	public JsonObject simpleMerge(JsonObject from, JsonObject to) {
+		from = getAsJsonObject(from, new JsonObject());
+		to = getAsJsonObject(to, new JsonObject());
+		for (Entry<String, JsonElement> entry : from.entrySet()) {
+			to.add(entry.getKey(), entry.getValue());
+		}
+		return to;
 	}
 
 }

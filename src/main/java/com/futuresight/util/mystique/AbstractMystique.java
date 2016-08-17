@@ -38,9 +38,21 @@ public abstract class AbstractMystique implements Mystique {
 	 */
 	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn,
 			JsonObject resultWrapper) {
+
+		Boolean turnExists = jsonLever.isNotNull(turn);
+		if (turnExists) {
+			JsonObject localAces = jsonLever.getAsJsonObject(turn.get(MysCon.ACES), null);
+			if (jsonLever.isNotNull(localAces)) {
+				// Aces will only work on first source
+				JsonElement first = jsonLever.getFirst(source);
+				JsonObject updatedAces = jsonLever.getUpdatedAces(first, localAces, deps, new JsonObject());
+				aces = jsonLever.simpleMerge(updatedAces, jsonLever.getAsJsonObject(aces, new JsonObject()));
+			}
+		}
+
 		JsonElement transform = transmute(source, deps, aces, turn);
 
-		if (jsonLever.isNotNull(turn)) {
+		if (turnExists) {
 			if (jsonLever.isNull(transform)) {
 				JsonObject defaultJson = jsonLever.getAsJsonObject(turn.get(MysCon.DEFAULT));
 				transform = transformToDefault(defaultJson, source, deps, aces);

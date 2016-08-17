@@ -64,6 +64,8 @@ public interface MysCon {
 
 	String KEY = "key";
 
+	String ACES = "aces";
+
 	/** The empty. */
 	String EMPTY = "";
 

@@ -92,7 +92,7 @@ public class JsonGsonConvertor implements ConvertorInterface {
 		updateGson();
 	}
 
-	private void updateGson() {
+	public void updateGson() {
 		gson = gsonBuilder.create();
 	}
 
