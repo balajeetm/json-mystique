@@ -23,6 +23,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import lombok.Getter;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
@@ -44,6 +45,7 @@ import com.google.gson.JsonSerializer;
 public class JsonGsonConvertor implements ConvertorInterface {
 
 	/** The gson. */
+	@Getter
 	private Gson gson;
 
 	@Getter
@@ -90,8 +92,17 @@ public class JsonGsonConvertor implements ConvertorInterface {
 		updateGson();
 	}
 
-	public void updateGson() {
+	private void updateGson() {
 		gson = gsonBuilder.create();
+	}
+
+	public void registerTypeAdapter(GsonTypeAdapter... adapters) {
+		if (!ArrayUtils.isEmpty(adapters)) {
+			for (GsonTypeAdapter gsonTypeAdapter : adapters) {
+				gsonBuilder.registerTypeAdapter(gsonTypeAdapter.getType(), gsonTypeAdapter.getAdapter());
+			}
+			updateGson();
+		}
 	}
 
 	/**

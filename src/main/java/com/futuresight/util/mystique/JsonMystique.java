@@ -40,7 +40,7 @@ public class JsonMystique extends AbstractMystique {
 			turn = jsonLever.getAsJsonObject(turn, new JsonObject());
 			String value = jsonLever.getAsString(turn.get(MysCon.VALUE));
 			if (null != value) {
-				JsonElement granularSource = getGranularSource(elementSource, turn);
+				JsonElement granularSource = getGranularSource(elementSource, turn, aces);
 				transform = jsonGenie.transform(granularSource, value, deps);
 			}
 		}

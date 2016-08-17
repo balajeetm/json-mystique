@@ -56,6 +56,8 @@ public class JsonLever {
 	/** The ace pat. */
 	private static String acePat = "^@ace\\((\\w+)\\)$";
 
+	private static String valuePat = "^@value\\((\\w+)\\)$";
+
 	/** The index pattern. */
 	private Pattern indexPattern;
 
@@ -64,6 +66,9 @@ public class JsonLever {
 
 	/** The ace pattern. */
 	private Pattern acePattern;
+
+	/** The ace pattern. */
+	private Pattern valuePattern;
 
 	/** The instance. */
 	private static JsonLever INSTANCE;
@@ -125,6 +130,7 @@ public class JsonLever {
 		indexPattern = Pattern.compile(indexPat);
 		loopyPattern = Pattern.compile(loopyPat);
 		acePattern = Pattern.compile(acePat);
+		valuePattern = Pattern.compile(valuePat);
 		jsonParser = new JsonParser();
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.setDateFormat(DateFormat.LONG, DateFormat.LONG);
@@ -193,6 +199,15 @@ public class JsonLever {
 		return index;
 	}
 
+	private String getAceValue(String path) {
+		String index = null;
+		Matcher matcher = valuePattern.matcher(path);
+		while (matcher.find()) {
+			index = matcher.group(1);
+		}
+		return index;
+	}
+
 	/**
 	 * Gets the field.
 	 *
@@ -228,6 +243,7 @@ public class JsonLever {
 								break;
 							}
 							else {
+								key = getPathField(key, aces);
 								field = getField(field, key);
 							}
 						}
@@ -283,13 +299,14 @@ public class JsonLever {
 	 * @param path the path
 	 * @return the field
 	 */
-	public JsonElement getField(JsonElement source, JsonArray path) {
+	public JsonElement getField(JsonElement source, JsonArray path, JsonObject aces) {
 		JsonElement field = null;
 		try {
 			field = source;
 			if (null != path) {
 				for (JsonElement jsonElement : path) {
 					String key = getAsString(jsonElement);
+					key = getPathField(key, aces);
 					field = getField(field, key);
 				}
 			}
@@ -307,12 +324,16 @@ public class JsonLever {
 		return field;
 	}
 
+	public JsonElement getField(JsonElement source, JsonArray path) {
+		return getField(source, path, new JsonObject());
+	}
+
 	public JsonElement getSubset(JsonElement source, JsonObject deps, JsonObject aces, JsonElement valueObject) {
 		JsonElement finalValue = null;
 		if (valueObject.isJsonArray()) {
 			JsonArray valueArray = valueObject.getAsJsonArray();
 			if (valueArray.size() == 0) {
-				finalValue = getField(source, valueArray);
+				finalValue = getField(source, valueArray, aces);
 			}
 
 			else {
@@ -321,13 +342,13 @@ public class JsonLever {
 					finalValue = new JsonObject();
 					for (JsonElement jsonElement : valueArray) {
 						JsonArray pathArray = getAsJsonArray(jsonElement);
-						JsonElement subset = getField(source, pathArray);
+						JsonElement subset = getField(source, pathArray, aces);
 						setField(finalValue.getAsJsonObject(), pathArray, subset, aces);
 					}
 					finalValue = finalValue.getAsJsonObject().get(MysCon.RESULT);
 				}
 				else {
-					finalValue = getField(source, valueArray);
+					finalValue = getField(source, valueArray, aces);
 				}
 			}
 		}
@@ -432,7 +453,7 @@ public class JsonLever {
 	 * @return the path field
 	 */
 	private String getPathField(String field, JsonObject aces) {
-		String ace = getAce(field);
+		String ace = getAceValue(field);
 		String output = field;
 		if (null != ace) {
 			String stringFromJson = getAsString(aces.get(ace));

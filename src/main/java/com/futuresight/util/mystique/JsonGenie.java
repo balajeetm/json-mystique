@@ -95,7 +95,7 @@ public class JsonGenie {
 								IOUtils.toString(resource.getInputStream()), type);
 						tarots.put(specName, fromJson);
 					}
-					catch (JsonSyntaxException | IOException exception) {
+					catch (JsonSyntaxException | IllegalArgumentException | IOException exception) {
 						logger.error(String.format(
 								"Unable to load mystiques %s from %s - %s. Trying to load other mystiques if any",
 								specName, locationPattern, exception.getMessage()), exception);

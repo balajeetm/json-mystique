@@ -36,7 +36,7 @@ public class ConcatMystique extends AbstractMystique {
 		if (CollectionUtils.isNotEmpty(source)) {
 			String separator = jsonLever.getAsString(turn.get(MysCon.SEPARATOR), MysCon.EMPTY);
 			for (int count = 0; count < source.size(); count++) {
-				JsonElement granularSource = getGranularSource(source.get(count), turn);
+				JsonElement granularSource = getGranularSource(source.get(count), turn, aces);
 				if (count != 0) {
 					stringBuilder.append(separator);
 				}

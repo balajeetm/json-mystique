@@ -44,7 +44,7 @@
 			["@ace(a1)"],
 			["a", "d", "d1"]
 		],
-		"to": ["ba5.1", "@ace(a1)"],
+		"to": ["ba5.1", "@value(a1)"],
 		"turn": {
 			"type": "concat",
 			"separator": "~"

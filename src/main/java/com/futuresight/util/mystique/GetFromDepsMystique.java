@@ -38,7 +38,7 @@ public class GetFromDepsMystique extends AbstractMystique {
 			//element source is key
 
 			turn = jsonLever.getAsJsonObject(turn, new JsonObject());
-			JsonElement granularSource = getGranularSource(elementSource, turn);
+			JsonElement granularSource = getGranularSource(elementSource, turn, aces);
 			String reference = jsonLever.getAsString(granularSource, null);
 
 			JsonArray keyPath = jsonLever.getAsJsonArray(turn.get(MysCon.KEY), new JsonArray());
@@ -46,7 +46,7 @@ public class GetFromDepsMystique extends AbstractMystique {
 			value = jsonLever.isNull(value) ? new JsonArray() : value;
 
 			//keymap
-			JsonObject keyMap = jsonLever.getAsJsonObject(jsonLever.getField(deps, keyPath), new JsonObject());
+			JsonObject keyMap = jsonLever.getAsJsonObject(jsonLever.getField(deps, keyPath, aces), new JsonObject());
 
 			JsonElement actualElement = keyMap.get(reference);
 

@@ -35,12 +35,12 @@ public class CopyMystique extends AbstractMystique {
 			if (source.size() > 1) {
 				transform = new JsonArray();
 				for (JsonElement jsonElement : source) {
-					JsonElement granularSource = getGranularSource(jsonElement, turn);
+					JsonElement granularSource = getGranularSource(jsonElement, turn, aces);
 					transform.getAsJsonArray().add(granularSource);
 				}
 			}
 			else {
-				transform = getGranularSource(source.get(0), turn);
+				transform = getGranularSource(source.get(0), turn, aces);
 			}
 		}
 		return transform;

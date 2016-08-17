@@ -33,7 +33,7 @@ public class ConditionMystique extends AbstractMystique {
 		JsonElement transform = null;
 		JsonElement elementSource = jsonLever.getFirst(source);
 		turn = jsonLever.getAsJsonObject(turn, new JsonObject());
-		JsonElement granularSource = getGranularSource(elementSource, turn);
+		JsonElement granularSource = getGranularSource(elementSource, turn, aces);
 		JsonElement value = turn.get(MysCon.VALUE);
 		Boolean equals = isEquals(granularSource, value);
 		JsonObject defaultJson = jsonLever.getAsJsonObject(turn.get(String.valueOf(equals)));

@@ -29,7 +29,7 @@ public class DateMystique extends AbstractMystique {
 	protected JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn) {
 		JsonElement elementSource = jsonLever.getFirst(source);
 		turn = jsonLever.getAsJsonObject(turn, new JsonObject());
-		JsonElement granularSource = getGranularSource(elementSource, turn);
+		JsonElement granularSource = getGranularSource(elementSource, turn, aces);
 
 		String action = StringUtils.trimToEmpty(jsonLever.getAsString(turn.get(MysCon.ACTION), MysCon.NOW))
 				.toLowerCase();

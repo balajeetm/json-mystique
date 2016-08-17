@@ -117,9 +117,9 @@ public abstract class AbstractMystique implements Mystique {
 	 * @param turn the turn
 	 * @return the granular source
 	 */
-	protected JsonElement getGranularSource(JsonElement source, JsonObject turn) {
+	protected JsonElement getGranularSource(JsonElement source, JsonObject turn, JsonObject aces) {
 		JsonArray from = jsonLever.isNotNull(turn) ? jsonLever.getAsJsonArray(turn.get(MysCon.FROM)) : null;
-		JsonElement conditionSource = jsonLever.isNull(from) ? source : jsonLever.getField(source, from);
+		JsonElement conditionSource = jsonLever.isNull(from) ? source : jsonLever.getField(source, from, aces);
 		return conditionSource;
 	}
 }
