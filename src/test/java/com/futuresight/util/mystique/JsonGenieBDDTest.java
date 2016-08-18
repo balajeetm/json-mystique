@@ -44,7 +44,7 @@ import com.google.gson.JsonParser;
 public class JsonGenieBDDTest {
 
 	@Autowired
-	private JsonGenie jsonGenie;
+	private JsonMystique jsonMystique;
 
 	/** The json parser. */
 	private JsonParser jsonParser;
@@ -77,7 +77,7 @@ public class JsonGenieBDDTest {
 			String string = IOUtils.toString(resource.getInputStream());
 			Resource outputRes = resourceResolver.getResource(outputPattern);
 			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
-			JsonElement transform = jsonGenie.transform(string, "ptest1");
+			JsonElement transform = jsonMystique.transform(string, "ptest1");
 			Boolean transformSuccess = transform != null && !transform.isJsonNull() && transform.isJsonObject();
 			Assert.assertTrue(transformSuccess);
 			JsonElement jsonElement = transform.getAsJsonObject().get("ba14");
@@ -102,7 +102,7 @@ public class JsonGenieBDDTest {
 			String string = IOUtils.toString(resource.getInputStream());
 			Resource outputRes = resourceResolver.getResource(outputPattern);
 			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
-			JsonElement transform = jsonGenie.transform(string, "test1");
+			JsonElement transform = jsonMystique.transform(string, "test1");
 			Assert.assertEquals(output, transform);
 		}
 		catch (Exception e) {
@@ -122,7 +122,7 @@ public class JsonGenieBDDTest {
 			String string = IOUtils.toString(resource.getInputStream());
 			Resource outputRes = resourceResolver.getResource(outputPattern);
 			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
-			JsonElement transform = jsonGenie.transform(string, "test2");
+			JsonElement transform = jsonMystique.transform(string, "test2");
 			Assert.assertEquals(output, transform);
 		}
 		catch (Exception e) {

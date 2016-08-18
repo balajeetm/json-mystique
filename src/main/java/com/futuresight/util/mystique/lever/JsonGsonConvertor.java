@@ -45,9 +45,20 @@ import com.google.gson.JsonSerializer;
 public class JsonGsonConvertor implements ConvertorInterface {
 
 	/** The gson. */
+
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
 	@Getter
 	private Gson gson;
 
+	/**
+	 * Gets the gson builder.
+	 *
+	 * @return the gson builder
+	 */
 	@Getter
 	private GsonBuilder gsonBuilder;
 
@@ -92,10 +103,18 @@ public class JsonGsonConvertor implements ConvertorInterface {
 		updateGson();
 	}
 
+	/**
+	 * Update gson.
+	 */
 	public void updateGson() {
 		gson = gsonBuilder.create();
 	}
 
+	/**
+	 * Register type adapter.
+	 *
+	 * @param adapters the adapters
+	 */
 	public void registerTypeAdapter(GsonTypeAdapter... adapters) {
 		if (!ArrayUtils.isEmpty(adapters)) {
 			for (GsonTypeAdapter gsonTypeAdapter : adapters) {

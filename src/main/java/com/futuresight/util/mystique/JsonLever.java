@@ -57,6 +57,7 @@ public class JsonLever {
 	/** The ace pat. */
 	private static String acePat = "^@ace\\((\\w+)\\)$";
 
+	/** The value pat. */
 	private static String valuePat = "^@value\\((\\w+)\\)$";
 
 	/** The index pattern. */
@@ -74,6 +75,7 @@ public class JsonLever {
 	/** The instance. */
 	private static JsonLever INSTANCE;
 
+	/** The factory. */
 	@Autowired
 	private MystiqueFactory factory;
 
@@ -94,8 +96,20 @@ public class JsonLever {
 	 *
 	 * @return the json parser
 	 */
+
+	/**
+	 * Gets the json parser.
+	 *
+	 * @return the json parser
+	 */
 	@Getter
 	private JsonParser jsonParser;
+
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
 
 	/**
 	 * Gets the gson.
@@ -200,6 +214,12 @@ public class JsonLever {
 		return index;
 	}
 
+	/**
+	 * Gets the ace value.
+	 *
+	 * @param path the path
+	 * @return the ace value
+	 */
 	private String getAceValue(String path) {
 		String index = null;
 		Matcher matcher = valuePattern.matcher(path);
@@ -236,7 +256,7 @@ public class JsonLever {
 							String ace = getAce(key);
 							if (null != ace) {
 								field = aces.get(ace);
-								break;
+								continue;
 							}
 							if (isLoopy(key)) {
 								isLoopy = Boolean.TRUE;
@@ -298,6 +318,7 @@ public class JsonLever {
 	 *
 	 * @param source the source
 	 * @param path the path
+	 * @param aces the aces
 	 * @return the field
 	 */
 	public JsonElement getField(JsonElement source, JsonArray path, JsonObject aces) {
@@ -325,10 +346,26 @@ public class JsonLever {
 		return field;
 	}
 
+	/**
+	 * Gets the field.
+	 *
+	 * @param source the source
+	 * @param path the path
+	 * @return the field
+	 */
 	public JsonElement getField(JsonElement source, JsonArray path) {
 		return getField(source, path, new JsonObject());
 	}
 
+	/**
+	 * Gets the subset.
+	 *
+	 * @param source the source
+	 * @param deps the deps
+	 * @param aces the aces
+	 * @param valueObject the value object
+	 * @return the subset
+	 */
 	public JsonElement getSubset(JsonElement source, JsonObject deps, JsonObject aces, JsonElement valueObject) {
 		JsonElement finalValue = null;
 		if (valueObject.isJsonArray()) {
@@ -356,7 +393,7 @@ public class JsonLever {
 		else if (isJsonObject(valueObject)) {
 			// This is a turn
 			JsonObject valueJson = valueObject.getAsJsonObject();
-			Mystique mystique = factory.getMystique(valueJson);
+			MystTurn mystique = factory.getMystTurn(valueJson);
 			finalValue = mystique.transform(Lists.newArrayList(source), deps, aces, valueJson, new JsonObject());
 		}
 		return finalValue;
@@ -476,12 +513,22 @@ public class JsonLever {
 		return setField(resultWrapper, to, transform, aces, Boolean.FALSE);
 	}
 
-	protected JsonObject getUpdatedAces(JsonElement source, JsonObject aces, JsonObject dependencies, JsonObject updated) {
+	/**
+	 * Gets the updated aces.
+	 *
+	 * @param source the source
+	 * @param aces the aces
+	 * @param dependencies the dependencies
+	 * @param updated the updated
+	 * @return the updated aces
+	 */
+	protected JsonObject getUpdatedAces(JsonElement source, JsonObject aces, JsonObject dependencies,
+			JsonObject updated) {
 		if (isNotNull(aces)) {
 			for (Entry<String, JsonElement> entry : aces.entrySet()) {
 				JsonObject value = getAsJsonObject(entry.getValue());
 				//Null check required, since for all other purposes, no turn means a default turn. In this case, turn needs to be executed only if it is explicitly specified
-				Mystique mystique = null != value ? factory.getMystique(value) : null;
+				MystTurn mystique = null != value ? factory.getMystTurn(value) : null;
 				if (null != mystique) {
 					JsonElement transform = mystique.transform(Lists.newArrayList(source), dependencies, aces, value,
 							new JsonObject());
@@ -492,6 +539,14 @@ public class JsonLever {
 		return updated;
 	}
 
+	/**
+	 * Gets the updated aces.
+	 *
+	 * @param source the source
+	 * @param aces the aces
+	 * @param dependencies the dependencies
+	 * @return the updated aces
+	 */
 	protected JsonObject getUpdatedAces(JsonElement source, JsonObject aces, JsonObject dependencies) {
 		return getUpdatedAces(source, aces, dependencies, aces);
 	}
@@ -632,10 +687,22 @@ public class JsonLever {
 		return isNotNull(element) && element.isJsonPrimitive() && element.getAsJsonPrimitive().isString();
 	}
 
+	/**
+	 * Checks if is boolean.
+	 *
+	 * @param element the element
+	 * @return the boolean
+	 */
 	public Boolean isBoolean(JsonElement element) {
 		return isNotNull(element) && element.isJsonPrimitive() && element.getAsJsonPrimitive().isBoolean();
 	}
 
+	/**
+	 * Checks if is long.
+	 *
+	 * @param element the element
+	 * @return the boolean
+	 */
 	public Boolean isLong(JsonElement element) {
 		return isNotNull(element) && element.isJsonPrimitive() && element.getAsJsonPrimitive().isNumber();
 	}
@@ -680,6 +747,13 @@ public class JsonLever {
 		return getAsJsonObject(element, null);
 	}
 
+	/**
+	 * Gets the as json object.
+	 *
+	 * @param element the element
+	 * @param defaultJson the default json
+	 * @return the as json object
+	 */
 	public JsonObject getAsJsonObject(JsonElement element, JsonObject defaultJson) {
 		return isJsonObject(element) ? element.getAsJsonObject() : defaultJson;
 	}
@@ -694,6 +768,13 @@ public class JsonLever {
 		return getAsJsonArray(element, null);
 	}
 
+	/**
+	 * Gets the as json array.
+	 *
+	 * @param element the element
+	 * @param defaultArray the default array
+	 * @return the as json array
+	 */
 	public JsonArray getAsJsonArray(JsonElement element, JsonArray defaultArray) {
 		return isJsonArray(element) ? element.getAsJsonArray() : defaultArray;
 	}
@@ -719,22 +800,54 @@ public class JsonLever {
 		return getAsString(element, null);
 	}
 
+	/**
+	 * Gets the as boolean.
+	 *
+	 * @param element the element
+	 * @param defaultBool the default bool
+	 * @return the as boolean
+	 */
 	public Boolean getAsBoolean(JsonElement element, Boolean defaultBool) {
 		return isBoolean(element) ? element.getAsBoolean() : defaultBool;
 	}
 
+	/**
+	 * Gets the as boolean.
+	 *
+	 * @param element the element
+	 * @return the as boolean
+	 */
 	public Boolean getAsBoolean(JsonElement element) {
 		return getAsBoolean(element, null);
 	}
 
+	/**
+	 * Gets the as long.
+	 *
+	 * @param element the element
+	 * @param defaultLong the default long
+	 * @return the as long
+	 */
 	public Long getAsLong(JsonElement element, Long defaultLong) {
 		return isLong(element) ? element.getAsLong() : defaultLong;
 	}
 
+	/**
+	 * Gets the as long.
+	 *
+	 * @param element the element
+	 * @return the as long
+	 */
 	public Long getAsLong(JsonElement element) {
 		return getAsLong(element, null);
 	}
 
+	/**
+	 * Gets the first.
+	 *
+	 * @param elements the elements
+	 * @return the first
+	 */
 	public JsonElement getFirst(List<JsonElement> elements) {
 		JsonElement first = null;
 		if (CollectionUtils.isNotEmpty(elements)) {
@@ -743,12 +856,24 @@ public class JsonLever {
 		return first;
 	}
 
+	/**
+	 * Gets the first.
+	 *
+	 * @param valueArray the value array
+	 * @return the first
+	 */
 	public JsonElement getFirst(JsonArray valueArray) {
 		JsonElement first = null;
 		first = isNotNull(valueArray) && valueArray.size() > 0 ? valueArray.get(0) : first;
 		return first;
 	}
 
+	/**
+	 * New json array.
+	 *
+	 * @param path the path
+	 * @return the json array
+	 */
 	public JsonArray newJsonArray(String... path) {
 		JsonArray output = new JsonArray();
 		for (String string : path) {
@@ -757,6 +882,12 @@ public class JsonLever {
 		return output;
 	}
 
+	/**
+	 * New json array.
+	 *
+	 * @param path the path
+	 * @return the json array
+	 */
 	public JsonArray newJsonArray(JsonElement... path) {
 		JsonArray output = new JsonArray();
 		for (JsonElement element : path) {
@@ -790,6 +921,13 @@ public class JsonLever {
 		return output;
 	}
 
+	/**
+	 * Simple merge.
+	 *
+	 * @param from the from
+	 * @param to the to
+	 * @return the json object
+	 */
 	public JsonObject simpleMerge(JsonObject from, JsonObject to) {
 		from = getAsJsonObject(from, new JsonObject());
 		to = getAsJsonObject(to, new JsonObject());

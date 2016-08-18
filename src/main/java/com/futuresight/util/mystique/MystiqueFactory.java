@@ -49,25 +49,25 @@ public class MystiqueFactory {
 	 * @param turn the turn
 	 * @return the mystique
 	 */
-	public Mystique getMystique(JsonObject turn) {
-		Mystique mystique = null;
+	public MystTurn getMystTurn(JsonObject turn) {
+		MystTurn mystique = null;
 		try {
 
 			if (jsonLever.isNull(turn)) {
-				mystique = context.getBean(CopyMystique.class);
+				mystique = context.getBean(CopyMystTurn.class);
 			}
 			else {
 				String turnType = jsonLever.getAsString(turn.get(MysCon.TYPE), MysCon.EMPTY);
 				if (StringUtils.isEmpty(turnType) || StringUtils.equalsIgnoreCase(turnType, MysType.copy.name())) {
-					mystique = context.getBean(CopyMystique.class);
+					mystique = context.getBean(CopyMystTurn.class);
 				}
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.mystique.name())) {
-					mystique = context.getBean(JsonMystique.class);
+					mystique = context.getBean(MystiqueMystTurn.class);
 				}
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.bean.name())) {
 					String bean = jsonLever.getAsString(turn.get(MysCon.VALUE), MysCon.EMPTY);
 					try {
-						mystique = (Mystique) context.getBean(Class.forName(bean));
+						mystique = (MystTurn) context.getBean(Class.forName(bean));
 					}
 					catch (ClassNotFoundException | ClassCastException e) {
 						logger.error(
@@ -76,31 +76,31 @@ public class MystiqueFactory {
 					}
 				}
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.constant.name())) {
-					mystique = context.getBean(ConstantMystique.class);
+					mystique = context.getBean(ConstantMystTurn.class);
 				}
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.concat.name())) {
-					mystique = context.getBean(ConcatMystique.class);
+					mystique = context.getBean(ConcatMystTurn.class);
 				}
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.arrayToMap.name())) {
-					mystique = context.getBean(MapMystique.class);
+					mystique = context.getBean(ArrayToMapMystTurn.class);
 				}
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.getFromDeps.name())) {
-					mystique = context.getBean(GetFromDepsMystique.class);
+					mystique = context.getBean(GetFromDepsMystTurn.class);
 				}
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.condition.name())) {
-					mystique = context.getBean(ConditionMystique.class);
+					mystique = context.getBean(ConditionMystTurn.class);
 				}
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.dateConvertor.name())) {
-					mystique = context.getBean(DateMystique.class);
+					mystique = context.getBean(DateMystTurn.class);
 				}
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.stringUtils.name())) {
-					mystique = context.getBean(StringUtilsMystique.class);
+					mystique = context.getBean(StringUtilsMystTurn.class);
 				}
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.switched.name())) {
-					mystique = context.getBean(SwitchedMystique.class);
+					mystique = context.getBean(SwitchedMystTurn.class);
 				}
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.chain.name())) {
-					mystique = context.getBean(ChainMystique.class);
+					mystique = context.getBean(ChainMystTurn.class);
 				}
 				else {
 					logger.error(String.format("Invalid mystique %s", turn));
@@ -118,7 +118,7 @@ public class MystiqueFactory {
 	/**
 	 * Gets the date function.
 	 *
-	 * @param actionJson the action json
+	 * @param action the action
 	 * @return the date function
 	 */
 	public MystFunction getDateFunction(String action) {

@@ -15,43 +15,44 @@ import org.springframework.stereotype.Component;
 import com.futuresight.util.mystique.lever.MysCon;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 
 /**
- * The Class MapMystique.
+ * The Class GetFromDepsMystTurn.
  *
  * @author balajmoh
  */
 @Component
-public class MapMystique extends AbstractMystique {
+public class GetFromDepsMystTurn extends AbstractMystTurn {
 
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.AbstractMystique#transmute(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonObject)
 	 */
 	@Override
 	protected JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn) {
-		JsonObject mapJson = new JsonObject();
-		JsonElement elementSource = jsonLever.getFirst(source);
 
+		JsonElement transform = JsonNull.INSTANCE;
+		JsonElement elementSource = jsonLever.getFirst(source);
 		if (null != elementSource) {
+			//element source is key
+
 			turn = jsonLever.getAsJsonObject(turn, new JsonObject());
 			JsonElement granularSource = getGranularSource(elementSource, turn, aces);
-			JsonArray inputArray = jsonLever.getAsJsonArray(granularSource, new JsonArray());
-			JsonArray keyArray = jsonLever.getAsJsonArray(turn.get(MysCon.KEY));
-			if (jsonLever.isNotNull(keyArray)) {
-				JsonElement valueElement = turn.get(MysCon.VALUE);
-				valueElement = jsonLever.isNull(valueElement) ? new JsonArray() : valueElement;
+			String reference = jsonLever.getAsString(granularSource, null);
 
-				for (JsonElement jsonElement : inputArray) {
-					JsonElement keyField = jsonLever.getField(jsonElement, keyArray, aces);
-					String key = jsonLever.getAsString(keyField, MysCon.EMPTY);
+			JsonArray keyPath = jsonLever.getAsJsonArray(turn.get(MysCon.KEY), new JsonArray());
+			JsonElement value = turn.get(MysCon.VALUE);
+			value = jsonLever.isNull(value) ? new JsonArray() : value;
 
-					JsonElement finalValue = jsonLever.getSubset(jsonElement, deps, aces, valueElement);
-					mapJson.add(key, finalValue);
-				}
-			}
+			//keymap
+			JsonObject keyMap = jsonLever.getAsJsonObject(jsonLever.getField(deps, keyPath, aces), new JsonObject());
+
+			JsonElement actualElement = keyMap.get(reference);
+
+			transform = jsonLever.getSubset(actualElement, deps, aces, value);
 		}
-
-		return mapJson;
+		return transform;
 	}
+
 }

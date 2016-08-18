@@ -58,7 +58,7 @@ public class SimpleSpell implements Spell {
 	 * @see com.futuresight.util.mystique.Spell#cast(com.futuresight.util.mystique.Mystique)
 	 */
 	@Override
-	public JsonElement cast(Mystique mystique) {
+	public JsonElement cast(MystTurn mystique) {
 		return null != mystique ? mystique.transform(source, dependencies, aces, turn, resultWrapper)
 				: JsonNull.INSTANCE;
 	}

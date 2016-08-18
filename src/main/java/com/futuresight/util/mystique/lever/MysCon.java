@@ -24,46 +24,67 @@ public interface MysCon {
 	/** The value. */
 	String VALUE = "value";
 
+	/** The at deps. */
 	String AT_DEPS = "@deps";
 
+	/** The default. */
 	String DEFAULT = "default";
 
+	/** The turn. */
 	String TURN = "turn";
 
+	/** The turns. */
 	String TURNS = "turns";
 
+	/** The to. */
 	String TO = "to";
 
+	/** The optional. */
 	String OPTIONAL = "optional";
 
+	/** The from. */
 	String FROM = "from";
 
+	/** The separator. */
 	String SEPARATOR = "separator";
 
+	/** The double quotes. */
 	String DOUBLE_QUOTES = "\"";
 
+	/** The action. */
 	String ACTION = "action";
 
+	/** The now. */
 	String NOW = "now";
 
+	/** The transform. */
 	String TRANSFORM = "transform";
 
+	/** The trim. */
 	String TRIM = "trim";
 
+	/** The trim to empty. */
 	String TRIM_TO_EMPTY = "trimToEmpty";
 
+	/** The substring after last. */
 	String SUBSTRING_AFTER_LAST = "substringAfterLast";
 
+	/** The outformat. */
 	String OUTFORMAT = "outformat";
 
+	/** The long. */
 	String LONG = "long";
 
+	/** The string. */
 	String STRING = "string";
 
+	/** The informat. */
 	String INFORMAT = "informat";
 
+	/** The key. */
 	String KEY = "key";
 
+	/** The aces. */
 	String ACES = "aces";
 
 	/** The empty. */

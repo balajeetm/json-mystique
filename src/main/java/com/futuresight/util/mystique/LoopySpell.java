@@ -62,7 +62,7 @@ public class LoopySpell implements Spell {
 	 * @see com.futuresight.util.mystique.Spell#cast(com.futuresight.util.mystique.Mystique)
 	 */
 	@Override
-	public JsonElement cast(Mystique mystique) {
+	public JsonElement cast(MystTurn mystique) {
 		JsonElement transform = JsonNull.INSTANCE;
 		if (CollectionUtils.isNotEmpty(source)) {
 			transform = new JsonArray();

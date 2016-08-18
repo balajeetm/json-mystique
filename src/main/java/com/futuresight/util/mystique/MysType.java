@@ -45,7 +45,9 @@ public enum MysType {
 	/** The string utils. */
 	stringUtils,
 
+	/** The switched. */
 	switched,
 
+	/** The chain. */
 	chain
 }

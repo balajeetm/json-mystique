@@ -18,12 +18,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
- * The Class CopyMystique.
+ * The Class CopyMystTurn.
  *
- * @author balajeetm
+ * @author balajmoh
  */
 @Component
-public class CopyMystique extends AbstractMystique {
+public class CopyMystTurn extends AbstractMystTurn {
 
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.Mystique#transform(java.util.List, com.google.gson.JsonObject, java.lang.String)

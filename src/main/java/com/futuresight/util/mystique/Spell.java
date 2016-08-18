@@ -23,6 +23,6 @@ public interface Spell {
 	 * @param mystique the mystique
 	 * @return the json element
 	 */
-	JsonElement cast(Mystique mystique);
+	JsonElement cast(MystTurn mystique);
 
 }

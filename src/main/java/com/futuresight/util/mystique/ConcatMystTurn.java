@@ -20,12 +20,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 /**
- * The Class ConcatMystique.
+ * The Class ConcatMystTurn.
  *
- * @author balajeetm
+ * @author balajmoh
  */
 @Component
-public class ConcatMystique extends AbstractMystique {
+public class ConcatMystTurn extends AbstractMystTurn {
 
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.Mystique#transform(java.util.List, com.google.gson.JsonObject, java.lang.String)

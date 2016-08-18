@@ -25,12 +25,13 @@ import com.google.gson.JsonObject;
  * @author balajmoh
  */
 @Component
-public class ChainMystique implements Mystique {
+public class SwitchedMystTurn implements MystTurn {
 
 	/** The factory. */
 	@Autowired
 	private MystiqueFactory factory;
 
+	/** The json lever. */
 	@Autowired
 	private JsonLever jsonLever;
 
@@ -44,13 +45,15 @@ public class ChainMystique implements Mystique {
 		JsonElement transform = JsonNull.INSTANCE;
 		turn = jsonLever.getAsJsonObject(turn, new JsonObject());
 		JsonArray turnArray = jsonLever.getAsJsonArray(turn.get(MysCon.TURNS), new JsonArray());
-
 		for (JsonElement turnObject : turnArray) {
 			if (jsonLever.isJsonObject(turnObject)) {
 				JsonObject asJsonObject = turnObject.getAsJsonObject();
-				Mystique mystique = factory.getMystique(asJsonObject);
+				MystTurn mystique = factory.getMystTurn(asJsonObject);
 				if (null != mystique) {
-					mystique.transform(source, deps, aces, asJsonObject, resultWrapper);
+					transform = mystique.transform(source, deps, aces, asJsonObject, resultWrapper);
+				}
+				if (jsonLever.isNotNull(transform)) {
+					break;
 				}
 			}
 		}

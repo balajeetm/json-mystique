@@ -72,7 +72,7 @@
 		}],
 		"turn": {
 			"type": "bean",
-			"value": "com.futuresight.util.mystique.TestMystique"
+			"value": "com.futuresight.util.mystique.TestMystTurn"
 		}
 	}, {
 		"from": ["h", "[*]"],

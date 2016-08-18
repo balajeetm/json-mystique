@@ -24,7 +24,7 @@ import com.google.gson.JsonPrimitive;
  * @author balajeetm
  */
 @Component
-public class TestMystique implements Mystique {
+public class TestMystTurn implements MystTurn {
 
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.Mystique#transform(java.util.List, com.google.gson.JsonObject, java.lang.String)

@@ -14,11 +14,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
- * The Interface Mystique.
+ * The Interface MystTurn.
  *
- * @author balajeetm
+ * @author balajmoh
  */
-public interface Mystique {
+public interface MystTurn {
 
 	/**
 	 * Transform.

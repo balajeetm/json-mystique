@@ -18,13 +18,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
- * The Class ConditionMystique.
+ * The Class DateMystTurn.
  *
  * @author balajmoh
  */
 @Component
-public class DateMystique extends AbstractMystique {
+public class DateMystTurn extends AbstractMystTurn {
 
+	/* (non-Javadoc)
+	 * @see com.futuresight.util.mystique.AbstractMystTurn#transmute(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonObject, com.google.gson.JsonObject)
+	 */
 	@Override
 	protected JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn) {
 		JsonElement elementSource = jsonLever.getFirst(source);

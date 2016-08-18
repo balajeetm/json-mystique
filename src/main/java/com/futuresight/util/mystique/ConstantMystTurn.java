@@ -17,12 +17,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
- * The Class ConstantMystique.
+ * The Class ConstantMystTurn.
  *
- * @author balajeetm
+ * @author balajmoh
  */
 @Component
-public class ConstantMystique extends AbstractMystique {
+public class ConstantMystTurn extends AbstractMystTurn {
 
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.Mystique#transform(java.util.List, com.google.gson.JsonObject, java.lang.String)

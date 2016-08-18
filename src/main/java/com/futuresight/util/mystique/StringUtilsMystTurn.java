@@ -19,13 +19,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 /**
- * The Class ConditionMystique.
+ * The Class StringUtilsMystTurn.
  *
  * @author balajmoh
  */
 @Component
-public class StringUtilsMystique extends AbstractMystique {
+public class StringUtilsMystTurn extends AbstractMystTurn {
 
+	/* (non-Javadoc)
+	 * @see com.futuresight.util.mystique.AbstractMystTurn#transmute(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonObject, com.google.gson.JsonObject)
+	 */
 	@Override
 	protected JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn) {
 		JsonElement elementSource = jsonLever.getFirst(source);
@@ -35,6 +38,13 @@ public class StringUtilsMystique extends AbstractMystique {
 		return execute(sourceString, turn);
 	}
 
+	/**
+	 * Execute.
+	 *
+	 * @param input the input
+	 * @param turn the turn
+	 * @return the json primitive
+	 */
 	private JsonPrimitive execute(String input, JsonObject turn) {
 		JsonPrimitive transform = null;
 		String action = jsonLever.getAsString(turn.get(MysCon.ACTION), MysCon.TRIM);

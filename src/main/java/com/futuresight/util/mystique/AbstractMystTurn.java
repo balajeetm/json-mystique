@@ -19,11 +19,11 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 
 /**
- * The Class AbstractMystique.
+ * The Class AbstractMystTurn.
  *
  * @author balajmoh
  */
-public abstract class AbstractMystique implements Mystique {
+public abstract class AbstractMystTurn implements MystTurn {
 
 	/** The json lever. */
 	@Autowired
@@ -74,7 +74,8 @@ public abstract class AbstractMystique implements Mystique {
 	 * @param conditionalJson the conditional json
 	 * @param source the source
 	 * @param deps the deps
-	 * @param result the result
+	 * @param aces the aces
+	 * @param resultWrapper the result wrapper
 	 * @return the json element
 	 */
 	protected JsonElement transformToDefault(JsonObject conditionalJson, List<JsonElement> source, JsonObject deps,
@@ -89,7 +90,7 @@ public abstract class AbstractMystique implements Mystique {
 			else {
 				JsonObject defaultTurn = jsonLever.getAsJsonObject(conditionalJson.get(MysCon.TURN));
 				if (jsonLever.isNotNull(defaultTurn)) {
-					Mystique mystique = factory.getMystique(defaultTurn);
+					MystTurn mystique = factory.getMystTurn(defaultTurn);
 					transform = mystique.transform(source, deps, aces, defaultTurn, resultWrapper);
 				}
 			}
@@ -103,6 +104,7 @@ public abstract class AbstractMystique implements Mystique {
 	 * @param conditionalJson the conditional json
 	 * @param source the source
 	 * @param deps the deps
+	 * @param aces the aces
 	 * @return the json element
 	 */
 	protected JsonElement transformToDefault(JsonObject conditionalJson, List<JsonElement> source, JsonObject deps,
@@ -116,6 +118,7 @@ public abstract class AbstractMystique implements Mystique {
 	 *
 	 * @param source the source
 	 * @param deps the deps
+	 * @param aces the aces
 	 * @param turn the turn
 	 * @return the json element
 	 */
@@ -127,6 +130,7 @@ public abstract class AbstractMystique implements Mystique {
 	 *
 	 * @param source the source
 	 * @param turn the turn
+	 * @param aces the aces
 	 * @return the granular source
 	 */
 	protected JsonElement getGranularSource(JsonElement source, JsonObject turn, JsonObject aces) {

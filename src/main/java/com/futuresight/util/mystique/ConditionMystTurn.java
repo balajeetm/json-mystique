@@ -18,12 +18,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 /**
- * The Class ConditionMystique.
+ * The Class ConditionMystTurn.
  *
  * @author balajmoh
  */
 @Component
-public class ConditionMystique extends AbstractMystique {
+public class ConditionMystTurn extends AbstractMystTurn {
 
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.AbstractMystique#transmute(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonObject)
@@ -42,6 +42,13 @@ public class ConditionMystique extends AbstractMystique {
 		return transform;
 	}
 
+	/**
+	 * Checks if is equals.
+	 *
+	 * @param source the source
+	 * @param expected the expected
+	 * @return the boolean
+	 */
 	private Boolean isEquals(JsonElement source, JsonElement expected) {
 		Boolean isEqual = Boolean.FALSE;
 		// This is to check the existence case. The condition is to check the existence of the element
