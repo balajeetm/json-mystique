@@ -492,11 +492,7 @@ public class JsonLever {
 	 */
 	private String getPathField(String field, JsonObject aces) {
 		String ace = getAceValue(field);
-		String output = field;
-		if (null != ace) {
-			String stringFromJson = getAsString(aces.get(ace));
-			output = null != stringFromJson ? stringFromJson : output;
-		}
+		String output = null != ace ? getAsString(aces.get(ace)) : field;
 		return output;
 	}
 
