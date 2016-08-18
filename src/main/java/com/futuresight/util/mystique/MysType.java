@@ -46,7 +46,7 @@ public enum MysType {
 	stringUtils,
 
 	/** The switched. */
-	switched,
+	toggle,
 
 	/** The chain. */
 	chain

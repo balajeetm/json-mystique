@@ -96,8 +96,8 @@ public class MystiqueFactory {
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.stringUtils.name())) {
 					mystique = context.getBean(StringUtilsMystTurn.class);
 				}
-				else if (StringUtils.equalsIgnoreCase(turnType, MysType.switched.name())) {
-					mystique = context.getBean(SwitchedMystTurn.class);
+				else if (StringUtils.equalsIgnoreCase(turnType, MysType.toggle.name())) {
+					mystique = context.getBean(ToggleMystTurn.class);
 				}
 				else if (StringUtils.equalsIgnoreCase(turnType, MysType.chain.name())) {
 					mystique = context.getBean(ChainMystTurn.class);

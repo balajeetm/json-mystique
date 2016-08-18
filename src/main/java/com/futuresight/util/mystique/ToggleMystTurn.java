@@ -25,7 +25,7 @@ import com.google.gson.JsonObject;
  * @author balajmoh
  */
 @Component
-public class SwitchedMystTurn implements MystTurn {
+public class ToggleMystTurn implements MystTurn {
 
 	/** The factory. */
 	@Autowired

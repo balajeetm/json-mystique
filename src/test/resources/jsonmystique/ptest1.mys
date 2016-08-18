@@ -103,7 +103,7 @@
 		"from": ["h"],
 		"to": ["ba10"],
 		"turn": {
-			"type": "switched",
+			"type": "toggle",
 			"turns": [{
 				"type": "arrayToMap",
 				"key": ["b"],
@@ -140,7 +140,7 @@
 	}, {
 		"from": ["k", "[*]"],
 		"turn": {
-			"type": "switched",
+			"type": "toggle",
 			"turns": [{
 					"type": "condition",
 					"from": ["rating"],
