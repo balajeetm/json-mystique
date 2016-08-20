@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/balajeetm/json-mystique.svg?branch=master)](https://travis-ci.org/balajeetm/json-mystique)
+
 # Json Mystique
 Utility for Json Conversion and json transformation in Java
 
