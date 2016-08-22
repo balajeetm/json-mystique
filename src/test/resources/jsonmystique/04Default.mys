@@ -1,0 +1,21 @@
+ [{
+ 	"from": ["wardrobe", "shirt", "[*]"],
+ 	"to": ["backpack", "shirts"],
+ 	"turn": {
+ 		"from": ["color"],
+ 		"default": {
+ 			"value": "white"
+ 		}
+ 	}
+ }, {
+ 	"from": ["wardrobe"],
+ 	"to": ["backpack", "glass"],
+ 	"turn": {
+ 		"from": ["spareGlasses"],
+ 		"default": {
+ 			"turn": {
+ 				"from": ["readingGlass"]
+ 			}
+ 		}
+ 	}
+ }]

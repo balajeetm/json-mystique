@@ -1,0 +1,18 @@
+{
+  "wardrobe": {
+    "shirt": [
+      {
+        "color": "red",
+        "size": "40"
+      },
+      {
+        "color": "blue",
+        "size": "40"
+      },
+      {
+        "color": "green",
+        "size": "42"
+      }
+    ]
+  }
+}

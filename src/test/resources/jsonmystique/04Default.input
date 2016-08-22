@@ -1,0 +1,17 @@
+{
+  "wardrobe": {
+    "shirt": [
+      {
+        "color": "red",
+        "size": "40"
+      },
+      {
+        "size": "40"
+      }
+    ],
+    "readingGlass": {
+      "type": "frameless",
+      "lens": "bifocal"
+    }
+  }
+}

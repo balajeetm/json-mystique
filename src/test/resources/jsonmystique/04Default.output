@@ -1,0 +1,12 @@
+{
+  "backpack": {
+    "shirts": [
+      "red",
+      "white"
+    ],
+    "glass": {
+      "type": "frameless",
+      "lens": "bifocal"
+    }
+  }
+}

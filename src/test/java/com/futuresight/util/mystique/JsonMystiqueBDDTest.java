@@ -41,7 +41,7 @@ import com.google.gson.JsonParser;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {JsonMystiqueConfig.class})
-public class JsonGenieBDDTest {
+public class JsonMystiqueBDDTest {
 
 	@Autowired
 	private JsonMystique jsonMystique;
@@ -52,7 +52,7 @@ public class JsonGenieBDDTest {
 	/**
 	 * Instantiates a new json mystique bdd test.
 	 */
-	public JsonGenieBDDTest() {
+	public JsonMystiqueBDDTest() {
 		jsonParser = new JsonParser();
 	}
 
@@ -92,17 +92,17 @@ public class JsonGenieBDDTest {
 	}
 
 	@Test
-	public void test1() {
+	public void simpleCopy01() {
 		try {
-			String inputPattern = "classpath:jsonmystique/test1.input";
-			String outputPattern = "classpath:jsonmystique/test1.output";
+			String inputPattern = "classpath:jsonmystique/01SimpleCopy.input";
+			String outputPattern = "classpath:jsonmystique/01SimpleCopy.output";
 			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
 			Resource resource = resourceResolver.getResource(inputPattern);
 
 			String string = IOUtils.toString(resource.getInputStream());
 			Resource outputRes = resourceResolver.getResource(outputPattern);
 			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
-			JsonElement transform = jsonMystique.transform(string, "test1");
+			JsonElement transform = jsonMystique.transform(string, "01SimpleCopy");
 			Assert.assertEquals(output, transform);
 		}
 		catch (Exception e) {
@@ -112,17 +112,57 @@ public class JsonGenieBDDTest {
 	}
 
 	@Test
-	public void test2() {
+	public void simpleCopy02() {
 		try {
-			String inputPattern = "classpath:jsonmystique/test2.input";
-			String outputPattern = "classpath:jsonmystique/test2.output";
+			String inputPattern = "classpath:jsonmystique/02SimpleCopy.input";
+			String outputPattern = "classpath:jsonmystique/02SimpleCopy.output";
 			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
 			Resource resource = resourceResolver.getResource(inputPattern);
 
 			String string = IOUtils.toString(resource.getInputStream());
 			Resource outputRes = resourceResolver.getResource(outputPattern);
 			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
-			JsonElement transform = jsonMystique.transform(string, "test2");
+			JsonElement transform = jsonMystique.transform(string, "02SimpleCopy");
+			Assert.assertEquals(output, transform);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Test
+	public void forEach03() {
+		try {
+			String inputPattern = "classpath:jsonmystique/03ForEach.input";
+			String outputPattern = "classpath:jsonmystique/03ForEach.output";
+			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+			Resource resource = resourceResolver.getResource(inputPattern);
+
+			String string = IOUtils.toString(resource.getInputStream());
+			Resource outputRes = resourceResolver.getResource(outputPattern);
+			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
+			JsonElement transform = jsonMystique.transform(string, "03ForEach");
+			Assert.assertEquals(output, transform);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Test
+	public void default04() {
+		try {
+			String inputPattern = "classpath:jsonmystique/04Default.input";
+			String outputPattern = "classpath:jsonmystique/04Default.output";
+			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+			Resource resource = resourceResolver.getResource(inputPattern);
+
+			String string = IOUtils.toString(resource.getInputStream());
+			Resource outputRes = resourceResolver.getResource(outputPattern);
+			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
+			JsonElement transform = jsonMystique.transform(string, "04Default");
 			Assert.assertEquals(output, transform);
 		}
 		catch (Exception e) {
