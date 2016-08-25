@@ -1,0 +1,20 @@
+[{
+	"from": ["wardrobe", "dvd", "name"],
+	"to": ["backpack", "movie", "name"]
+}, {
+	"from": ["wardrobe", "dvd", "genre"],
+	"to": ["backpack", "movie", "genre"],
+	"turn": {
+		"type": "getFromDeps",
+		"key": ["genres"]
+	},
+	"deps": [{
+		"from": ["wardrobe", "videoGenreCatalog"],
+		"to": ["genres"],
+		"turn": {
+			"type": "arrayToMap",
+			"key": ["genreCode"],
+			"value": ["descr"]
+		}
+	}]
+}]

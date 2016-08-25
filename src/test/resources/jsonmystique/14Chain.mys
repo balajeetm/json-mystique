@@ -1,0 +1,13 @@
+[{
+	"from": ["wardrobe", "drivingLicense"],
+	"turn": {
+		"type": "chain",
+		"turns": [{
+			"from": ["name"],
+			"to": ["backpack", "tag", "name"]
+		}, {
+			"from": ["bloodGroup"],
+			"to": ["backpack", "tag", "bloodGroup"]
+		}]
+	}
+}]

@@ -1,0 +1,14 @@
+{
+  "wardrobe": {
+    "spectacleCase": {
+      "name": "leatherCase",
+      "size": "large"
+    },
+    "spectacles": [
+      {
+        "type": "frameless",
+        "lens": "bifocal"
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "wardrobe": {
+    "player": {
+      "name": "musicPlayer"
+    },
+    "earphone": {
+      "name": "noise-cancelled-earpiece"
+    }
+  }
+}

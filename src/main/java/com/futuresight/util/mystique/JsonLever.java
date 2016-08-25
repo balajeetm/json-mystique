@@ -1,10 +1,11 @@
 /*
  * Copyright (c) Balajee TM 2016.
  * All rights reserved.
+ * License -  @see <a href="http://www.apache.org/licenses/LICENSE-2.0"></a>
  */
 
 /*
- * Created on 4 Aug, 2016 by balajeetm
+ * Created on 25 Aug, 2016 by balajeetm
  */
 package com.futuresight.util.mystique;
 
@@ -22,6 +23,7 @@ import javax.annotation.PostConstruct;
 import lombok.Getter;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -55,10 +57,10 @@ public class JsonLever {
 	private static String loopyPat = "^\\[\\*\\]$";
 
 	/** The ace pat. */
-	private static String acePat = "^@ace\\((\\w+)\\)$";
+	private static String acePat = "^@ace\\(([a-zA-Z_0-9$#@!%^&*]+)\\)$";
 
 	/** The value pat. */
-	private static String valuePat = "^@value\\((\\w+)\\)$";
+	private static String valuePat = "^@value\\(([a-zA-Z_0-9, $#@!%^&*]+)\\)$";
 
 	/** The index pattern. */
 	private Pattern indexPattern;
@@ -102,8 +104,20 @@ public class JsonLever {
 	 *
 	 * @return the json parser
 	 */
+
+	/**
+	 * Gets the json parser.
+	 *
+	 * @return the json parser
+	 */
 	@Getter
 	private JsonParser jsonParser;
+
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
 
 	/**
 	 * Gets the gson.
@@ -318,16 +332,22 @@ public class JsonLever {
 	 *
 	 * @param source the source
 	 * @param path the path
+	 * @param deps the deps
 	 * @param aces the aces
 	 * @return the field
 	 */
-	public JsonElement getField(JsonElement source, JsonArray path, JsonObject aces) {
+	public JsonElement getField(JsonElement source, JsonArray path, JsonObject deps, JsonObject aces) {
 		JsonElement field = null;
 		try {
 			field = source;
 			if (null != path) {
 				for (JsonElement jsonElement : path) {
 					String key = getAsString(jsonElement);
+					String ace = getAce(key);
+					if (null != ace) {
+						field = aces.get(ace);
+						continue;
+					}
 					key = getPathField(key, aces);
 					field = getField(field, key);
 				}
@@ -354,7 +374,7 @@ public class JsonLever {
 	 * @return the field
 	 */
 	public JsonElement getField(JsonElement source, JsonArray path) {
-		return getField(source, path, new JsonObject());
+		return getField(source, path, new JsonObject(), new JsonObject());
 	}
 
 	/**
@@ -371,7 +391,7 @@ public class JsonLever {
 		if (valueObject.isJsonArray()) {
 			JsonArray valueArray = valueObject.getAsJsonArray();
 			if (valueArray.size() == 0) {
-				finalValue = getField(source, valueArray, aces);
+				finalValue = getField(source, valueArray, deps, aces);
 			}
 
 			else {
@@ -380,13 +400,13 @@ public class JsonLever {
 					finalValue = new JsonObject();
 					for (JsonElement jsonElement : valueArray) {
 						JsonArray pathArray = getAsJsonArray(jsonElement);
-						JsonElement subset = getField(source, pathArray, aces);
+						JsonElement subset = getField(source, pathArray, deps, aces);
 						setField(finalValue.getAsJsonObject(), pathArray, subset, aces);
 					}
 					finalValue = finalValue.getAsJsonObject().get(MysCon.RESULT);
 				}
 				else {
-					finalValue = getField(source, valueArray, aces);
+					finalValue = getField(source, valueArray, deps, aces);
 				}
 			}
 		}
@@ -492,7 +512,11 @@ public class JsonLever {
 	 */
 	private String getPathField(String field, JsonObject aces) {
 		String ace = getAceValue(field);
-		String output = null != ace ? getAsString(aces.get(ace)) : field;
+		String output = field;
+		if (null != ace) {
+			JsonArray newJsonArray = newJsonArray(ace.split(","));
+			output = getAsString(getField(aces, newJsonArray));
+		}
 		return output;
 	}
 
@@ -744,6 +768,17 @@ public class JsonLever {
 	}
 
 	/**
+	 * Gets the as json element.
+	 *
+	 * @param element the element
+	 * @param defaultJson the default json
+	 * @return the as json element
+	 */
+	public JsonElement getAsJsonElement(JsonElement element, JsonElement defaultJson) {
+		return isNotNull(element) ? element : defaultJson;
+	}
+
+	/**
 	 * Gets the as json object.
 	 *
 	 * @param element the element
@@ -873,7 +908,7 @@ public class JsonLever {
 	public JsonArray newJsonArray(String... path) {
 		JsonArray output = new JsonArray();
 		for (String string : path) {
-			output.add(new JsonPrimitive(string));
+			output.add(new JsonPrimitive(StringUtils.trim(string)));
 		}
 		return output;
 	}

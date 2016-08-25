@@ -17,6 +17,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -26,7 +27,6 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import com.futuresight.util.mystique.config.JsonMystiqueConfig;
 import com.futuresight.util.mystique.lever.ConvertorException;
-import com.futuresight.util.mystique.lever.ConvertorInterface;
 import com.futuresight.util.mystique.lever.JsonJacksonConvertor;
 
 /**
@@ -40,6 +40,9 @@ import com.futuresight.util.mystique.lever.JsonJacksonConvertor;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {JsonMystiqueConfig.class})
 public class JsonJacksonConvertorBDDTest {
+
+	@Autowired
+	private JsonJacksonConvertor instance;
 
 	/**
 	 * Inits the.
@@ -59,7 +62,6 @@ public class JsonJacksonConvertorBDDTest {
 			Resource resource = resourceResolver.getResource(locationPattern);
 			String string = IOUtils.toString(resource.getInputStream());
 
-			ConvertorInterface instance = JsonJacksonConvertor.getInstance();
 			List<TestTarot> deserializeList = instance.deserializeList(resource.getInputStream(), TestTarot.class);
 			List<TestTarot> deserializeGroup = instance.deserializeGroup(resource.getInputStream(), List.class,
 					TestTarot.class);
@@ -91,7 +93,6 @@ public class JsonJacksonConvertorBDDTest {
 	@Test
 	public void jacksonNegativeTest1() {
 		try {
-			ConvertorInterface instance = JsonJacksonConvertor.getInstance();
 			instance.deserializeList((InputStream) null, TestTarot.class);
 		}
 		catch (ConvertorException e) {
@@ -102,7 +103,6 @@ public class JsonJacksonConvertorBDDTest {
 	@Test
 	public void jacksonNegativeTest2() {
 		try {
-			ConvertorInterface instance = JsonJacksonConvertor.getInstance();
 			instance.deserializeGroup((InputStream) null, List.class, TestTarot.class);
 		}
 		catch (ConvertorException e) {
@@ -113,7 +113,6 @@ public class JsonJacksonConvertorBDDTest {
 	@Test
 	public void jacksonNegativeTest3() {
 		try {
-			ConvertorInterface instance = JsonJacksonConvertor.getInstance();
 			instance.deserializeGroup((InputStream) null, Collection.class, TestTarot.class);
 		}
 		catch (ConvertorException e) {
@@ -124,7 +123,6 @@ public class JsonJacksonConvertorBDDTest {
 	@Test
 	public void jacksonNegativeTest4() {
 		try {
-			ConvertorInterface instance = JsonJacksonConvertor.getInstance();
 			instance.deserializeList((String) null, TestTarot.class);
 		}
 		catch (ConvertorException e) {
@@ -135,7 +133,6 @@ public class JsonJacksonConvertorBDDTest {
 	@Test
 	public void jacksonNegativeTest5() {
 		try {
-			ConvertorInterface instance = JsonJacksonConvertor.getInstance();
 			instance.deserializeGroup((String) null, List.class, TestTarot.class);
 		}
 		catch (ConvertorException e) {
@@ -146,7 +143,6 @@ public class JsonJacksonConvertorBDDTest {
 	@Test
 	public void jacksonNegativeTest6() {
 		try {
-			ConvertorInterface instance = JsonJacksonConvertor.getInstance();
 			instance.deserializeGroup((String) null, Collection.class, TestTarot.class);
 		}
 		catch (ConvertorException e) {

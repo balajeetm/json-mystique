@@ -1,0 +1,10 @@
+[{
+	"to": ["backpack", "tag"],
+	"turn": {
+		"type": "constant",
+		"value": {
+			"name": "Dheeru",
+			"id": "DH01"
+		}
+	}
+}]

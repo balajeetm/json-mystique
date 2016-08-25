@@ -9,10 +9,8 @@
 package com.futuresight.util.mystique;
 
 import java.io.InputStreamReader;
-import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ArrayUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,10 +24,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import com.futuresight.util.mystique.config.JsonMystiqueConfig;
-import com.futuresight.util.mystique.lever.ConvertorInterface;
-import com.futuresight.util.mystique.lever.JsonGsonConvertor;
+import com.futuresight.util.mystique.lever.JsonComparator;
+import com.futuresight.util.mystique.lever.MystResult;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.JsonNull;
 
 /**
  * The Class JsonMystiqueBDDTest.
@@ -46,14 +44,20 @@ public class JsonMystiqueBDDTest {
 	@Autowired
 	private JsonMystique jsonMystique;
 
-	/** The json parser. */
-	private JsonParser jsonParser;
+	@Autowired
+	private JsonLever jsonLever;
+
+	@Autowired
+	private JsonComparator jsonComparator;
+
+	private String inputFormat = "classpath:jsonmystique/%s.input";
+
+	private String outputFormat = "classpath:jsonmystique/%s.output";
 
 	/**
 	 * Instantiates a new json mystique bdd test.
 	 */
 	public JsonMystiqueBDDTest() {
-		jsonParser = new JsonParser();
 	}
 
 	/**
@@ -76,7 +80,7 @@ public class JsonMystiqueBDDTest {
 
 			String string = IOUtils.toString(resource.getInputStream());
 			Resource outputRes = resourceResolver.getResource(outputPattern);
-			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
+			JsonElement output = jsonLever.getJsonParser().parse(new InputStreamReader(outputRes.getInputStream()));
 			JsonElement transform = jsonMystique.transform(string, "ptest1");
 			Boolean transformSuccess = transform != null && !transform.isJsonNull() && transform.isJsonObject();
 			Assert.assertTrue(transformSuccess);
@@ -93,76 +97,101 @@ public class JsonMystiqueBDDTest {
 
 	@Test
 	public void simpleCopy01() {
-		try {
-			String inputPattern = "classpath:jsonmystique/01SimpleCopy.input";
-			String outputPattern = "classpath:jsonmystique/01SimpleCopy.output";
-			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
-			Resource resource = resourceResolver.getResource(inputPattern);
-
-			String string = IOUtils.toString(resource.getInputStream());
-			Resource outputRes = resourceResolver.getResource(outputPattern);
-			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
-			JsonElement transform = jsonMystique.transform(string, "01SimpleCopy");
-			Assert.assertEquals(output, transform);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail(e.getMessage());
-		}
+		testEqual("01SimpleCopy");
 	}
 
 	@Test
 	public void simpleCopy02() {
-		try {
-			String inputPattern = "classpath:jsonmystique/02SimpleCopy.input";
-			String outputPattern = "classpath:jsonmystique/02SimpleCopy.output";
-			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
-			Resource resource = resourceResolver.getResource(inputPattern);
-
-			String string = IOUtils.toString(resource.getInputStream());
-			Resource outputRes = resourceResolver.getResource(outputPattern);
-			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
-			JsonElement transform = jsonMystique.transform(string, "02SimpleCopy");
-			Assert.assertEquals(output, transform);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail(e.getMessage());
-		}
+		testEqual("02SimpleCopy");
 	}
 
 	@Test
 	public void forEach03() {
-		try {
-			String inputPattern = "classpath:jsonmystique/03ForEach.input";
-			String outputPattern = "classpath:jsonmystique/03ForEach.output";
-			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
-			Resource resource = resourceResolver.getResource(inputPattern);
-
-			String string = IOUtils.toString(resource.getInputStream());
-			Resource outputRes = resourceResolver.getResource(outputPattern);
-			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
-			JsonElement transform = jsonMystique.transform(string, "03ForEach");
-			Assert.assertEquals(output, transform);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail(e.getMessage());
-		}
+		testEqual("03ForEach");
 	}
 
 	@Test
 	public void default04() {
-		try {
-			String inputPattern = "classpath:jsonmystique/04Default.input";
-			String outputPattern = "classpath:jsonmystique/04Default.output";
-			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
-			Resource resource = resourceResolver.getResource(inputPattern);
+		testEqual("04Default");
+	}
 
-			String string = IOUtils.toString(resource.getInputStream());
+	@Test
+	public void aces05() {
+		testEqual("05Aces");
+	}
+
+	@Test
+	public void concat06() {
+		testEqual("06Concat");
+	}
+
+	@Test
+	public void condition07() {
+		testEqual("07Condition");
+	}
+
+	@Test
+	public void constant08() {
+		testEqual("08Constant", "07Condition");
+	}
+
+	@Test
+	public void date09() {
+		testSubset("09Date", "07Condition");
+	}
+
+	@Test
+	public void getFromDeps10() {
+		testEqual("10GetFromDeps");
+	}
+
+	@Test
+	public void arrayToMap11() {
+		testEqual("11ArrayToMap");
+	}
+
+	@Test
+	public void mystique12() {
+		testEqual("12Mystique");
+	}
+
+	@Test
+	public void stringUtils13() {
+		testEqual("13StringUtils");
+	}
+
+	@Test
+	public void chain14() {
+		testEqual("14Chain");
+	}
+
+	@Test
+	public void toggle15() {
+		testEqual("15Toggle");
+	}
+
+	@Test
+	public void custom16() {
+		testEqual("16Custom");
+	}
+
+	private void testEqual(String test) {
+		testEqual(test, null, null);
+	}
+
+	private void testEqual(String test, String inputPattern) {
+		testEqual(test, inputPattern, null);
+	}
+
+	private void testEqual(String test, String inputPattern, String outputPattern) {
+
+		try {
+			JsonElement transform = transform(test, inputPattern);
+			outputPattern = null == outputPattern ? String.format(outputFormat, test) : String.format(outputFormat,
+					outputPattern);
+			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
 			Resource outputRes = resourceResolver.getResource(outputPattern);
-			JsonElement output = jsonParser.parse(new InputStreamReader(outputRes.getInputStream()));
-			JsonElement transform = jsonMystique.transform(string, "04Default");
+			JsonElement output = jsonLever.getJsonParser().parse(new InputStreamReader(outputRes.getInputStream()));
 			Assert.assertEquals(output, transform);
 		}
 		catch (Exception e) {
@@ -171,26 +200,36 @@ public class JsonMystiqueBDDTest {
 		}
 	}
 
-	@Test
-	public void chumma() {
+	private void testSubset(String test, String inputPattern) {
+		testSubset(test, inputPattern, null);
+	}
+
+	private void testSubset(String test, String inputPattern, String outputPattern) {
 		try {
-			String locationPattern = "classpath:jsonmystique/*.abc";
+			JsonElement transform = transform(test, inputPattern);
+			outputPattern = null == outputPattern ? String.format(outputFormat, test) : String.format(outputFormat,
+					outputPattern);
 			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
-			Resource[] resources = null;
-			resources = resourceResolver.getResources(locationPattern);
-			if (!ArrayUtils.isEmpty(resources)) {
-				Resource resource = resources[0];
-				if (resource.exists()) {
-					ConvertorInterface instance = JsonGsonConvertor.getInstance();
-					List<Chumma> deserializeList = instance.deserializeList(resource.getInputStream(), Chumma.class);
-					for (Chumma chumma : deserializeList) {
-						System.out.println("oh");
-					}
-				}
-			}
+			Resource outputRes = resourceResolver.getResource(outputPattern);
+			JsonElement output = jsonLever.getJsonParser().parse(new InputStreamReader(outputRes.getInputStream()));
+			MystResult subset = jsonComparator.isSubset(output, transform);
+			Assert.assertTrue(subset.getResult());
 		}
 		catch (Exception e) {
-			System.err.println("A");
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
 		}
+	}
+
+	private JsonElement transform(String test, String inputPattern) throws Exception {
+		JsonElement transform = JsonNull.INSTANCE;
+		inputPattern = null == inputPattern ? String.format(inputFormat, test) : String.format(inputFormat,
+				inputPattern);
+		ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+		Resource resource = resourceResolver.getResource(inputPattern);
+
+		String string = IOUtils.toString(resource.getInputStream());
+		transform = jsonMystique.transform(string, test);
+		return transform;
 	}
 }

@@ -1,0 +1,17 @@
+{
+  "wardrobe": {
+    "player": {
+      "name": "musicPlayer"
+    },
+    "earphone": {
+      "name": "noise-cancelled-earpiece"
+    },
+    "charger": {
+      "name": "energizer"
+    },
+    "batteries": {
+      "type": "li-ion",
+      "number": 4
+    }
+  }
+}

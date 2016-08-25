@@ -1,0 +1,10 @@
+{
+  "wardrobe": {
+    "shoes": {
+      "sports": {
+        "type": "nike",
+        "size": "12"
+      }
+    }
+  }
+}

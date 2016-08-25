@@ -1,0 +1,22 @@
+{
+  "wardrobe": {
+    "videoGenreCatalog": [
+      {
+        "genreCode": "act",
+        "descr": "Action"
+      },
+      {
+        "genreCode": "com",
+        "descr": "Comedy"
+      },
+      {
+        "genreCode": "adu",
+        "descr": "Adult"
+      }
+    ],
+    "dvd": {
+      "name": "Rambo",
+      "genre": "act"
+    }
+  }
+}

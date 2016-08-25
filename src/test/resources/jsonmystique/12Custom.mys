@@ -1,0 +1,11 @@
+[{
+	"from": ["name"],
+	"to": ["name"]
+}, {
+	"from": ["genre"],
+	"to": ["genre"],
+	"turn": {
+		"type": "getFromDeps",
+		"key": ["genres"]
+	}
+}]

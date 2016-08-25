@@ -1,0 +1,6 @@
+**/target/
+/.clover/
+**/.settings
+**/.project
+**/.classpath
+/target/

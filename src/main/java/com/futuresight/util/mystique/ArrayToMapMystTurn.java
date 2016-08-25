@@ -1,10 +1,11 @@
 /*
  * Copyright (c) Balajee TM 2016.
  * All rights reserved.
+ * License -  @see <a href="http://www.apache.org/licenses/LICENSE-2.0"></a>
  */
 
 /*
- * Created on 7 Aug, 2016 by balajeetm
+ * Created on 25 Aug, 2016 by balajeetm
  */
 package com.futuresight.util.mystique;
 
@@ -35,7 +36,7 @@ public class ArrayToMapMystTurn extends AbstractMystTurn {
 
 		if (null != elementSource) {
 			turn = jsonLever.getAsJsonObject(turn, new JsonObject());
-			JsonElement granularSource = getGranularSource(elementSource, turn, aces);
+			JsonElement granularSource = getGranularSource(elementSource, turn, deps, aces);
 			JsonArray inputArray = jsonLever.getAsJsonArray(granularSource, new JsonArray());
 			JsonArray keyArray = jsonLever.getAsJsonArray(turn.get(MysCon.KEY));
 			if (jsonLever.isNotNull(keyArray)) {
@@ -43,7 +44,7 @@ public class ArrayToMapMystTurn extends AbstractMystTurn {
 				valueElement = jsonLever.isNull(valueElement) ? new JsonArray() : valueElement;
 
 				for (JsonElement jsonElement : inputArray) {
-					JsonElement keyField = jsonLever.getField(jsonElement, keyArray, aces);
+					JsonElement keyField = jsonLever.getField(jsonElement, keyArray, deps, aces);
 					String key = jsonLever.getAsString(keyField, MysCon.EMPTY);
 
 					JsonElement finalValue = jsonLever.getSubset(jsonElement, deps, aces, valueElement);

@@ -1,0 +1,17 @@
+[{
+	"from": [ ["wardrobe", "player", "name"], ["wardrobe", "earphone", "name"] ],
+	"to": ["backpack", "player"],
+	"turn": {
+		"type": "concat",
+		"separator": "~"
+	}
+},
+{
+	"from": [ ["wardrobe", "charger", "name"], ["wardrobe", "batteries", "type"], ["wardrobe", "batteries", "number"] ],
+	"to": ["backpack", "charger"],
+	"turn": {
+		"type": "concat",
+		"separator": "#"
+	}
+}
+]

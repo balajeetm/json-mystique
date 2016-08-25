@@ -1,10 +1,11 @@
 /*
  * Copyright (c) Balajee TM 2016.
  * All rights reserved.
+ * License -  @see <a href="http://www.apache.org/licenses/LICENSE-2.0"></a>
  */
 
 /*
- * Created on 7 Aug, 2016 by balajeetm
+ * Created on 25 Aug, 2016 by balajeetm
  */
 package com.futuresight.util.mystique;
 
@@ -33,7 +34,7 @@ public class StringUtilsMystTurn extends AbstractMystTurn {
 	protected JsonElement transmute(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn) {
 		JsonElement elementSource = jsonLever.getFirst(source);
 		turn = jsonLever.getAsJsonObject(turn, new JsonObject());
-		JsonElement granularSource = getGranularSource(elementSource, turn, aces);
+		JsonElement granularSource = getGranularSource(elementSource, turn, deps, aces);
 		String sourceString = jsonLever.getAsString(granularSource, MysCon.EMPTY);
 		return execute(sourceString, turn);
 	}

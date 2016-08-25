@@ -1,0 +1,20 @@
+[{
+	"to": ["backpack", "dates", "packedAt"],
+	"turn": {
+		"type": "dateConvertor",
+		"action": "now",
+		"outformat": "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+	}
+}, {
+	"from": ["@ace(travelDate)"],
+	"to": ["backpack", "dates", "travelDate"],
+	"turn": {
+		"type": "dateConvertor",
+		"action": "transform",
+		"informat": "yyyy-MM-dd",
+		"outformat": "dd-MM-yyyy"
+	},
+	"aces": {
+		"travelDate": "2016-08-20"
+	}
+}]

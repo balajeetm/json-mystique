@@ -1,0 +1,32 @@
+{
+  "wardrobe": {
+    "videoGenreCatalog": [
+      {
+        "genreCode": "act",
+        "descr": "Action"
+      },
+      {
+        "genreCode": "com",
+        "descr": "Comedy"
+      },
+      {
+        "genreCode": "adu",
+        "descr": "Adult"
+      }
+    ],
+    "dvds": [
+      {
+        "name": "act/Rambo",
+        "genre": "act"
+      },
+      {
+        "name": "com/Hangover",
+        "genre": "com"
+      },
+      {
+        "name": "adu/American Pie",
+        "genre": "adu"
+      }
+    ]
+  }
+}

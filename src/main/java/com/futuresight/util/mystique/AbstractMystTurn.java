@@ -1,10 +1,11 @@
 /*
  * Copyright (c) Balajee TM 2016.
  * All rights reserved.
+ * License -  @see <a href="http://www.apache.org/licenses/LICENSE-2.0"></a>
  */
 
 /*
- * Created on 7 Aug, 2016 by balajeetm
+ * Created on 25 Aug, 2016 by balajeetm
  */
 package com.futuresight.util.mystique;
 
@@ -40,29 +41,31 @@ public abstract class AbstractMystTurn implements MystTurn {
 			JsonObject resultWrapper) {
 
 		Boolean turnExists = jsonLever.isNotNull(turn);
+		JsonObject updatedAces = new JsonObject();
 		if (turnExists) {
 			JsonObject localAces = jsonLever.getAsJsonObject(turn.get(MysCon.ACES), null);
 			if (jsonLever.isNotNull(localAces)) {
 				// Aces will only work on first source
 				JsonElement first = jsonLever.getFirst(source);
-				JsonObject updatedAces = jsonLever.getUpdatedAces(first, localAces, deps, new JsonObject());
-				aces = jsonLever.simpleMerge(updatedAces, jsonLever.getAsJsonObject(aces, new JsonObject()));
+				updatedAces = jsonLever.getUpdatedAces(first, localAces, deps, updatedAces);
 			}
 		}
 
-		JsonElement transform = transmute(source, deps, aces, turn);
+		jsonLever.simpleMerge(jsonLever.getAsJsonObject(aces, new JsonObject()), updatedAces);
+
+		JsonElement transform = transmute(source, deps, updatedAces, turn);
 
 		if (turnExists) {
 			if (jsonLever.isNull(transform)) {
 				JsonObject defaultJson = jsonLever.getAsJsonObject(turn.get(MysCon.DEFAULT));
-				transform = transformToDefault(defaultJson, source, deps, aces);
+				transform = transformToDefault(defaultJson, source, deps, updatedAces);
 			}
 
 			//set the result
 			JsonArray to = jsonLever.getAsJsonArray(turn.get(MysCon.TO));
 			Boolean optional = jsonLever.getAsBoolean(turn.get(MysCon.OPTIONAL), Boolean.FALSE);
 
-			jsonLever.setField(resultWrapper, to, transform, aces, optional);
+			jsonLever.setField(resultWrapper, to, transform, updatedAces, optional);
 		}
 
 		return transform;
@@ -130,12 +133,13 @@ public abstract class AbstractMystTurn implements MystTurn {
 	 *
 	 * @param source the source
 	 * @param turn the turn
+	 * @param deps the deps
 	 * @param aces the aces
 	 * @return the granular source
 	 */
-	protected JsonElement getGranularSource(JsonElement source, JsonObject turn, JsonObject aces) {
+	protected JsonElement getGranularSource(JsonElement source, JsonObject turn, JsonObject deps, JsonObject aces) {
 		JsonArray from = jsonLever.isNotNull(turn) ? jsonLever.getAsJsonArray(turn.get(MysCon.FROM)) : null;
-		JsonElement conditionSource = jsonLever.isNull(from) ? source : jsonLever.getField(source, from, aces);
+		JsonElement conditionSource = jsonLever.isNull(from) ? source : jsonLever.getField(source, from, deps, aces);
 		return conditionSource;
 	}
 }

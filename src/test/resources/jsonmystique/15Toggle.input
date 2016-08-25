@@ -1,0 +1,12 @@
+{
+  "wardrobe": {
+    "id": {
+      "type": "drivingLicense",
+      "name": "Dheeru",
+      "licenseNum": "xx-yy-zz",
+      "validFrom": "01-01-2010",
+      "validTo": "01-01-2030",
+      "bloodGroup": "B +ve"
+    }
+  }
+}
