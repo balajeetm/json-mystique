@@ -431,76 +431,85 @@ public class JsonLever {
 	 */
 	public JsonObject setField(JsonObject resultWrapper, JsonArray to, JsonElement transform, JsonObject aces,
 			Boolean optional) {
-		if (optional && isNull(transform)) {
-			// Do Not update result wrapper
-			return resultWrapper;
-		}
-		if (isNotNull(to)) {
-			JsonElement result = resultWrapper.get(MysCon.RESULT);
-			JsonElement field = result;
-			if (to.size() > 0) {
-				String previous = null;
-				String current = null;
-				Integer prevIndex = null;
-				Integer currentIndex = null;
-				Iterator<JsonElement> iterator = to.iterator();
-				if (iterator.hasNext()) {
-					previous = getPathField(iterator.next().getAsString(), aces);
-					prevIndex = getIndex(previous);
-				}
 
-				while (iterator.hasNext()) {
-					current = getPathField(iterator.next().getAsString(), aces);
+		/**
+		 * Holding a mutex on result wrapper and not making the method
+		 * synchronized because, when multiple unrelated threads might be
+		 * calling mystique for transformation. The resource of contention is
+		 * only the result wrapper
+		 **/
+		synchronized (resultWrapper) {
+			if (optional && isNull(transform)) {
+				// Do Not update result wrapper
+				return resultWrapper;
+			}
+			if (isNotNull(to)) {
+				JsonElement result = resultWrapper.get(MysCon.RESULT);
+				JsonElement field = result;
+				if (to.size() > 0) {
+					String previous = null;
+					String current = null;
+					Integer prevIndex = null;
+					Integer currentIndex = null;
+					Iterator<JsonElement> iterator = to.iterator();
+					if (iterator.hasNext()) {
+						previous = getPathField(iterator.next().getAsString(), aces);
+						prevIndex = getIndex(previous);
+					}
 
-					prevIndex = null != prevIndex ? prevIndex : getIndex(previous);
-					currentIndex = null != currentIndex ? currentIndex : getIndex(current);
+					while (iterator.hasNext()) {
+						current = getPathField(iterator.next().getAsString(), aces);
+
+						prevIndex = null != prevIndex ? prevIndex : getIndex(previous);
+						currentIndex = null != currentIndex ? currentIndex : getIndex(current);
+
+						if (null == prevIndex) {
+							field = getRepleteField(field, JsonType.Object);
+							result = updateResult(result, field);
+
+							if (null == currentIndex) {
+								field = updateFieldValue(field.getAsJsonObject(), previous, JsonType.Object);
+							}
+							else {
+								field = updateFieldValue(field.getAsJsonObject(), previous, JsonType.Array);
+							}
+						}
+						else {
+							field = getRepleteField(field, JsonType.Array);
+							result = updateResult(result, field);
+
+							if (null == currentIndex) {
+								field = updateFieldValue(field.getAsJsonArray(), prevIndex, JsonType.Object);
+							}
+							else {
+								field = updateFieldValue(field.getAsJsonArray(), prevIndex, JsonType.Array);
+							}
+						}
+						previous = current;
+						prevIndex = currentIndex;
+						current = null;
+						currentIndex = null;
+					}
 
 					if (null == prevIndex) {
 						field = getRepleteField(field, JsonType.Object);
 						result = updateResult(result, field);
-
-						if (null == currentIndex) {
-							field = updateFieldValue(field.getAsJsonObject(), previous, JsonType.Object);
-						}
-						else {
-							field = updateFieldValue(field.getAsJsonObject(), previous, JsonType.Array);
-						}
+						field.getAsJsonObject().add(previous, transform);
 					}
 					else {
 						field = getRepleteField(field, JsonType.Array);
 						result = updateResult(result, field);
-
-						if (null == currentIndex) {
-							field = updateFieldValue(field.getAsJsonArray(), prevIndex, JsonType.Object);
-						}
-						else {
-							field = updateFieldValue(field.getAsJsonArray(), prevIndex, JsonType.Array);
-						}
+						updateFieldValue(field.getAsJsonArray(), prevIndex, JsonType.Null);
+						field.getAsJsonArray().set(prevIndex, transform);
 					}
-					previous = current;
-					prevIndex = currentIndex;
-					current = null;
-					currentIndex = null;
-				}
-
-				if (null == prevIndex) {
-					field = getRepleteField(field, JsonType.Object);
-					result = updateResult(result, field);
-					field.getAsJsonObject().add(previous, transform);
 				}
 				else {
-					field = getRepleteField(field, JsonType.Array);
-					result = updateResult(result, field);
-					updateFieldValue(field.getAsJsonArray(), prevIndex, JsonType.Null);
-					field.getAsJsonArray().set(prevIndex, transform);
+					result = transform;
 				}
+				resultWrapper.add(MysCon.RESULT, result);
 			}
-			else {
-				result = transform;
-			}
-			resultWrapper.add(MysCon.RESULT, result);
+			return resultWrapper;
 		}
-		return resultWrapper;
 	}
 
 	/**
@@ -535,6 +544,7 @@ public class JsonLever {
 
 	/**
 	 * Gets the updated aces.
+	 * Aces can depend on each other. Cannot execute this parallel
 	 *
 	 * @param source the source
 	 * @param aces the aces
