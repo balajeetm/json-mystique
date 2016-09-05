@@ -10,12 +10,11 @@
 package com.futuresight.util.mystique;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.PostConstruct;
 
@@ -29,8 +28,8 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
+import com.futuresight.util.mystique.lever.JsonGsonConvertor;
 import com.futuresight.util.mystique.lever.MysCon;
-import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -56,14 +55,16 @@ public class JsonMystique {
 	@Autowired
 	private JsonLever jsonLever;
 
-	/** The tarots. */
-	private Map<String, List<Tarot>> tarots;
+	@Autowired
+	private JsonGsonConvertor gsonConvertor;
+
+	private Map<String, Map<String, List<Tarot>>> mystiques;
 
 	/**
 	 * Instantiates a new json genie.
 	 */
 	private JsonMystique() {
-		tarots = new HashMap<String, List<Tarot>>();
+		mystiques = new HashMap<>();
 	}
 
 	/**
@@ -87,12 +88,22 @@ public class JsonMystique {
 				if (resource.exists()) {
 					String specName = FilenameUtils.removeExtension(resource.getFilename());
 					try {
-						@SuppressWarnings("serial")
-						Type type = new TypeToken<List<Tarot>>() {
-						}.getType();
-						List<Tarot> fromJson = jsonLever.getGson().fromJson(
-								new InputStreamReader(resource.getInputStream()), type);
-						tarots.put(specName, fromJson);
+						List<Tarot> tarotList = gsonConvertor.deserializeList(resource.getInputStream(), Tarot.class);
+						Map<String, List<Tarot>> tarotMap = new HashMap<>();
+						List<Tarot> depsList = new ArrayList<>();
+						List<Tarot> ruleList = new ArrayList<>();
+						tarotMap.put(MysCon.DEPS, depsList);
+						tarotMap.put(MysCon.TAROTS, ruleList);
+						mystiques.put(specName, tarotMap);
+						for (Tarot tarot : tarotList) {
+							List<Tarot> deps = tarot.getDeps();
+							if (CollectionUtils.isNotEmpty(deps)) {
+								depsList.addAll(deps);
+							}
+							tarot.setDeps(null);
+							ruleList.add(tarot);
+						}
+
 					}
 					catch (JsonSyntaxException | IllegalArgumentException | IOException exception) {
 						logger.error(String.format(
@@ -165,10 +176,17 @@ public class JsonMystique {
 	 * @param aces the aces
 	 * @return the json element
 	 */
-	protected JsonElement transform(JsonElement source, String specName, JsonObject deps, JsonObject aces) {
-		List<Tarot> tarotList = tarots.get(specName);
-		JsonObject dependencies = null == deps ? new JsonObject() : deps;
-		JsonElement transform = transform(source, tarotList, dependencies, aces);
+	public JsonElement transform(JsonElement source, String specName, JsonObject deps, JsonObject aces) {
+		JsonElement transform = JsonNull.INSTANCE;
+		Map<String, List<Tarot>> map = mystiques.get(specName);
+		deps = jsonLever.getAsJsonObject(deps, new JsonObject());
+		if (null != map) {
+			List<Tarot> depList = map.get(MysCon.DEPS);
+			updateDependencies(source, depList, deps);
+			List<Tarot> tarotList = map.get(MysCon.TAROTS);
+			transform = transform(source, tarotList, deps, aces);
+		}
+
 		if (jsonLever.isNull(transform)) {
 			logger.info(String.format("Transformed value for spec %s is null", specName));
 		}
@@ -247,25 +265,49 @@ public class JsonMystique {
 		JsonObject resultWrapper = new JsonObject();
 		resultWrapper.add(MysCon.RESULT, JsonNull.INSTANCE);
 		if (CollectionUtils.isNotEmpty(tarotList)) {
+			List<CompletableFuture<JsonObject>> cfs = new ArrayList<>();
 			for (Tarot tarot : tarotList) {
-				updateDependencies(source, tarot.getDeps(), dependencies);
-				JsonObject aces = tarot.getAces();
-				jsonLever.getUpdatedAces(source, aces, dependencies);
-				jsonLever.simpleMerge(parentAces, aces);
 				JsonObject turn = tarot.getTurn();
-				try {
-					MystTurn mystique = factory.getMystTurn(turn);
+
+				CompletableFuture<JsonObject> getAces = CompletableFuture.supplyAsync(() -> {
+					JsonObject aces = tarot.getAces();
+					jsonLever.getUpdatedAces(source, aces, dependencies);
+					jsonLever.simpleMerge(parentAces, aces);
+					return aces;
+				}).exceptionally(e -> {
+					String msg = String.format("Error updating aces for turn %s - %s", turn, e.getMessage());
+					logger.info(msg, e);
+					return parentAces;
+				});
+
+				CompletableFuture<JsonElement> transformAsync = getAces.thenApplyAsync((aces) -> {
+					JsonElement transform = JsonNull.INSTANCE;
 					Spell spell = getSpell(source, tarot.getFrom(), dependencies, aces, turn, resultWrapper);
-					JsonElement transform = spell.cast(mystique);
-					resultWrapper = jsonLever.setField(resultWrapper, tarot.getTo(), transform, aces,
-							tarot.getOptional());
-				}
-				catch (RuntimeException e) {
-					logger.info(
-							String.format("Error transforming input with specification for turn %s - %s", turn,
-									e.getMessage()), e);
-					continue;
-				}
+					MystTurn mystique = factory.getMystTurn(turn);
+					transform = spell.cast(mystique);
+					return transform;
+				}).exceptionally(
+						(e) -> {
+							String msg = String.format("Error transforming input with specification for turn %s - %s",
+									turn, e.getMessage());
+							logger.info(msg, e);
+							return JsonNull.INSTANCE;
+						});
+
+				CompletableFuture<JsonObject> setResult = getAces.thenCombine(
+						transformAsync,
+						(aces, transform) -> jsonLever.setField(resultWrapper, tarot.getTo(), transform, aces,
+								tarot.getOptional())).exceptionally(e -> {
+					String msg = String.format("Error setting output for turn %s - %s", turn, e.getMessage());
+					logger.info(msg, e);
+					return resultWrapper;
+				});
+
+				cfs.add(setResult);
+			}
+
+			for (CompletableFuture<JsonObject> completableFuture : cfs) {
+				completableFuture.join();
 			}
 		}
 		else {
