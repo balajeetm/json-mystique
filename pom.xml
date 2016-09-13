@@ -3,7 +3,7 @@
 
 	<groupId>com.github.balajeetm</groupId>
 	<artifactId>json-mystique</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>Json Mystique</name>
 	<description>Json Utility to transform Jsons</description>
 
