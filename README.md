@@ -20,4 +20,7 @@ The transformation is performed via a ruleSet file that specifies the mappings i
 
 The actual versions can be found in the pom file
 
+## Json Mystique Download and Maven
+[Json Mystique]("") downloads at Maven Central
+
 For more information on the usage refer the [wiki]("https://github.com/balajeetm/json-mystique/wiki")
