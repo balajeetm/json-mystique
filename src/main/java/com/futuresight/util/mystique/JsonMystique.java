@@ -28,7 +28,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
-import com.futuresight.util.mystique.lever.JsonGsonConvertor;
+import com.futuresight.util.mystique.lever.GsonConvertor;
 import com.futuresight.util.mystique.lever.MysCon;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -56,7 +56,7 @@ public class JsonMystique {
 	private JsonLever jsonLever;
 
 	@Autowired
-	private JsonGsonConvertor gsonConvertor;
+	private GsonConvertor gsonConvertor;
 
 	private Map<String, Map<String, List<Tarot>>> mystiques;
 

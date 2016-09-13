@@ -12,7 +12,7 @@ package com.futuresight.util.mystique.lever;
 /**
  * The Interface MysCon.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 public interface MysCon {
 
@@ -88,8 +88,10 @@ public interface MysCon {
 	/** The aces. */
 	String ACES = "aces";
 
+	/** The deps. */
 	String DEPS = "deps";
 
+	/** The tarots. */
 	String TAROTS = "tarots";
 
 	/** The empty. */
