@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.github.balajeetm</groupId>
@@ -8,8 +9,8 @@
 	<description>Json Utility to transform Jsons</description>
 
 	<scm>
-		<connection>scm:git:git@github.com:balajeetm/json-mystique.git</connection>
-		<developerConnection>scm:git:git@github.com:balajeetm/json-mystique.git</developerConnection>
+		<connection>scm:git:git://github.com/balajeetm/json-mystique.git</connection>
+		<developerConnection>scm:git:ssh://github.com:balajeetm/json-mystique.git</developerConnection>
 		<url>https://github.com/balajeetm/json-mystique.git</url>
 		<tag>HEAD</tag>
 	</scm>
@@ -28,6 +29,13 @@
 			</roles>
 		</developer>
 	</developers>
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
 
 	<url>http://maven-doc.nds.com/maven_sites/${project.groupId}/${project.artifactId}/${project.version}</url>
 
@@ -156,6 +164,17 @@
 					</executions>
 				</plugin>
 				<plugin>
+					<artifactId>maven-jxr-plugin</artifactId>
+					<version>2.5</version>
+					<configuration>
+						<outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>2.9</version>
+				</plugin>
+				<plugin>
 					<artifactId>maven-source-plugin</artifactId>
 					<version>3.0.1</version>
 					<executions>
@@ -173,11 +192,43 @@
 					</configuration>
 				</plugin>
 				<plugin>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.5.1</version>
+					<configuration>
+						<outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.19.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-report-plugin</artifactId>
+					<version>2.19.1</version>
+				</plugin>
+				<plugin>
 					<artifactId>maven-install-plugin</artifactId>
 					<version>2.5.2</version>
 					<configuration>
 						<createChecksum>true</createChecksum>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>com.github.github</groupId>
+					<artifactId>site-maven-plugin</artifactId>
+					<version>0.12</version>
+					<configuration>
+						<message>Creating site for ${project.version}</message>
+						<server>github</server>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>site</goal>
+							</goals>
+							<phase>site</phase>
+						</execution>
+					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -185,8 +236,78 @@
 			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.4</version>
+				<configuration>
+					<bottom>
+<![CDATA[
+<P align="right"><FONT SIZE="-2">Copyright &copy; ${year} <A href="https://github.com/balajeetm">Balajee TM</A>. All rights reserved.</FONT></P>
+]]>
+					</bottom>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>javadoc</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>jxr</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.9</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>2.19.1</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
 
 	<profiles>
 		<profile>
@@ -201,13 +322,13 @@
 
 	<distributionManagement>
 		<repository>
-			<id>Mystique Releases</id>
-			<name>Mystique Release Repository</name>
+			<id>OSSRH Releases</id>
+			<name>OSSRH Release Repository</name>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
 		</repository>
 		<snapshotRepository>
-			<id>Mystique Snapshots</id>
-			<name>Mystique Snapshot Repository</name>
+			<id>OSSRH Snapshots</id>
+			<name>OSSRH Snapshot Repository</name>
 			<uniqueVersion>true</uniqueVersion>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
@@ -220,6 +341,9 @@
 		<spring.version>4.2.6.RELEASE</spring.version>
 		<springtest.version>4.2.6.RELEASE</springtest.version>
 		<jackson2.version>2.4.3</jackson2.version>
+		<github.global.server>github</github.global.server>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<year>2016</year>
 	</properties>
 
 </project>
