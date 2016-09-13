@@ -1,0 +1,16 @@
+{
+	"content": {
+		"id1": "contentId",
+		"audioType1": "Dolby",
+		"lang": {
+			"eng1": {
+				"title": "EngTitle"
+			},
+			"ger1": {
+				"title": "GerTitle"
+			}
+		}
+	},
+	"offerKeys": ["key1"],
+	"categories2": ["action", "comedy"]
+}

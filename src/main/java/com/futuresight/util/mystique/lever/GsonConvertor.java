@@ -38,12 +38,12 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
- * The Class GsonJacksonConvertor.
+ * The Class GsonConvertor.
  *
  * @author balajmoh
  */
 @Component
-public class JsonGsonConvertor implements ConvertorInterface {
+public class GsonConvertor implements JsonConvertor {
 
 	/** The gson. */
 
@@ -78,15 +78,7 @@ public class JsonGsonConvertor implements ConvertorInterface {
 	/**
 	 * Instantiates a new gson jackson convertor.
 	 */
-	private JsonGsonConvertor() {
-	}
-
-	/**
-	 * Inits the.
-	 */
-	@PostConstruct
-	protected void init() {
-		Creator.INSTANCE = this;
+	private GsonConvertor() {
 		gsonBuilder = new GsonBuilder();
 		gsonBuilder.setDateFormat(DateFormat.LONG, DateFormat.LONG);
 		gsonBuilder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -117,6 +109,14 @@ public class JsonGsonConvertor implements ConvertorInterface {
 	}
 
 	/**
+	 * Inits the.
+	 */
+	@PostConstruct
+	protected void init() {
+		Creator.INSTANCE = this;
+	}
+
+	/**
 	 * Update gson.
 	 */
 	public void updateGson() {
@@ -142,7 +142,7 @@ public class JsonGsonConvertor implements ConvertorInterface {
 	 *
 	 * @return single instance of JsonJacksonConvertor
 	 */
-	public static ConvertorInterface getInstance() {
+	public static JsonConvertor getInstance() {
 		return Creator.INSTANCE;
 	}
 
@@ -154,7 +154,7 @@ public class JsonGsonConvertor implements ConvertorInterface {
 	private static class Creator {
 
 		/** The instance. */
-		public static ConvertorInterface INSTANCE = new JsonGsonConvertor();
+		public static JsonConvertor INSTANCE = new GsonConvertor();
 	}
 
 	/* (non-Javadoc)

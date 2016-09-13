@@ -26,12 +26,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 /**
- * The Class JsonJacksonConvertor.
+ * The Class JacksonConvertor.
  *
  * @author balajeetm
  */
 @Component
-public final class JsonJacksonConvertor implements ConvertorInterface {
+public class JacksonConvertor implements JsonConvertor {
 
 	/** The object mapper. */
 	private ObjectMapper objectMapper;
@@ -49,7 +49,7 @@ public final class JsonJacksonConvertor implements ConvertorInterface {
 	 *
 	 * @return single instance of JsonJacksonConvertor
 	 */
-	public static ConvertorInterface getInstance() {
+	public static JsonConvertor getInstance() {
 		return Creator.INSTANCE;
 	}
 
@@ -61,13 +61,13 @@ public final class JsonJacksonConvertor implements ConvertorInterface {
 	private static class Creator {
 
 		/** The instance. */
-		public static ConvertorInterface INSTANCE = new JsonJacksonConvertor();
+		public static JsonConvertor INSTANCE = new JacksonConvertor();
 	}
 
 	/**
 	 * Instantiates a new json jackson convertor.
 	 */
-	private JsonJacksonConvertor() {
+	private JacksonConvertor() {
 		getObjectMapper();
 	}
 

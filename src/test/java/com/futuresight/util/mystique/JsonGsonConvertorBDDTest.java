@@ -27,14 +27,14 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import com.futuresight.util.mystique.config.JsonMystiqueConfig;
 import com.futuresight.util.mystique.lever.ConvertorException;
-import com.futuresight.util.mystique.lever.JsonGsonConvertor;
+import com.futuresight.util.mystique.lever.GsonConvertor;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {JsonMystiqueConfig.class})
 public class JsonGsonConvertorBDDTest {
 
 	@Autowired
-	private JsonGsonConvertor instance;
+	private GsonConvertor instance;
 
 	/**
 	 * Inits the.

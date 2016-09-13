@@ -27,7 +27,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import com.futuresight.util.mystique.config.JsonMystiqueConfig;
 import com.futuresight.util.mystique.lever.ConvertorException;
-import com.futuresight.util.mystique.lever.JsonJacksonConvertor;
+import com.futuresight.util.mystique.lever.JacksonConvertor;
 
 /**
  * The Class JsonMystiqueBDDTest.
@@ -42,7 +42,7 @@ import com.futuresight.util.mystique.lever.JsonJacksonConvertor;
 public class JsonJacksonConvertorBDDTest {
 
 	@Autowired
-	private JsonJacksonConvertor instance;
+	private JacksonConvertor instance;
 
 	/**
 	 * Inits the.

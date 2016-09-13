@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.futuresight.util</groupId>
+	<groupId>com.github.balajeetm</groupId>
 	<artifactId>json-mystique</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Json Mystique</name>
@@ -18,11 +18,6 @@
 	<mailingLists>
 		<mailingList />
 	</mailingLists>
-
-	<distributionManagement>
-		<site>
-		</site>
-	</distributionManagement>
 
 	<developers>
 		<developer>
@@ -124,18 +119,6 @@
 			<version>1.16.10</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjtools</artifactId>
-			<version>1.8.9</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-			<version>1.8.9</version>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -163,22 +146,6 @@
 				<plugin>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>2.10.4</version>
-					<configuration>
-						<links>
-							<!-- these links need to be internal as build machines may not have 
-								internet access -->
-							<!-- Note: these could be made relative by using linkoffline if we 
-								where to use site mirroring -->
-							<link>
-								http://maven-doc.nds.com/javadoc/j2se/1.7.0_u05/api
-							</link>
-							<link>http://maven-doc.nds.com/javadoc/j2ee/6.0</link>
-							<link>http://maven-doc.nds.com/javadoc/spring/3.2.1/api</link>
-						</links>
-						<linksource>true</linksource>
-						<version />
-						<author />
-					</configuration>
 					<executions>
 						<execution>
 							<id>attach-javadocs</id>
@@ -206,8 +173,20 @@
 						<includePom>true</includePom>
 					</configuration>
 				</plugin>
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.5.2</version>
+					<configuration>
+						<createChecksum>true</createChecksum>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+		</plugins>
 	</build>
 
 	<profiles>
@@ -220,6 +199,20 @@
 			</properties>
 		</profile>
 	</profiles>
+
+	<distributionManagement>
+		<repository>
+			<id>Mystique Releases</id>
+			<name>Mystique Release Repository</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
+		<snapshotRepository>
+			<id>Mystique Snapshots</id>
+			<name>Mystique Snapshot Repository</name>
+			<uniqueVersion>true</uniqueVersion>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<properties>
 		<javaVersion>1.8</javaVersion>
