@@ -88,8 +88,10 @@ public interface MysCon {
 	/** The aces. */
 	String ACES = "aces";
 
+	/** The deps. */
 	String DEPS = "deps";
 
+	/** The tarots. */
 	String TAROTS = "tarots";
 
 	/** The empty. */
