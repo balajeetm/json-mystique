@@ -9,8 +9,8 @@
 	<description>Json Utility to transform Jsons</description>
 
 	<scm>
-		<connection>scm:git@github.com:balajeetm/json-mystique.git</connection>
-		<developerConnection>https://github.com/balajeetm/json-mystique.git</developerConnection>
+		<connection>scm:git:git@github.com:balajeetm/json-mystique.git</connection>
+		<developerConnection>scm:git:git@github.com:balajeetm/json-mystique.git</developerConnection>
 		<url>https://github.com/balajeetm/json-mystique.git</url>
 		<tag>HEAD</tag>
 	</scm>
