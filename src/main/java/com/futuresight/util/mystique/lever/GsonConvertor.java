@@ -40,7 +40,7 @@ import com.google.gson.JsonSerializer;
 /**
  * The Class GsonConvertor.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 @Component
 public class GsonConvertor implements JsonConvertor {

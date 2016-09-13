@@ -12,7 +12,7 @@ package com.futuresight.util.mystique;
 /**
  * The Enum MysType.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 public enum MysType {
 

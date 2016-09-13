@@ -21,7 +21,7 @@ import com.google.gson.JsonObject;
 /**
  * The Class MystiqueMystTurn.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 @Component
 public class MystiqueMystTurn extends AbstractMystTurn {

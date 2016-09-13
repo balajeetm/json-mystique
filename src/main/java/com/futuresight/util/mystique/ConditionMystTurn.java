@@ -21,7 +21,7 @@ import com.google.gson.JsonPrimitive;
 /**
  * The Class ConditionMystTurn.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 @Component
 public class ConditionMystTurn extends AbstractMystTurn {

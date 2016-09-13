@@ -16,7 +16,7 @@ import lombok.Data;
 /**
  * The Class GsonTypeAdapter.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 
 /**

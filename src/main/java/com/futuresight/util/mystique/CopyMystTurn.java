@@ -21,7 +21,7 @@ import com.google.gson.JsonObject;
 /**
  * The Class CopyMystTurn.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 @Component
 public class CopyMystTurn extends AbstractMystTurn {

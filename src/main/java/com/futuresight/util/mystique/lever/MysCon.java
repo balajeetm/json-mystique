@@ -12,7 +12,7 @@ package com.futuresight.util.mystique.lever;
 /**
  * The Interface MysCon.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 public interface MysCon {
 

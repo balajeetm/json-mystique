@@ -20,7 +20,7 @@ import com.google.gson.JsonObject;
 /**
  * The Class ConstantMystTurn.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 @Component
 public class ConstantMystTurn extends AbstractMystTurn {

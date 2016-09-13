@@ -23,7 +23,7 @@ import com.google.gson.JsonObject;
 /**
  * The Class MultiTurnMystique.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 @Component
 public class ToggleMystTurn implements MystTurn {

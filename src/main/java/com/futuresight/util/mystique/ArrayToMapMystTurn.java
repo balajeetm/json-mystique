@@ -21,7 +21,7 @@ import com.google.gson.JsonObject;
 /**
  * The Class ArrayToMapMystTurn.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 @Component
 public class ArrayToMapMystTurn extends AbstractMystTurn {

@@ -28,7 +28,7 @@ import com.google.gson.JsonParser;
  * The Class JsonComparator.
  */
 /**
- * @author balajmoh
+ * @author balajeetm
  */
 @Component
 public class JsonComparator {

@@ -22,7 +22,7 @@ import com.google.gson.JsonPrimitive;
 /**
  * The Class StringUtilsMystTurn.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 @Component
 public class StringUtilsMystTurn extends AbstractMystTurn {

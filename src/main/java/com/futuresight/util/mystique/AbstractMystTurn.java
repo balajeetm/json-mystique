@@ -22,7 +22,7 @@ import com.google.gson.JsonObject;
 /**
  * The Class AbstractMystTurn.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 public abstract class AbstractMystTurn implements MystTurn {
 

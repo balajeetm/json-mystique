@@ -22,7 +22,7 @@ import com.google.gson.JsonObject;
 /**
  * The Class GetFromDepsMystTurn.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 @Component
 public class GetFromDepsMystTurn extends AbstractMystTurn {

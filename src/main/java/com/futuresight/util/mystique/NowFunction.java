@@ -21,7 +21,7 @@ import com.google.gson.JsonObject;
 /**
  * The Class NowFunction.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 @Component
 public class NowFunction implements MystFunction {

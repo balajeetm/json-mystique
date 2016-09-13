@@ -23,7 +23,7 @@ import com.google.gson.internal.$Gson$Types;
 /**
  * The Class GsonParametrizedType.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 public final class GsonParametrizedType implements ParameterizedType, Serializable {
 

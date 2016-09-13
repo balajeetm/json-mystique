@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * The Class MystResult.
  *
- * @author balajmoh
+ * @author balajeetm
  */
 public class MystResult {
 
