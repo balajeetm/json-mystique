@@ -110,8 +110,20 @@ public class JsonLever {
 	 *
 	 * @return the json parser
 	 */
+
+	/**
+	 * Gets the json parser.
+	 *
+	 * @return the json parser
+	 */
 	@Getter
 	private JsonParser jsonParser;
+
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
 
 	/**
 	 * Gets the gson.
@@ -966,6 +978,86 @@ public class JsonLever {
 			to.add(entry.getKey(), entry.getValue());
 		}
 		return to;
+	}
+
+	/**
+	 * Merge.
+	 *
+	 * @param src1 the src1
+	 * @param src2 the src2
+	 * @return the json element
+	 */
+	public JsonElement merge(JsonElement src1, JsonElement src2) {
+		return merge(src1, src2, Boolean.FALSE);
+	}
+
+	/**
+	 * Merge.
+	 *
+	 * @param src1 the src1
+	 * @param src2 the src2
+	 * @param mergeArray the merge array
+	 * @return the json element
+	 */
+	public JsonElement merge(JsonElement src1, JsonElement src2, Boolean mergeArray) {
+		mergeArray = null == mergeArray ? Boolean.FALSE : mergeArray;
+		JsonElement result = JsonNull.INSTANCE;
+		src1 = getAsJsonElement(src1, JsonNull.INSTANCE);
+		src2 = getAsJsonElement(src2, JsonNull.INSTANCE);
+		if (src1.getClass().equals(src2.getClass())) {
+			if (src1.isJsonObject()) {
+				JsonObject obj1 = getAsJsonObject(src1);
+				JsonObject obj2 = getAsJsonObject(src2);
+				result = obj1;
+				JsonObject resultObj = result.getAsJsonObject();
+				for (Entry<String, JsonElement> entry : obj1.entrySet()) {
+					String key = entry.getKey();
+					JsonElement value1 = entry.getValue();
+					JsonElement value2 = obj2.get(key);
+					JsonElement merge = merge(value1, value2, mergeArray);
+					resultObj.add(key, merge);
+				}
+				for (Entry<String, JsonElement> entry : obj2.entrySet()) {
+					String key = entry.getKey();
+					if (!resultObj.has(key)) {
+						resultObj.add(key, entry.getValue());
+					}
+				}
+			}
+			else if (src1.isJsonArray()) {
+				result = new JsonArray();
+				JsonArray resultArray = result.getAsJsonArray();
+				JsonArray array1 = getAsJsonArray(src1);
+				JsonArray array2 = getAsJsonArray(src2);
+				int index = 0;
+				int a1size = array1.size();
+				int a2size = array2.size();
+
+				if (!mergeArray) {
+					for (; index < a1size && index < a2size; index++) {
+						resultArray.add(merge(array1.get(index), array2.get(index), mergeArray));
+					}
+				}
+
+				for (; index < a1size; index++) {
+					resultArray.add(array1.get(index));
+				}
+
+				index = mergeArray ? 0 : index;
+
+				for (; index < a2size; index++) {
+					resultArray.add(array2.get(index));
+				}
+
+			}
+			else {
+				result = src1 != null ? src1 : src2;
+			}
+		}
+		else {
+			result = isNotNull(src1) ? src1 : src2;
+		}
+		return result;
 	}
 
 }

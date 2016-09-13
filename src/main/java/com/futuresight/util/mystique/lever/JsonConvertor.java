@@ -13,11 +13,11 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * The Interface ConvertorInterface.
+ * The Interface JsonConvertor.
  *
  * @author balajeetm
  */
-public interface ConvertorInterface {
+public interface JsonConvertor {
 
 	/**
 	 * Deserialize.
