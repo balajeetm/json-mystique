@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/balajeetm/json-mystique.svg?branch=master)](https://travis-ci.org/balajeetm/json-mystique)
-[![Coverage Status](https://coveralls.io/repos/github/balajeetm/json-mystique/badge.svg?branch=master)](https://coveralls.io/github/balajeetm/json-mystique?branch=master)
 
 # Json Mystique
 Utility for Json Conversion and json transformation in Java
@@ -20,7 +19,34 @@ The transformation is performed via a ruleSet file that specifies the mappings i
 
 The actual versions can be found in the pom file
 
-## Json Mystique Download and Maven
-[Json Mystique]("") downloads at Maven Central
+
+## Maven Download
+
+[Json Mystique](http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C1.0.0%7Cjar) downloads at Maven Central
+
+There are two variants of JsonMystique
+* 0.x.x - Where all the processing of JsonMystique is sequential
+* 1.x.x - JsonMystique parallely processes various parts of the input Json
+
+### Maven Dependency Snippet
+The maven dependency snippet is as below
+
+```xml
+<dependency>
+  <groupId>com.github.balajeetm</groupId>
+  <artifactId>json-mystique</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
+
+```xml
+<dependency>
+  <groupId>com.github.balajeetm</groupId>
+  <artifactId>json-mystique</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+
+> There is absolutely no change in the usage or the syntax and semantics of the two versions. Moving forward, the parallel processing logic would be mainstream
 
 For more information on the usage refer the [wiki]("https://github.com/balajeetm/json-mystique/wiki")
