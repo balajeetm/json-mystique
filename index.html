@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Json-mystique by balajeetm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Json-mystique</h1>
+      <h2 class="project-tagline">Utility for Json Conversion and json transformation in Java</h2>
+      <a href="https://github.com/balajeetm/json-mystique" class="btn">View on GitHub</a>
+      <a href="https://github.com/balajeetm/json-mystique/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/balajeetm/json-mystique/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p><a href="https://travis-ci.org/balajeetm/json-mystique"><img src="https://travis-ci.org/balajeetm/json-mystique.svg?branch=master" alt="Build Status"></a></p>
+
+<h1>
+<a id="json-mystique" class="anchor" href="#json-mystique" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Json Mystique</h1>
+
+<p>Utility for Json Conversion and json transformation in Java</p>
+
+<p>Json mystique is a json transformation library written in and for Java. The library takes an input json as a string or jsonElement and transforms the same to a json string or JsonElement.
+The transformation is performed via a ruleSet file that specifies the mappings in a json format</p>
+
+<h2>
+<a id="features-and-primary-use-cases" class="anchor" href="#features-and-primary-use-cases" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features and Primary Use Cases</h2>
+
+<ul>
+<li>The library is useful for transforming from one json to another, even when the input and output jsons are non identical</li>
+<li>Multiple fields from the input can be operated on to map to a single field in the output</li>
+<li>Custom converters can be easily plugged to handle custom domain logic</li>
+</ul>
+
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<ul>
+<li>The library uses maven as its build management</li>
+<li>The library primarily depends on 
+
+<ul>
+<li>Spring-Context for Spring based wiring and </li>
+<li>
+<a href="https://mvnrepository.com/artifact/com.google.code.gson/gson">Gson</a> for json String to Java pojo transformations</li>
+</ul>
+</li>
+</ul>
+
+<p>The actual versions can be found in the pom file</p>
+
+<h2>
+<a id="maven-download" class="anchor" href="#maven-download" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Maven Download</h2>
+
+<p><a href="http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C1.0.0%7Cjar">Json Mystique</a> downloads at Maven Central</p>
+
+<p>There are two variants of JsonMystique</p>
+
+<ul>
+<li>0.x.x - Where all the processing of JsonMystique is sequential</li>
+<li>1.x.x - JsonMystique parallely processes various parts of the input Json</li>
+</ul>
+
+<h3>
+<a id="maven-dependency-snippet" class="anchor" href="#maven-dependency-snippet" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Maven Dependency Snippet</h3>
+
+<p>The maven dependency snippet is as below</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+  &lt;<span class="pl-ent">groupId</span>&gt;com.github.balajeetm&lt;/<span class="pl-ent">groupId</span>&gt;
+  &lt;<span class="pl-ent">artifactId</span>&gt;json-mystique&lt;/<span class="pl-ent">artifactId</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;0.0.1&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+  &lt;<span class="pl-ent">groupId</span>&gt;com.github.balajeetm&lt;/<span class="pl-ent">groupId</span>&gt;
+  &lt;<span class="pl-ent">artifactId</span>&gt;json-mystique&lt;/<span class="pl-ent">artifactId</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;1.0.0&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<blockquote>
+<p>There is absolutely no change in the usage or the syntax and semantics of the two versions. Moving forward, the parallel processing logic would be mainstream</p>
+</blockquote>
+
+<p>For more information on the usage refer the wiki</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/balajeetm/json-mystique">Json-mystique</a> is maintained by <a href="https://github.com/balajeetm">balajeetm</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
