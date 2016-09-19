@@ -26,6 +26,10 @@ import lombok.Data;
 /**
  * Instantiates a new gson type adapter.
  */
+
+/**
+ * Instantiates a new gson type adapter.
+ */
 @Data
 public class GsonTypeAdapter {
 

@@ -21,7 +21,8 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -45,7 +46,7 @@ import com.google.gson.JsonSyntaxException;
 public class JsonMystique {
 
 	/** The logger. */
-	private Logger logger = Logger.getLogger(this.getClass());
+	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/** The factory. */
 	@Autowired
@@ -55,9 +56,11 @@ public class JsonMystique {
 	@Autowired
 	private JsonLever jsonLever;
 
+	/** The gson convertor. */
 	@Autowired
 	private GsonConvertor gsonConvertor;
 
+	/** The mystiques. */
 	private Map<String, Map<String, List<Tarot>>> mystiques;
 
 	/**

@@ -34,13 +34,11 @@ import com.futuresight.util.mystique.lever.JacksonConvertor;
  *
  * @author balajeetm
  */
-/**
- * @author balajeetm
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {JsonMystiqueConfig.class})
 public class JsonJacksonConvertorBDDTest {
 
+	/** The instance. */
 	@Autowired
 	private JacksonConvertor instance;
 
@@ -90,6 +88,9 @@ public class JsonJacksonConvertorBDDTest {
 		}
 	}
 
+	/**
+	 * Jackson negative test1.
+	 */
 	@Test
 	public void jacksonNegativeTest1() {
 		try {
@@ -100,6 +101,9 @@ public class JsonJacksonConvertorBDDTest {
 		}
 	}
 
+	/**
+	 * Jackson negative test2.
+	 */
 	@Test
 	public void jacksonNegativeTest2() {
 		try {
@@ -110,6 +114,9 @@ public class JsonJacksonConvertorBDDTest {
 		}
 	}
 
+	/**
+	 * Jackson negative test3.
+	 */
 	@Test
 	public void jacksonNegativeTest3() {
 		try {
@@ -120,6 +127,9 @@ public class JsonJacksonConvertorBDDTest {
 		}
 	}
 
+	/**
+	 * Jackson negative test4.
+	 */
 	@Test
 	public void jacksonNegativeTest4() {
 		try {
@@ -130,6 +140,9 @@ public class JsonJacksonConvertorBDDTest {
 		}
 	}
 
+	/**
+	 * Jackson negative test5.
+	 */
 	@Test
 	public void jacksonNegativeTest5() {
 		try {
@@ -140,6 +153,9 @@ public class JsonJacksonConvertorBDDTest {
 		}
 	}
 
+	/**
+	 * Jackson negative test6.
+	 */
 	@Test
 	public void jacksonNegativeTest6() {
 		try {

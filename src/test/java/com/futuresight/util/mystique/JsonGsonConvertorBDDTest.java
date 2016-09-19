@@ -29,10 +29,16 @@ import com.futuresight.util.mystique.config.JsonMystiqueConfig;
 import com.futuresight.util.mystique.lever.ConvertorException;
 import com.futuresight.util.mystique.lever.GsonConvertor;
 
+/**
+ * The Class JsonGsonConvertorBDDTest.
+ *
+ * @author balajeetm
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {JsonMystiqueConfig.class})
 public class JsonGsonConvertorBDDTest {
 
+	/** The instance. */
 	@Autowired
 	private GsonConvertor instance;
 
@@ -82,6 +88,9 @@ public class JsonGsonConvertorBDDTest {
 		}
 	}
 
+	/**
+	 * Jackson negative test1.
+	 */
 	@Test
 	public void jacksonNegativeTest1() {
 		try {
@@ -92,6 +101,9 @@ public class JsonGsonConvertorBDDTest {
 		}
 	}
 
+	/**
+	 * Jackson negative test2.
+	 */
 	@Test
 	public void jacksonNegativeTest2() {
 		try {
@@ -102,6 +114,9 @@ public class JsonGsonConvertorBDDTest {
 		}
 	}
 
+	/**
+	 * Jackson negative test3.
+	 */
 	@Test
 	public void jacksonNegativeTest3() {
 		try {
@@ -112,6 +127,9 @@ public class JsonGsonConvertorBDDTest {
 		}
 	}
 
+	/**
+	 * Jackson negative test4.
+	 */
 	@Test
 	public void jacksonNegativeTest4() {
 		try {
@@ -122,6 +140,9 @@ public class JsonGsonConvertorBDDTest {
 		}
 	}
 
+	/**
+	 * Jackson negative test5.
+	 */
 	@Test
 	public void jacksonNegativeTest5() {
 		try {
@@ -132,6 +153,9 @@ public class JsonGsonConvertorBDDTest {
 		}
 	}
 
+	/**
+	 * Jackson negative test6.
+	 */
 	@Test
 	public void jacksonNegativeTest6() {
 		try {

@@ -15,7 +15,8 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.google.gson.internal.$Gson$Types;
@@ -43,7 +44,7 @@ public final class GsonParametrizedType implements ParameterizedType, Serializab
 	private final List<Type> typeArguments;
 
 	/** The logger. */
-	private static Logger logger = Logger.getLogger(GsonParametrizedType.class);
+	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
 	 * Instantiates a new gson parametrized type.

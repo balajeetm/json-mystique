@@ -13,7 +13,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +35,7 @@ public class TransformFunction implements MystFunction {
 	private JsonLever jsonLever;
 
 	/** The logger. */
-	private Logger logger = Logger.getLogger(getClass());
+	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.MystFunction#execute(com.google.gson.JsonElement, com.google.gson.JsonObject)

@@ -58,8 +58,20 @@ public class GsonConvertor implements JsonConvertor {
 	 *
 	 * @return the gson
 	 */
+
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
 	@Getter
 	private Gson gson;
+
+	/**
+	 * Gets the gson builder.
+	 *
+	 * @return the gson builder
+	 */
 
 	/**
 	 * Gets the gson builder.

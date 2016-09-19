@@ -35,9 +35,13 @@ import com.google.gson.JsonParser;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {JsonMystiqueConfig.class})
 public class JsonLeverBDDTest {
 
+	/** The json lever. */
 	@Autowired
 	private JsonLever jsonLever;
 
+	/**
+	 * Merge.
+	 */
 	@Test
 	public void merge() {
 		try {
@@ -61,6 +65,9 @@ public class JsonLeverBDDTest {
 		}
 	}
 
+	/**
+	 * Merge array.
+	 */
 	@Test
 	public void mergeArray() {
 		try {

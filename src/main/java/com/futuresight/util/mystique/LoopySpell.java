@@ -9,9 +9,14 @@
  */
 package com.futuresight.util.mystique;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
@@ -41,6 +46,8 @@ public class LoopySpell implements Spell {
 	/** The result. */
 	private JsonObject resultWrapper;
 
+	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
 	/**
 	 * Instantiates a new loopy spell.
 	 *
@@ -67,13 +74,38 @@ public class LoopySpell implements Spell {
 		JsonElement transform = JsonNull.INSTANCE;
 		if (CollectionUtils.isNotEmpty(source)) {
 			transform = new JsonArray();
+			List<CompletableFuture<JsonElement>> cfs = new ArrayList<>();
 			JsonArray jsonArray = source.get(0).getAsJsonArray();
 			for (JsonElement jsonElement : jsonArray) {
-				transform.getAsJsonArray().add(
-						mystique.transform(Lists.newArrayList(jsonElement), dependencies, aces, turn, resultWrapper));
+
+				CompletableFuture<JsonElement> transformElement = CompletableFuture.supplyAsync(
+						() -> mystique.transform(Lists.newArrayList(jsonElement), dependencies, aces, turn,
+								resultWrapper)).exceptionally(
+						e -> {
+							String msg = String.format(
+									"Error transforming one of the elements in the array for %s - %s", turn,
+									e.getMessage());
+							logger.info(msg, e);
+							return JsonNull.INSTANCE;
+						});
+				cfs.add(transformElement);
+			}
+
+			for (CompletableFuture<JsonElement> completableFuture : cfs) {
+				JsonElement element = null;
+				try {
+					element = completableFuture.get();
+				}
+				catch (InterruptedException | ExecutionException e) {
+					String msg = String.format(
+							"Error getting transformed element for one of the elements in the array for %s - %s",
+							turn, e.getMessage());
+					logger.info(msg, e);
+					element = JsonNull.INSTANCE;
+				}
+				transform.getAsJsonArray().add(element);
 			}
 		}
 		return transform;
 	}
-
 }

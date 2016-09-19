@@ -24,7 +24,8 @@ import lombok.Getter;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,7 +49,7 @@ import com.google.gson.JsonPrimitive;
 public class JsonLever {
 
 	/** The logger. */
-	private Logger logger = Logger.getLogger(getClass());
+	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/** The index pat. */
 	private static String indexPat = "^\\[(\\d+)\\]$";
@@ -116,8 +117,32 @@ public class JsonLever {
 	 *
 	 * @return the json parser
 	 */
+
+	/**
+	 * Gets the json parser.
+	 *
+	 * @return the json parser
+	 */
+
+	/**
+	 * Gets the json parser.
+	 *
+	 * @return the json parser
+	 */
 	@Getter
 	private JsonParser jsonParser;
+
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
+
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
 
 	/**
 	 * Gets the gson.
@@ -387,6 +412,39 @@ public class JsonLever {
 	 */
 	public JsonElement getField(JsonElement source, JsonArray path) {
 		return getField(source, path, new JsonObject(), new JsonObject());
+	}
+
+	/**
+	 * Gets the field.
+	 *
+	 * @param source the source
+	 * @param path the path
+	 * @return the field
+	 */
+	public JsonElement getField(JsonElement source, String... path) {
+		return getField(source, newJsonArray(path));
+	}
+
+	/**
+	 * Gets the field.
+	 *
+	 * @param source the source
+	 * @param path the path
+	 * @return the field
+	 */
+	public JsonElement getField(String source, JsonArray path) {
+		return getField(jsonParser.parse(source), path);
+	}
+
+	/**
+	 * Gets the field.
+	 *
+	 * @param source the source
+	 * @param path the path
+	 * @return the field
+	 */
+	public JsonElement getField(String source, String... path) {
+		return getField(source, newJsonArray(path));
 	}
 
 	/**
@@ -893,6 +951,16 @@ public class JsonLever {
 	 */
 	public Long getAsLong(JsonElement element) {
 		return getAsLong(element, null);
+	}
+
+	/**
+	 * To string.
+	 *
+	 * @param element the element
+	 * @return the string
+	 */
+	public String toString(JsonElement element) {
+		return null != element ? element.toString() : null;
 	}
 
 	/**

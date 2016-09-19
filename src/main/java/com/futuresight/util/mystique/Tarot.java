@@ -29,6 +29,10 @@ import com.google.gson.JsonObject;
 /**
  * Instantiates a new tarot.
  */
+
+/**
+ * Instantiates a new tarot.
+ */
 @Data
 public class Tarot {
 

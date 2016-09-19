@@ -21,6 +21,10 @@ import lombok.Data;
 /**
  * Instantiates a new tarot.
  */
+
+/**
+ * Instantiates a new test tarot.
+ */
 @Data
 public class TestTarot {
 

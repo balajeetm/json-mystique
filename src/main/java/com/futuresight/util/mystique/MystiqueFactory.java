@@ -10,7 +10,8 @@
 package com.futuresight.util.mystique;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -28,7 +29,7 @@ import com.google.gson.JsonObject;
 public class MystiqueFactory {
 
 	/** The logger. */
-	private Logger logger = Logger.getLogger(this.getClass());
+	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/** The context. */
 	@Autowired

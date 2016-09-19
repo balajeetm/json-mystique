@@ -41,17 +41,22 @@ import com.google.gson.JsonNull;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {JsonMystiqueConfig.class})
 public class JsonMystiqueBDDTest {
 
+	/** The json mystique. */
 	@Autowired
 	private JsonMystique jsonMystique;
 
+	/** The json lever. */
 	@Autowired
 	private JsonLever jsonLever;
 
+	/** The json comparator. */
 	@Autowired
 	private JsonComparator jsonComparator;
 
+	/** The input format. */
 	private String inputFormat = "classpath:jsonmystique/%s.input";
 
+	/** The output format. */
 	private String outputFormat = "classpath:jsonmystique/%s.output";
 
 	/**
@@ -95,94 +100,162 @@ public class JsonMystiqueBDDTest {
 		}
 	}
 
+	/**
+	 * Simple copy01.
+	 */
 	@Test
 	public void simpleCopy01() {
 		testEqual("01SimpleCopy");
 	}
 
+	/**
+	 * Simple copy02.
+	 */
 	@Test
 	public void simpleCopy02() {
 		testEqual("02SimpleCopy");
 	}
 
+	/**
+	 * For each03.
+	 */
 	@Test
 	public void forEach03() {
 		testEqual("03ForEach");
 	}
 
+	/**
+	 * Default04.
+	 */
 	@Test
 	public void default04() {
 		testEqual("04Default");
 	}
 
+	/**
+	 * Aces05.
+	 */
 	@Test
 	public void aces05() {
 		testEqual("05Aces");
 	}
 
+	/**
+	 * Concat06.
+	 */
 	@Test
 	public void concat06() {
 		testEqual("06Concat");
 	}
 
+	/**
+	 * Condition07.
+	 */
 	@Test
 	public void condition07() {
 		testEqual("07Condition");
 	}
 
+	/**
+	 * Constant08.
+	 */
 	@Test
 	public void constant08() {
 		testEqual("08Constant", "07Condition");
 	}
 
+	/**
+	 * Date09.
+	 */
 	@Test
 	public void date09() {
 		testSubset("09Date", "07Condition");
 	}
 
+	/**
+	 * Gets the from deps10.
+	 *
+	 * @return the from deps10
+	 */
 	@Test
 	public void getFromDeps10() {
 		testEqual("10GetFromDeps");
 	}
 
+	/**
+	 * Array to map11.
+	 */
 	@Test
 	public void arrayToMap11() {
 		testEqual("11ArrayToMap");
 	}
 
+	/**
+	 * Mystique12.
+	 */
 	@Test
 	public void mystique12() {
 		testEqual("12Mystique");
 	}
 
+	/**
+	 * String utils13.
+	 */
 	@Test
 	public void stringUtils13() {
 		testEqual("13StringUtils");
 	}
 
+	/**
+	 * Chain14.
+	 */
 	@Test
 	public void chain14() {
 		testEqual("14Chain");
 	}
 
+	/**
+	 * Toggle15.
+	 */
 	@Test
 	public void toggle15() {
 		testEqual("15Toggle");
 	}
 
+	/**
+	 * Custom16.
+	 */
 	@Test
 	public void custom16() {
 		testEqual("16Custom");
 	}
 
+	/**
+	 * Test equal.
+	 *
+	 * @param test the test
+	 */
 	private void testEqual(String test) {
 		testEqual(test, null, null);
 	}
 
+	/**
+	 * Test equal.
+	 *
+	 * @param test the test
+	 * @param inputPattern the input pattern
+	 */
 	private void testEqual(String test, String inputPattern) {
 		testEqual(test, inputPattern, null);
 	}
 
+	/**
+	 * Test equal.
+	 *
+	 * @param test the test
+	 * @param inputPattern the input pattern
+	 * @param outputPattern the output pattern
+	 */
 	private void testEqual(String test, String inputPattern, String outputPattern) {
 
 		try {
@@ -200,10 +273,23 @@ public class JsonMystiqueBDDTest {
 		}
 	}
 
+	/**
+	 * Test subset.
+	 *
+	 * @param test the test
+	 * @param inputPattern the input pattern
+	 */
 	private void testSubset(String test, String inputPattern) {
 		testSubset(test, inputPattern, null);
 	}
 
+	/**
+	 * Test subset.
+	 *
+	 * @param test the test
+	 * @param inputPattern the input pattern
+	 * @param outputPattern the output pattern
+	 */
 	private void testSubset(String test, String inputPattern, String outputPattern) {
 		try {
 			JsonElement transform = transform(test, inputPattern);
@@ -221,6 +307,14 @@ public class JsonMystiqueBDDTest {
 		}
 	}
 
+	/**
+	 * Transform.
+	 *
+	 * @param test the test
+	 * @param inputPattern the input pattern
+	 * @return the json element
+	 * @throws Exception the exception
+	 */
 	private JsonElement transform(String test, String inputPattern) throws Exception {
 		JsonElement transform = JsonNull.INSTANCE;
 		inputPattern = null == inputPattern ? String.format(inputFormat, test) : String.format(inputFormat,
