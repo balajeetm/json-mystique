@@ -489,6 +489,10 @@ public class JsonLever {
 		return finalValue;
 	}
 
+	public JsonElement getSubset(JsonElement source, JsonElement pathArray) {
+		return getSubset(source, null, null, pathArray);
+	}
+
 	/**
 	 * Sets the field.
 	 *
