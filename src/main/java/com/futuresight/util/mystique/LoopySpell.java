@@ -18,6 +18,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.futuresight.util.mystique.lever.MysCon;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -48,6 +49,8 @@ public class LoopySpell implements Spell {
 
 	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
+	private JsonLever jsonLever;
+
 	/**
 	 * Instantiates a new loopy spell.
 	 *
@@ -64,6 +67,7 @@ public class LoopySpell implements Spell {
 		this.aces = aces;
 		this.turn = turn;
 		this.resultWrapper = resultWrapper;
+		jsonLever = JsonLever.getInstance();
 	}
 
 	/* (non-Javadoc)
@@ -103,7 +107,10 @@ public class LoopySpell implements Spell {
 					logger.info(msg, e);
 					element = JsonNull.INSTANCE;
 				}
-				transform.getAsJsonArray().add(element);
+				Boolean optional = jsonLever.getAsBoolean(turn.get(MysCon.OPTIONAL), Boolean.FALSE);
+				if (jsonLever.isNotNull(element) || !optional) {
+					transform.getAsJsonArray().add(element);
+				}
 			}
 		}
 		return transform;
