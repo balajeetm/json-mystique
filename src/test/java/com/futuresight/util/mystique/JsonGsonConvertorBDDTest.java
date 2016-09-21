@@ -29,6 +29,7 @@ import com.futuresight.util.mystique.config.JsonMystiqueConfig;
 import com.futuresight.util.mystique.lever.ConvertorException;
 import com.futuresight.util.mystique.lever.GsonConvertor;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 /**
  * The Class JsonGsonConvertorBDDTest.
@@ -174,6 +175,20 @@ public class JsonGsonConvertorBDDTest {
 	public void gsonNegativeTest7() {
 		try {
 			JsonElement deserialize = instance.deserialize((String) null, JsonElement.class);
+			Assert.assertNull(deserialize);
+		}
+		catch (ConvertorException e) {
+			Assert.assertTrue(e.getMessage(), false);
+		}
+	}
+
+	/**
+	 * Gson negative test8.
+	 */
+	@Test
+	public void gsonNegativeTest8() {
+		try {
+			JsonElement deserialize = instance.deserialize((Object) null, JsonObject.class);
 			Assert.assertNull(deserialize);
 		}
 		catch (ConvertorException e) {

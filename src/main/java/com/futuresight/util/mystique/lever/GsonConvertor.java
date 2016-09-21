@@ -25,8 +25,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import lombok.Getter;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.futuresight.util.mystique.JsonLever;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -46,6 +48,12 @@ import com.google.gson.JsonSerializer;
 public class GsonConvertor implements JsonConvertor {
 
 	/** The gson. */
+
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
 
 	/**
 	 * Gets the gson.
@@ -84,8 +92,18 @@ public class GsonConvertor implements JsonConvertor {
 	 *
 	 * @return the gson builder
 	 */
+
+	/**
+	 * Gets the gson builder.
+	 *
+	 * @return the gson builder
+	 */
 	@Getter
 	private GsonBuilder gsonBuilder;
+
+	/** The json lever. */
+	@Autowired
+	private JsonLever jsonLever;
 
 	/**
 	 * Instantiates a new gson jackson convertor.
@@ -327,6 +345,7 @@ public class GsonConvertor implements JsonConvertor {
 	 * @return the json element
 	 */
 	private JsonElement getJsonElement(Object obj) {
-		return (obj instanceof JsonElement) ? (JsonElement) obj : gson.toJsonTree(obj);
+		JsonElement jsonElement = (obj instanceof JsonElement) ? (JsonElement) obj : gson.toJsonTree(obj);
+		return jsonLever.isNull(jsonElement) ? null : jsonElement;
 	}
 }
