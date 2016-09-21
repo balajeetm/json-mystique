@@ -275,7 +275,7 @@ public class JsonMystique {
 				CompletableFuture<JsonObject> getAces = CompletableFuture.supplyAsync(() -> {
 					JsonObject aces = tarot.getAces();
 					jsonLever.getUpdatedAces(source, aces, dependencies);
-					jsonLever.simpleMerge(parentAces, aces);
+					jsonLever.simpleMerge(aces, parentAces);
 					return aces;
 				}).exceptionally(e -> {
 					String msg = String.format("Error updating aces for turn %s - %s", turn, e.getMessage());
@@ -386,7 +386,7 @@ public class JsonMystique {
 			try {
 				JsonObject transformJson = jsonLever.getAsJsonObject(transform(source, deps, dependencies),
 						new JsonObject());
-				jsonLever.simpleMerge(transformJson, dependencies);
+				jsonLever.simpleMerge(dependencies, transformJson);
 			}
 			catch (RuntimeException e) {
 				logger.info(String.format("Could not update dependencies : %s", e.getMessage()));

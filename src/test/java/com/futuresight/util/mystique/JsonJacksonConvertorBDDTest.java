@@ -28,6 +28,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import com.futuresight.util.mystique.config.JsonMystiqueConfig;
 import com.futuresight.util.mystique.lever.ConvertorException;
 import com.futuresight.util.mystique.lever.JacksonConvertor;
+import com.google.gson.JsonElement;
 
 /**
  * The Class JsonMystiqueBDDTest.
@@ -163,6 +164,17 @@ public class JsonJacksonConvertorBDDTest {
 		}
 		catch (ConvertorException e) {
 			Assert.assertTrue(true);
+		}
+	}
+
+	@Test
+	public void jacksonNegativeTest7() {
+		try {
+			JsonElement deserialize = instance.deserialize((String) null, JsonElement.class);
+			Assert.assertNull(deserialize);
+		}
+		catch (ConvertorException e) {
+			Assert.assertTrue(e.getMessage(), false);
 		}
 	}
 

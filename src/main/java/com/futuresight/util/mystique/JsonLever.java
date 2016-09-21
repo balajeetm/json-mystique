@@ -129,8 +129,20 @@ public class JsonLever {
 	 *
 	 * @return the json parser
 	 */
+
+	/**
+	 * Gets the json parser.
+	 *
+	 * @return the json parser
+	 */
 	@Getter
 	private JsonParser jsonParser;
+
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
 
 	/**
 	 * Gets the gson.
@@ -489,6 +501,13 @@ public class JsonLever {
 		return finalValue;
 	}
 
+	/**
+	 * Gets the subset.
+	 *
+	 * @param source the source
+	 * @param pathArray the path array
+	 * @return the subset
+	 */
 	public JsonElement getSubset(JsonElement source, JsonElement pathArray) {
 		return getSubset(source, null, null, pathArray);
 	}
@@ -1049,17 +1068,33 @@ public class JsonLever {
 	/**
 	 * Simple merge.
 	 *
-	 * @param from the from
 	 * @param to the to
+	 * @param from the from
 	 * @return the json object
 	 */
-	public JsonObject simpleMerge(JsonObject from, JsonObject to) {
+	public JsonObject simpleMerge(JsonObject to, JsonObject from) {
 		from = getAsJsonObject(from, new JsonObject());
 		to = getAsJsonObject(to, new JsonObject());
 		for (Entry<String, JsonElement> entry : from.entrySet()) {
 			to.add(entry.getKey(), entry.getValue());
 		}
 		return to;
+	}
+
+	/**
+	 * Simple merge.
+	 *
+	 * @param to the to
+	 * @param from the from
+	 * @return the json object
+	 */
+	public JsonObject simpleMerge(JsonObject to, JsonObject... from) {
+		to = getAsJsonObject(to, new JsonObject());
+		JsonObject finalTo = to;
+		for (JsonObject jsonObject : from) {
+			finalTo = simpleMerge(finalTo, jsonObject);
+		}
+		return finalTo;
 	}
 
 	/**

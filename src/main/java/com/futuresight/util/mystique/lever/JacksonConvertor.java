@@ -87,13 +87,14 @@ public class JacksonConvertor implements JsonConvertor {
 	 * @throws ConvertorException the convertor exception
 	 */
 	public <T> T deserialize(String objectString, Class<T> objectType) throws ConvertorException {
+		T value = null;
 		try {
-			ObjectMapper objectMapper = getObjectMapper();
-			return objectMapper.readValue(objectString, objectType);
+			value = null != objectString ? getObjectMapper().readValue(objectString, objectType) : value;
 		}
 		catch (Exception e) {
 			throw getConvertorException(e);
 		}
+		return value;
 	}
 
 	/*
@@ -103,12 +104,14 @@ public class JacksonConvertor implements JsonConvertor {
 	 * (java.lang.Object, java.lang.Class)
 	 */
 	public <T> T deserialize(Object object, Class<T> objectType) throws ConvertorException {
+		T value = null;
 		try {
-			return getObjectMapper().convertValue(object, objectType);
+			value = null != object ? getObjectMapper().convertValue(object, objectType) : value;
 		}
 		catch (Exception e) {
 			throw getConvertorException(e);
 		}
+		return value;
 	}
 
 	/*
@@ -118,13 +121,14 @@ public class JacksonConvertor implements JsonConvertor {
 	 * (java.io.InputStream, java.lang.Class)
 	 */
 	public <T> T deserialize(InputStream inputStream, Class<T> objectType) throws ConvertorException {
+		T value = null;
 		try {
-			ObjectMapper objectMapper = getObjectMapper();
-			return objectMapper.readValue(inputStream, objectType);
+			value = null != inputStream ? getObjectMapper().readValue(inputStream, objectType) : value;
 		}
 		catch (Exception e) {
 			throw getConvertorException(e);
 		}
+		return value;
 	}
 
 	/**

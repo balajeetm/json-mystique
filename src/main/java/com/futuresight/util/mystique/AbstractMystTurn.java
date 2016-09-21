@@ -51,7 +51,7 @@ public abstract class AbstractMystTurn implements MystTurn {
 			}
 		}
 
-		jsonLever.simpleMerge(jsonLever.getAsJsonObject(aces, new JsonObject()), updatedAces);
+		jsonLever.simpleMerge(updatedAces, jsonLever.getAsJsonObject(aces, new JsonObject()));
 
 		JsonElement transform = transmute(source, deps, updatedAces, turn);
 

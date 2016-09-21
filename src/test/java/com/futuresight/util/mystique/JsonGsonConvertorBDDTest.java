@@ -28,6 +28,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import com.futuresight.util.mystique.config.JsonMystiqueConfig;
 import com.futuresight.util.mystique.lever.ConvertorException;
 import com.futuresight.util.mystique.lever.GsonConvertor;
+import com.google.gson.JsonElement;
 
 /**
  * The Class JsonGsonConvertorBDDTest.
@@ -50,10 +51,10 @@ public class JsonGsonConvertorBDDTest {
 	}
 
 	/**
-	 * Test.
+	 * Gson positive test.
 	 */
 	@Test
-	public void jacksonPositiveTest() {
+	public void gsonPositiveTest() {
 		try {
 			String locationPattern = "classpath:jsonmystique/ptest1.mys";
 			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
@@ -89,10 +90,10 @@ public class JsonGsonConvertorBDDTest {
 	}
 
 	/**
-	 * Jackson negative test1.
+	 * Gson negative test1.
 	 */
 	@Test
-	public void jacksonNegativeTest1() {
+	public void gsonNegativeTest1() {
 		try {
 			instance.deserializeList((InputStream) null, TestTarot.class);
 		}
@@ -102,10 +103,10 @@ public class JsonGsonConvertorBDDTest {
 	}
 
 	/**
-	 * Jackson negative test2.
+	 * Gson negative test2.
 	 */
 	@Test
-	public void jacksonNegativeTest2() {
+	public void gsonNegativeTest2() {
 		try {
 			instance.deserializeGroup((InputStream) null, List.class, TestTarot.class);
 		}
@@ -115,10 +116,10 @@ public class JsonGsonConvertorBDDTest {
 	}
 
 	/**
-	 * Jackson negative test3.
+	 * Gson negative test3.
 	 */
 	@Test
-	public void jacksonNegativeTest3() {
+	public void gsonNegativeTest3() {
 		try {
 			instance.deserializeGroup((InputStream) null, Collection.class, TestTarot.class);
 		}
@@ -128,10 +129,10 @@ public class JsonGsonConvertorBDDTest {
 	}
 
 	/**
-	 * Jackson negative test4.
+	 * Gson negative test4.
 	 */
 	@Test
-	public void jacksonNegativeTest4() {
+	public void gsonNegativeTest4() {
 		try {
 			instance.deserializeList((String) null, TestTarot.class);
 		}
@@ -141,10 +142,10 @@ public class JsonGsonConvertorBDDTest {
 	}
 
 	/**
-	 * Jackson negative test5.
+	 * Gson negative test5.
 	 */
 	@Test
-	public void jacksonNegativeTest5() {
+	public void gsonNegativeTest5() {
 		try {
 			instance.deserializeGroup((String) null, List.class, TestTarot.class);
 		}
@@ -154,15 +155,29 @@ public class JsonGsonConvertorBDDTest {
 	}
 
 	/**
-	 * Jackson negative test6.
+	 * Gson negative test6.
 	 */
 	@Test
-	public void jacksonNegativeTest6() {
+	public void gsonNegativeTest6() {
 		try {
 			instance.deserializeGroup((String) null, Collection.class, TestTarot.class);
 		}
 		catch (ConvertorException e) {
 			Assert.assertTrue(true);
+		}
+	}
+
+	/**
+	 * Gson negative test7.
+	 */
+	@Test
+	public void gsonNegativeTest7() {
+		try {
+			JsonElement deserialize = instance.deserialize((String) null, JsonElement.class);
+			Assert.assertNull(deserialize);
+		}
+		catch (ConvertorException e) {
+			Assert.assertTrue(e.getMessage(), false);
 		}
 	}
 
