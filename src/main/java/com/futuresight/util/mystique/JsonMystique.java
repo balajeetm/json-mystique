@@ -63,6 +63,9 @@ public class JsonMystique {
 	/** The mystiques. */
 	private Map<String, Map<String, List<Tarot>>> mystiques;
 
+	/** The instance. */
+	private static JsonMystique INSTANCE;
+
 	/**
 	 * Instantiates a new json genie.
 	 */
@@ -120,6 +123,16 @@ public class JsonMystique {
 		else {
 			logger.warn(String.format("No mystiques found @ %s for transformation", locationPattern));
 		}
+		INSTANCE = this;
+	}
+
+	/**
+	 * Gets the single instance of JsonMystique.
+	 *
+	 * @return single instance of JsonMystique
+	 */
+	public static JsonMystique getInstance() {
+		return INSTANCE;
 	}
 
 	/**
