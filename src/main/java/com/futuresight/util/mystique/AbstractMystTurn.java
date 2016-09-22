@@ -43,7 +43,7 @@ public abstract class AbstractMystTurn implements MystTurn {
 		Boolean turnExists = jsonLever.isNotNull(turn);
 		JsonObject updatedAces = new JsonObject();
 		if (turnExists) {
-			JsonObject localAces = jsonLever.getAsJsonObject(turn.get(MysCon.ACES), null);
+			JsonObject localAces = jsonLever.getAsJsonObject(turn.get(MysCon.ACES), (JsonObject) null);
 			if (jsonLever.isNotNull(localAces)) {
 				// Aces will only work on first source
 				JsonElement first = jsonLever.getFirst(source);

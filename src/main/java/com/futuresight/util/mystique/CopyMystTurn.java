@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Component;
 
+import com.futuresight.util.mystique.lever.MysCon;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -37,14 +38,31 @@ public class CopyMystTurn extends AbstractMystTurn {
 				transform = new JsonArray();
 				for (JsonElement jsonElement : source) {
 					JsonElement granularSource = getGranularSource(jsonElement, turn, deps, aces);
+					granularSource = getSubset(granularSource, deps, aces, turn);
 					transform.getAsJsonArray().add(granularSource);
 				}
 			}
 			else {
-				transform = getGranularSource(source.get(0), turn, deps, aces);
+				JsonElement granularSource = getGranularSource(source.get(0), turn, deps, aces);
+				transform = getSubset(granularSource, deps, aces, turn);
 			}
 		}
 		return transform;
+	}
+
+	/**
+	 * Gets the subset.
+	 *
+	 * @param source the source
+	 * @param deps the deps
+	 * @param aces the aces
+	 * @param turn the turn
+	 * @return the subset
+	 */
+	private JsonElement getSubset(JsonElement source, JsonObject deps, JsonObject aces, JsonObject turn) {
+		JsonElement value = null != turn ? turn.get(MysCon.VALUE) : null;
+		value = jsonLever.isNull(value) ? null : value;
+		return null != value ? jsonLever.getSubset(source, deps, aces, value) : source;
 	}
 
 }

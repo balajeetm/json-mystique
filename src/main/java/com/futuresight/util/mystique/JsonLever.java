@@ -87,8 +87,32 @@ public class JsonLever {
 	 *
 	 * @return the json parser
 	 */
+
+	/**
+	 * Gets the json parser.
+	 *
+	 * @return the json parser
+	 */
+
+	/**
+	 * Gets the json parser.
+	 *
+	 * @return the json parser
+	 */
 	@Getter
 	private JsonParser jsonParser;
+
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
+
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
 
 	/**
 	 * Gets the gson.
@@ -507,7 +531,7 @@ public class JsonLever {
 					}
 				}
 				else {
-					result = transform;
+					result = merge(result, transform);
 				}
 				resultWrapper.add(MysCon.RESULT, result);
 			}
@@ -777,7 +801,7 @@ public class JsonLever {
 	 * @return the as json object
 	 */
 	public JsonObject getAsJsonObject(JsonElement element) {
-		return getAsJsonObject(element, null);
+		return getAsJsonObject(element, (JsonObject) null);
 	}
 
 	/**
@@ -800,6 +824,78 @@ public class JsonLever {
 	 */
 	public JsonObject getAsJsonObject(JsonElement element, JsonObject defaultJson) {
 		return isJsonObject(element) ? element.getAsJsonObject() : defaultJson;
+	}
+
+	/**
+	 * Gets the as json object.
+	 *
+	 * @param element the element
+	 * @param fieldPath the field key
+	 * @return the as json object
+	 */
+	public JsonObject getAsJsonObject(JsonElement element, String... fieldPath) {
+		JsonElement field = getField(element, fieldPath);
+		return getAsJsonObject(field);
+	}
+
+	/**
+	 * Gets the as json array.
+	 *
+	 * @param element the element
+	 * @param fieldPath the field path
+	 * @return the as json array
+	 */
+	public JsonArray getAsJsonArray(JsonObject element, String fieldPath) {
+		JsonElement field = getField(element, fieldPath);
+		return getAsJsonArray(field);
+	}
+
+	/**
+	 * Gets the as string.
+	 *
+	 * @param element the element
+	 * @param fieldPath the field path
+	 * @return the as string
+	 */
+	public String getAsString(JsonObject element, String fieldPath) {
+		JsonElement field = getField(element, fieldPath);
+		return getAsString(field);
+	}
+
+	/**
+	 * Gets the as long.
+	 *
+	 * @param element the element
+	 * @param fieldPath the field path
+	 * @return the as long
+	 */
+	public Long getAsLong(JsonObject element, String fieldPath) {
+		JsonElement field = getField(element, fieldPath);
+		return getAsLong(field);
+	}
+
+	/**
+	 * Gets the as boolean.
+	 *
+	 * @param element the element
+	 * @param fieldPath the field path
+	 * @return the as boolean
+	 */
+	public Boolean getAsBoolean(JsonObject element, String fieldPath) {
+		JsonElement field = getField(element, fieldPath);
+		return getAsBoolean(field);
+	}
+
+	/**
+	 * Gets the as json primitive.
+	 *
+	 * @param element the element
+	 * @param fieldPath the field path
+	 * @return the as json primitive
+	 */
+	public JsonPrimitive getAsJsonPrimitive(JsonObject element, String fieldPath) {
+		JsonElement field = getField(element, fieldPath);
+		return getAsJsonPrimitive(field);
 	}
 
 	/**
