@@ -48,7 +48,7 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  			turn = jsonLever.getAsJsonObject(turn, <strong class="jxr_keyword">new</strong> JsonObject());
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  			JsonElement granularSource = getGranularSource(elementSource, turn, deps, aces);
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  			String reference = jsonLever.getAsString(granularSource, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  			String reference = jsonLever.getAsString(granularSource, (String) <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  			JsonArray keyPath = jsonLever.getAsJsonArray(turn.get(MysCon.KEY), <strong class="jxr_keyword">new</strong> JsonArray());
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  			JsonElement value = turn.get(MysCon.VALUE);
