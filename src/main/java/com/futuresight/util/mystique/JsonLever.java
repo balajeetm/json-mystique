@@ -324,8 +324,12 @@ public class JsonLever {
 		try {
 			field = source;
 			if (null != path) {
-				for (JsonElement jsonElement : path) {
-					String key = getAsString(jsonElement);
+				for (int count = 0; count < path.size(); count++) {
+					String key = getAsString(path.get(count));
+					if (count == 0 && MysCon.AT_DEPS.equals(key)) {
+						field = deps;
+						continue;
+					}
 					String ace = getAce(key);
 					if (null != ace) {
 						field = aces.get(ace);
