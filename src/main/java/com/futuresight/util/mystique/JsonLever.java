@@ -849,7 +849,7 @@ public class JsonLever {
 	 * @param fieldPath the field path
 	 * @return the as json array
 	 */
-	public JsonArray getAsJsonArray(JsonObject element, String fieldPath) {
+	public JsonArray getAsJsonArray(JsonElement element, String... fieldPath) {
 		JsonElement field = getField(element, fieldPath);
 		return getAsJsonArray(field);
 	}
@@ -861,7 +861,7 @@ public class JsonLever {
 	 * @param fieldPath the field path
 	 * @return the as string
 	 */
-	public String getAsString(JsonObject element, String fieldPath) {
+	public String getAsString(JsonElement element, String... fieldPath) {
 		JsonElement field = getField(element, fieldPath);
 		return getAsString(field);
 	}
@@ -873,7 +873,7 @@ public class JsonLever {
 	 * @param fieldPath the field path
 	 * @return the as long
 	 */
-	public Long getAsLong(JsonObject element, String fieldPath) {
+	public Long getAsLong(JsonElement element, String... fieldPath) {
 		JsonElement field = getField(element, fieldPath);
 		return getAsLong(field);
 	}
@@ -885,7 +885,7 @@ public class JsonLever {
 	 * @param fieldPath the field path
 	 * @return the as boolean
 	 */
-	public Boolean getAsBoolean(JsonObject element, String fieldPath) {
+	public Boolean getAsBoolean(JsonElement element, String... fieldPath) {
 		JsonElement field = getField(element, fieldPath);
 		return getAsBoolean(field);
 	}
@@ -897,7 +897,7 @@ public class JsonLever {
 	 * @param fieldPath the field path
 	 * @return the as json primitive
 	 */
-	public JsonPrimitive getAsJsonPrimitive(JsonObject element, String fieldPath) {
+	public JsonPrimitive getAsJsonPrimitive(JsonElement element, String... fieldPath) {
 		JsonElement field = getField(element, fieldPath);
 		return getAsJsonPrimitive(field);
 	}
@@ -909,7 +909,7 @@ public class JsonLever {
 	 * @return the as json array
 	 */
 	public JsonArray getAsJsonArray(JsonElement element) {
-		return getAsJsonArray(element, null);
+		return getAsJsonArray(element, (JsonArray) null);
 	}
 
 	/**
@@ -941,7 +941,7 @@ public class JsonLever {
 	 * @return the as string
 	 */
 	public String getAsString(JsonElement element) {
-		return getAsString(element, null);
+		return getAsString(element, (String) null);
 	}
 
 	/**
@@ -962,7 +962,7 @@ public class JsonLever {
 	 * @return the as boolean
 	 */
 	public Boolean getAsBoolean(JsonElement element) {
-		return getAsBoolean(element, null);
+		return getAsBoolean(element, (Boolean) null);
 	}
 
 	/**
@@ -983,7 +983,7 @@ public class JsonLever {
 	 * @return the as long
 	 */
 	public Long getAsLong(JsonElement element) {
-		return getAsLong(element, null);
+		return getAsLong(element, (Long) null);
 	}
 
 	/**

@@ -40,7 +40,7 @@ public class GetFromDepsMystTurn extends AbstractMystTurn {
 
 			turn = jsonLever.getAsJsonObject(turn, new JsonObject());
 			JsonElement granularSource = getGranularSource(elementSource, turn, deps, aces);
-			String reference = jsonLever.getAsString(granularSource, null);
+			String reference = jsonLever.getAsString(granularSource, (String) null);
 
 			JsonArray keyPath = jsonLever.getAsJsonArray(turn.get(MysCon.KEY), new JsonArray());
 			JsonElement value = turn.get(MysCon.VALUE);
