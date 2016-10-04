@@ -285,12 +285,14 @@ public class JsonMystique {
 			for (Tarot tarot : tarotList) {
 				JsonObject turn = tarot.getTurn();
 
-				CompletableFuture<JsonObject> getAces = CompletableFuture.supplyAsync(() -> {
-					JsonObject aces = tarot.getAces();
-					jsonLever.getUpdatedAces(source, aces, dependencies);
-					jsonLever.simpleMerge(aces, parentAces);
-					return aces;
-				}).exceptionally(e -> {
+				CompletableFuture<JsonObject> getAces = CompletableFuture.supplyAsync(
+						() -> {
+							JsonObject aces = tarot.getAces();
+							JsonObject updatedAces = jsonLever.getUpdatedAces(source, aces, dependencies,
+									gsonConvertor.deserialize(aces, JsonObject.class));
+							jsonLever.simpleMerge(updatedAces, parentAces);
+							return updatedAces;
+						}).exceptionally(e -> {
 					String msg = String.format("Error updating aces for turn %s - %s", turn, e.getMessage());
 					logger.info(msg, e);
 					return parentAces;
