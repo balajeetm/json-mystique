@@ -78,7 +78,7 @@ public class JsonMystique {
 	 */
 	@PostConstruct
 	protected void init() {
-		String locationPattern = "classpath:jsonmystique/**/*.mys";
+		String locationPattern = "classpath*:jsonmystique/**/*.mys";
 		ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
 		Resource[] resources = null;
 		try {
