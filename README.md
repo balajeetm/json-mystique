@@ -22,7 +22,7 @@ The actual versions can be found in the pom file
 
 ## Maven Download
 
-[Json Mystique](http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C1.0.0%7Cjar) downloads at Maven Central
+[Json Mystique](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.balajeetm%22%20AND%20a%3A%22json-mystique%22) downloads at Maven Central
 
 There are two variants of JsonMystique
 * 0.x.x - Where all the processing of JsonMystique is sequential
