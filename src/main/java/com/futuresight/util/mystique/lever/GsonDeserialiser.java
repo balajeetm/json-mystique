@@ -35,9 +35,10 @@ import com.google.gson.JsonPrimitive;
  * The Class GsonDeserialiser.
  *
  * @author balajeetm
+ * @param <T> the generic type
  */
 @Component
-public class GsonDeserialiser extends StdDeserializer<JsonElement> {
+public class GsonDeserialiser<T extends JsonElement> extends StdDeserializer<T> {
 
 	/** The gson convertor. */
 	@Autowired
@@ -66,8 +67,7 @@ public class GsonDeserialiser extends StdDeserializer<JsonElement> {
 	 * @see com.fasterxml.jackson.databind.JsonDeserializer#deserialize(com.fasterxml.jackson.core.JsonParser, com.fasterxml.jackson.databind.DeserializationContext)
 	 */
 	@Override
-	public JsonElement deserialize(JsonParser p, DeserializationContext ctxt) throws IOException,
-			JsonProcessingException {
+	public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 		JsonNode node = p.getCodec().readTree(p);
 		return deserialize(node);
 	}
@@ -78,7 +78,8 @@ public class GsonDeserialiser extends StdDeserializer<JsonElement> {
 	 * @param node the node
 	 * @return the json element
 	 */
-	private JsonElement deserialize(JsonNode node) {
+	@SuppressWarnings("unchecked")
+	private T deserialize(JsonNode node) {
 		JsonElement result = JsonNull.INSTANCE;
 		if (null != node && !node.isNull()) {
 			if (node.isObject()) {
@@ -113,7 +114,7 @@ public class GsonDeserialiser extends StdDeserializer<JsonElement> {
 			}
 		}
 
-		return result;
+		return (T) result;
 	}
 
 }

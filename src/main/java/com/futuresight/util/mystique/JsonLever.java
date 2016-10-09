@@ -105,8 +105,20 @@ public class JsonLever {
 	 *
 	 * @return the json parser
 	 */
+
+	/**
+	 * Gets the json parser.
+	 *
+	 * @return the json parser
+	 */
 	@Getter
 	private JsonParser jsonParser;
+
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
 
 	/**
 	 * Gets the gson.
@@ -964,7 +976,7 @@ public class JsonLever {
 	 * @return the as boolean
 	 */
 	public Boolean getAsBoolean(JsonElement element, Boolean defaultBool) {
-		return isBoolean(element) ? element.getAsBoolean() : defaultBool;
+		return isBoolean(element) ? (Boolean) element.getAsBoolean() : defaultBool;
 	}
 
 	/**
@@ -985,7 +997,7 @@ public class JsonLever {
 	 * @return the as long
 	 */
 	public Long getAsLong(JsonElement element, Long defaultLong) {
-		return isLong(element) ? element.getAsLong() : defaultLong;
+		return isLong(element) ? (Long) element.getAsLong() : defaultLong;
 	}
 
 	/**

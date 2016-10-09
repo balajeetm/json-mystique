@@ -18,13 +18,8 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 /**
@@ -36,10 +31,8 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 public class JacksonConvertor implements JsonConvertor {
 
 	/** The object mapper. */
-	private ObjectMapper objectMapper;
-
 	@Autowired
-	private MystiqueModule mystiqueModule;
+	private ObjectMapper objectMapper;
 
 	/**
 	 * Inits the.
@@ -47,7 +40,6 @@ public class JacksonConvertor implements JsonConvertor {
 	@PostConstruct
 	protected void init() {
 		Creator.INSTANCE = this;
-		getObjectMapper();
 	}
 
 	/**
@@ -144,53 +136,6 @@ public class JacksonConvertor implements JsonConvertor {
 	 */
 	private ConvertorException getConvertorException(Exception e) {
 		return new ConvertorException(e);
-	}
-
-	/**
-	 * Gets the object mapper.
-	 * 
-	 * @return the object mapper
-	 */
-	public ObjectMapper getObjectMapper() {
-		if (null == objectMapper) {
-			objectMapper = new ObjectMapper();
-
-			/*
-			 * The configurations for a object mapper. Eg. Serialization,
-			 * Deserialization, etc. There are enable, disable functions for the
-			 * same. We will use an explicit configure so that we can enable and
-			 * disable this based on configuration
-			 */
-			// to prevent exception when encountering unknown property:
-			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			// to allow serialization of "empty" POJOs (no properties to
-			// serialize)
-			// (without this setting, an exception is thrown in those cases)
-			objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-			// to write java.util.Date, Calendar as number (timestamp):
-			objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-			objectMapper.setSerializationInclusion(Include.NON_NULL);
-			// objectMapper.setSerializationInclusion(Include.NON_EMPTY);
-
-			// JsonParser.Feature for configuring parsing settings:
-			// to allow use of apostrophes (single quotes), non standard
-			objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-
-			objectMapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
-
-			// Add Mix Ins if needed
-			// eg. objectMapper.addMixInAnnotations(MagicProductUmbrella.class,
-			// Test.class);
-
-			// set various strategies
-			// eg.
-			// objectMapper.enableDefaultTypingAsProperty(DefaultTyping.OBJECT_AND_NON_CONCRETE,
-			// "remoteClass");
-
-			objectMapper.registerModule(mystiqueModule);
-		}
-		return objectMapper;
 	}
 
 	/*
