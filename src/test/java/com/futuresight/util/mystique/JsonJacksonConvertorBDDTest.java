@@ -91,7 +91,7 @@ public class JsonJacksonConvertorBDDTest {
 	}
 
 	@Test
-	public void jacksonPositiveTest1() {
+	public void jacksonGsonTest() {
 		try {
 			String locationPattern = "classpath:jsonmystique/gsonJackson.json";
 			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();

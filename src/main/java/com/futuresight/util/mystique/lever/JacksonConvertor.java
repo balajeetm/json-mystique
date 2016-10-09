@@ -22,11 +22,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.google.gson.JsonElement;
 
 /**
  * The Class JacksonConvertor.
@@ -40,10 +39,7 @@ public class JacksonConvertor implements JsonConvertor {
 	private ObjectMapper objectMapper;
 
 	@Autowired
-	private GsonDeserialiser gsonDeserialiser;
-
-	@Autowired
-	private GsonSerialiser gsonSerialiser;
+	private MystiqueModule mystiqueModule;
 
 	/**
 	 * Inits the.
@@ -181,6 +177,8 @@ public class JacksonConvertor implements JsonConvertor {
 			// to allow use of apostrophes (single quotes), non standard
 			objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
 
+			objectMapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
+
 			// Add Mix Ins if needed
 			// eg. objectMapper.addMixInAnnotations(MagicProductUmbrella.class,
 			// Test.class);
@@ -190,10 +188,7 @@ public class JacksonConvertor implements JsonConvertor {
 			// objectMapper.enableDefaultTypingAsProperty(DefaultTyping.OBJECT_AND_NON_CONCRETE,
 			// "remoteClass");
 
-			SimpleModule module = new SimpleModule();
-			module.addDeserializer(JsonElement.class, gsonDeserialiser);
-			module.addSerializer(JsonElement.class, gsonSerialiser);
-			objectMapper.registerModule(module);
+			objectMapper.registerModule(mystiqueModule);
 		}
 		return objectMapper;
 	}
