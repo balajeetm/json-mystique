@@ -25,6 +25,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.futuresight.util.mystique.config.JsonMystiqueConfig;
 import com.futuresight.util.mystique.lever.ConvertorException;
 import com.futuresight.util.mystique.lever.JacksonConvertor;
@@ -83,6 +84,26 @@ public class JsonJacksonConvertorBDDTest {
 				deserialize = instance.deserialize(tarot, TestTarot.class);
 				Assert.assertNotNull(deserialize);
 			}
+		}
+		catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Test
+	public void jacksonPositiveTest1() {
+		try {
+			String locationPattern = "classpath:jsonmystique/gsonJackson.json";
+			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+			Resource resource = resourceResolver.getResource(locationPattern);
+
+			JsonNode jacksonObject = instance.deserialize(resource.getInputStream(), JsonNode.class);
+			JsonElement gsonObject = instance.deserialize(resource.getInputStream(), JsonElement.class);
+			JsonElement transGsonObject = instance.deserialize(jacksonObject, JsonElement.class);
+			JsonNode transJacksonObject = instance.deserialize(gsonObject, JsonNode.class);
+
+			Assert.assertEquals(gsonObject, transGsonObject);
+			Assert.assertEquals(jacksonObject, transJacksonObject);
 		}
 		catch (Exception e) {
 			Assert.fail(e.getMessage());

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Hello",
+    "id": "id1",
+    "num": 1,
+    "bool": true,
+    "nil": null,
+    "array": [
+      "string",
+      true,
+      123,
+      {
+        "a": "a1"
+      }
+    ],
+    "obj": {
+      "b": 1234,
+      "c": "c1",
+      "d": 123.123
+    }
+  },
+  {
+    "name": "Fellow",
+    "id": "id2"
+  }
+]

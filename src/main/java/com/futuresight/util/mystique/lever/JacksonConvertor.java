@@ -15,6 +15,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -23,7 +24,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.google.gson.JsonElement;
 
 /**
  * The Class JacksonConvertor.
@@ -36,12 +39,19 @@ public class JacksonConvertor implements JsonConvertor {
 	/** The object mapper. */
 	private ObjectMapper objectMapper;
 
+	@Autowired
+	private GsonDeserialiser gsonDeserialiser;
+
+	@Autowired
+	private GsonSerialiser gsonSerialiser;
+
 	/**
 	 * Inits the.
 	 */
 	@PostConstruct
 	protected void init() {
 		Creator.INSTANCE = this;
+		getObjectMapper();
 	}
 
 	/**
@@ -68,7 +78,6 @@ public class JacksonConvertor implements JsonConvertor {
 	 * Instantiates a new json jackson convertor.
 	 */
 	private JacksonConvertor() {
-		getObjectMapper();
 	}
 
 	/*
@@ -89,7 +98,7 @@ public class JacksonConvertor implements JsonConvertor {
 	public <T> T deserialize(String objectString, Class<T> objectType) throws ConvertorException {
 		T value = null;
 		try {
-			value = null != objectString ? getObjectMapper().readValue(objectString, objectType) : value;
+			value = null != objectString ? objectMapper.readValue(objectString, objectType) : value;
 		}
 		catch (Exception e) {
 			throw getConvertorException(e);
@@ -106,7 +115,7 @@ public class JacksonConvertor implements JsonConvertor {
 	public <T> T deserialize(Object object, Class<T> objectType) throws ConvertorException {
 		T value = null;
 		try {
-			value = null != object ? getObjectMapper().convertValue(object, objectType) : value;
+			value = null != object ? objectMapper.convertValue(object, objectType) : value;
 		}
 		catch (Exception e) {
 			throw getConvertorException(e);
@@ -123,7 +132,7 @@ public class JacksonConvertor implements JsonConvertor {
 	public <T> T deserialize(InputStream inputStream, Class<T> objectType) throws ConvertorException {
 		T value = null;
 		try {
-			value = null != inputStream ? getObjectMapper().readValue(inputStream, objectType) : value;
+			value = null != inputStream ? objectMapper.readValue(inputStream, objectType) : value;
 		}
 		catch (Exception e) {
 			throw getConvertorException(e);
@@ -180,6 +189,11 @@ public class JacksonConvertor implements JsonConvertor {
 			// eg.
 			// objectMapper.enableDefaultTypingAsProperty(DefaultTyping.OBJECT_AND_NON_CONCRETE,
 			// "remoteClass");
+
+			SimpleModule module = new SimpleModule();
+			module.addDeserializer(JsonElement.class, gsonDeserialiser);
+			module.addSerializer(JsonElement.class, gsonSerialiser);
+			objectMapper.registerModule(module);
 		}
 		return objectMapper;
 	}
@@ -199,7 +213,7 @@ public class JacksonConvertor implements JsonConvertor {
 	 */
 	public String serialize(Object value) throws ConvertorException {
 		try {
-			return getObjectMapper().writeValueAsString(value);
+			return objectMapper.writeValueAsString(value);
 		}
 		catch (Exception e) {
 			throw getConvertorException(e);
@@ -216,7 +230,7 @@ public class JacksonConvertor implements JsonConvertor {
 			throws ConvertorException {
 		JavaType javaType = getJavaType(groupClass, elementClass);
 		try {
-			return (T) getObjectMapper().readValue(inputStream, javaType);
+			return (T) objectMapper.readValue(inputStream, javaType);
 		}
 		catch (Exception e) {
 			throw getConvertorException(e);
@@ -232,7 +246,7 @@ public class JacksonConvertor implements JsonConvertor {
 	public <T> List<T> deserializeList(InputStream inputStream, Class<T> elementClass) throws ConvertorException {
 		JavaType javaType = getJavaType(List.class, elementClass);
 		try {
-			return (List<T>) getObjectMapper().readValue(inputStream, javaType);
+			return (List<T>) objectMapper.readValue(inputStream, javaType);
 		}
 		catch (Exception e) {
 			throw getConvertorException(e);
@@ -248,7 +262,7 @@ public class JacksonConvertor implements JsonConvertor {
 	public <T> List<T> deserializeList(Object object, Class<T> elementClass) throws ConvertorException {
 		JavaType javaType = getJavaType(List.class, elementClass);
 		try {
-			return (List<T>) getObjectMapper().convertValue(object, javaType);
+			return (List<T>) objectMapper.convertValue(object, javaType);
 		}
 		catch (Exception e) {
 			throw getConvertorException(e);
@@ -290,7 +304,7 @@ public class JacksonConvertor implements JsonConvertor {
 	private <T, U> T deserializeGroupOnJavaType(String objectString, Class<T> groupClass, Class<U> elementClass) {
 		JavaType javaType = getJavaType(groupClass, elementClass);
 		try {
-			return getObjectMapper().readValue(objectString, javaType);
+			return objectMapper.readValue(objectString, javaType);
 		}
 		catch (Exception e) {
 			throw getConvertorException(e);
@@ -324,7 +338,7 @@ public class JacksonConvertor implements JsonConvertor {
 	public <T> List<T> deserializeList(String jsonString, Class<T> elementClass) throws ConvertorException {
 		JavaType javaType = getJavaType(List.class, elementClass);
 		try {
-			return (List<T>) getObjectMapper().readValue(jsonString, javaType);
+			return (List<T>) objectMapper.readValue(jsonString, javaType);
 		}
 		catch (Exception e) {
 			throw getConvertorException(e);
