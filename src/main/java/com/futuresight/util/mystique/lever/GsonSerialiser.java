@@ -10,6 +10,7 @@
 package com.futuresight.util.mystique.lever;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Map.Entry;
 
@@ -24,6 +25,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.internal.LazilyParsedNumber;
 
 /**
  * The Class GsonSerialiser.
@@ -85,11 +87,22 @@ public class GsonSerialiser extends StdSerializer<JsonElement> {
 			}
 			if (jsonPrimitive.isNumber()) {
 				Number nnode = jsonPrimitive.getAsNumber();
-				if (nnode instanceof Integer || nnode instanceof BigInteger || nnode instanceof Long
-						|| nnode instanceof Short) {
+				if (nnode instanceof LazilyParsedNumber) {
+					gen.writeNumber(nnode.toString());
+				}
+				else if (nnode instanceof Integer) {
+					gen.writeNumber(nnode.intValue());
+				}
+				else if (nnode instanceof Short) {
+					gen.writeNumber(nnode.shortValue());
+				}
+				else if (nnode instanceof BigInteger || nnode instanceof Long) {
 					gen.writeNumber(nnode.longValue());
 				}
-				else {
+				else if (nnode instanceof Float) {
+					gen.writeNumber(nnode.floatValue());
+				}
+				else if (nnode instanceof Double || nnode instanceof BigDecimal) {
 					gen.writeNumber(nnode.doubleValue());
 				}
 			}
