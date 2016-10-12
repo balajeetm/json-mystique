@@ -1,0 +1,22 @@
+[{
+	"name": "prajwal",
+	"id": 123,
+	"physique": {
+		"height": 180,
+		"weight": 75
+	}
+}, {
+	"name": "paneesh",
+	"id": 341,
+	"physique": {
+		"height": 170,
+		"weight": 60
+	}
+}, {
+	"name": "mahi",
+	"id": 444,
+	"physique": {
+		"height": 175,
+		"weight": 80
+	}
+}]
