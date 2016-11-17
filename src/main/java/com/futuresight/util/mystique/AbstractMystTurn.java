@@ -11,6 +11,8 @@ package com.futuresight.util.mystique;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.futuresight.util.mystique.lever.MysCon;
@@ -33,6 +35,9 @@ public abstract class AbstractMystTurn implements MystTurn {
 	/** The factory. */
 	@Autowired
 	protected MystiqueFactory factory;
+	
+	/** The logger. */
+	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.SimpleTurnMystique#transform(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonObject, com.google.gson.JsonElement)
@@ -53,7 +58,15 @@ public abstract class AbstractMystTurn implements MystTurn {
 
 		jsonLever.simpleMerge(updatedAces, jsonLever.getAsJsonObject(aces, new JsonObject()));
 
-		JsonElement transform = transmute(source, deps, updatedAces, turn);
+		JsonElement transform = JsonNull.INSTANCE;
+		try {
+			transform = transmute(source, deps, updatedAces, turn);
+		} catch (RuntimeException e) {
+			// Any error during transmute, log error
+			String msg = String.format("Error transforming input with specification for turn %s - %s",
+					turn, e.getMessage());
+			logger.info(msg, e);
+		}
 
 		if (turnExists) {
 			if (jsonLever.isNull(transform)) {

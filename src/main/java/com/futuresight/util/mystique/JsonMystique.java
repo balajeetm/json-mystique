@@ -85,7 +85,7 @@ public class JsonMystique {
 			resources = resourceResolver.getResources(locationPattern);
 		}
 		catch (IOException e) {
-			logger.error(String.format("Error loading mystiques from %s - %s", locationPattern, e.getMessage()), e);
+			logger.info(String.format("Error loading mystiques from %s - %s", locationPattern, e.getMessage()), e);
 			return;
 		}
 
@@ -112,7 +112,7 @@ public class JsonMystique {
 
 					}
 					catch (JsonSyntaxException | IllegalArgumentException | IOException exception) {
-						logger.error(String.format(
+						logger.info(String.format(
 								"Unable to load mystiques %s from %s - %s. Trying to load other mystiques if any",
 								specName, locationPattern, exception.getMessage()), exception);
 						continue;

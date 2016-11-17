@@ -1,0 +1,27 @@
+[
+	{
+	
+	"from": ["startDateTime"],
+	"to": ["startTime"],
+	"turn": {
+		"type": "dateConvertor",
+		"action": "transform",
+		"informat": "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
+		"outformat": "long"
+	}
+	},
+
+    {
+    	"from":[ "endDateTime" ],
+        "to":[
+            "endTime"
+        ],
+        "turn":{
+            "default": {"value":1420070400000},
+            "type":"dateConvertor",
+            "action":"transform",
+            "informat":"yyyy-MM-dd'T'HH:mm:ss.SSSZ",
+            "outformat":"long"
+        }
+    }
+]
