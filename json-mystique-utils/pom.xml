@@ -9,13 +9,6 @@
 	<name>json-mystique-utils</name>
 	<description>Json Mystique Utilities</description>
 
-	<scm>
-		<connection>scm:git:git@github.com:balajeetm/json-mystique.git</connection>
-		<developerConnection>scm:git:git@github.com:balajeetm/json-mystique.git</developerConnection>
-		<url>https://github.com/balajeetm/json-mystique</url>
-		<tag>HEAD</tag>
-	</scm>
-
 	<parent>
 		<groupId>com.balajeetm.mystique</groupId>
 		<artifactId>json-mystique-root</artifactId>

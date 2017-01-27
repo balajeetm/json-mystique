@@ -11,13 +11,6 @@
 	<name>json-mystique-starter</name>
 	<description>json-mystique-starter</description>
 
-	<scm>
-		<connection>scm:git:git@github.com:balajeetm/json-mystique.git</connection>
-		<developerConnection>scm:git:git@github.com:balajeetm/json-mystique.git</developerConnection>
-		<url>https://github.com/balajeetm/json-mystique</url>
-		<tag>HEAD</tag>
-	</scm>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
