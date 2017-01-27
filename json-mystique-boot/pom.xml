@@ -9,12 +9,19 @@
 	<name>json-mystique-boot</name>
 	<description>Json Mystique Booter</description>
 
+	<scm>
+		<connection>scm:git:git@github.com:balajeetm/json-mystique.git</connection>
+		<developerConnection>scm:git:git@github.com:balajeetm/json-mystique.git</developerConnection>
+		<url>https://github.com/balajeetm/json-mystique</url>
+		<tag>HEAD</tag>
+	</scm>
+
 	<parent>
 		<groupId>com.balajeetm.mystique</groupId>
 		<artifactId>json-mystique-root</artifactId>
 		<version>1.0.9-SNAPSHOT</version>
 	</parent>
-	
+
 	<modules>
 		<module>json-mystique-starter</module>
 	</modules>
