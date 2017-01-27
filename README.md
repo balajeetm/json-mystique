@@ -24,9 +24,10 @@ The actual versions can be found in the pom file
 
 [Json Mystique](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.balajeetm%22%20AND%20a%3A%22json-mystique%22) downloads at Maven Central
 
-There are two variants of JsonMystique
+There are three variants of JsonMystique
 * 0.x.x - Where all the processing of JsonMystique is sequential
 * 1.x.x - JsonMystique parallely processes various parts of the input Json
+* 2.x.x - Speing Boot compliant Json Mystique with starters and auto configuration
 
 ### Maven Dependency Snippet
 The maven dependency snippet is as below
@@ -44,6 +45,12 @@ The maven dependency snippet is as below
   <groupId>com.github.balajeetm</groupId>
   <artifactId>json-mystique</artifactId>
   <version>1.0.7</version>
+</dependency>
+
+<dependency>
+  <groupId>com.balajeetm.mystique</groupId>
+  <artifactId>json-mystique</artifactId>
+  <version>2.0.0</version>
 </dependency>
 ```
 

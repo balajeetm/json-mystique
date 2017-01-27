@@ -1,0 +1,11 @@
+[{
+	"from": [
+		["wardrobe", "player", "name"],
+		["wardrobe", "earphone", "name"]
+	],
+	"to": ["backpack", "player"],
+	"turn": {
+		"type": "bean",
+		"value": "com.balajeetm.mystique.core.test.bean.CustomMystTurn"
+	}
+}]

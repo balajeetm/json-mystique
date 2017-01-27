@@ -1,0 +1,91 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>json-mystique</artifactId>
+	<name>Json Mystique</name>
+	<description>Json Utility to transform Jsons</description>
+
+	<parent>
+		<groupId>com.balajeetm.mystique</groupId>
+		<artifactId>json-mystique-libs</artifactId>
+		<version>1.0.9-SNAPSHOT</version>
+	</parent>
+
+	<dependencies>
+		<!-- Spring -->
+		<!-- Spring AOP + AspectJ -->
+		<!-- Google -->
+		<!-- Apache -->
+		<!-- Object Mappers -->
+		<!-- Logging -->
+		<!-- InHouse -->
+		<!-- Test -->
+		<!-- Others -->
+
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+
+		<!-- Google -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+
+		<!-- Apache -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+
+		<!-- Object Mappers -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+
+		<!-- InHouse -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>gson-utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jackson-utils</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

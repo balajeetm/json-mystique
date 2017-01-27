@@ -1,11 +1,42 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.balajeetm</groupId>
-	<artifactId>json-mystique</artifactId>
+	<groupId>com.balajeetm.mystique</groupId>
+	<artifactId>json-mystique-root</artifactId>
 	<version>1.0.9-SNAPSHOT</version>
-	<name>Json Mystique</name>
-	<description>Json Utility to transform Jsons</description>
+	<packaging>pom</packaging>
+
+	<name>json-mystique-root</name>
+	<description>Json Mystique Parent</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.4.3.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<modules>
+		<module>json-mystique-utils</module>
+		<module>json-mystique-libs</module>
+		<module>json-mystique-boot</module>
+	</modules>
+
+	<distributionManagement>
+		<repository>
+			<id>OSSRH Releases</id>
+			<name>OSSRH Release Repository</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
+		<snapshotRepository>
+			<id>OSSRH Snapshots</id>
+			<name>OSSRH Snapshot Repository</name>
+			<uniqueVersion>true</uniqueVersion>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<scm>
 		<connection>scm:git:git@github.com:balajeetm/json-mystique.git</connection>
@@ -38,6 +69,47 @@
 		</license>
 	</licenses>
 
+	<dependencyManagement>
+		<dependencies>
+			<!-- Spring -->
+			<!-- Spring AOP + AspectJ -->
+			<!-- Google -->
+			<!-- Apache -->
+			<!-- Object Mappers -->
+			<!-- Logging -->
+			<!-- InHouse -->
+			<!-- Test -->
+			<!-- Others -->
+
+			<!-- Google -->
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>19.0</version>
+			</dependency>
+
+			<!-- Apache -->
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.5</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>2.6</version>
+			</dependency>
+
+			<!-- Others -->
+			<dependency>
+				<groupId>io.reactivex</groupId>
+				<artifactId>rxjava</artifactId>
+				<version>1.2.0</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<!-- Spring -->
 		<!-- Spring AOP + AspectJ -->
@@ -49,87 +121,37 @@
 		<!-- Test -->
 		<!-- Others -->
 
-		<!-- Spring -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<!-- Google -->
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>19.0</version>
-		</dependency>
-
-		<!-- Apache -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-			<version>3.2.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.4</version>
-		</dependency>
-
-		<!-- Object Mappers -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>${jackson2.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.7</version>
-		</dependency>
-
 		<!-- Logging -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.1.7</version>
-		</dependency>
-
-
-		<!-- Test -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${springtest.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
 		</dependency>
 
 		<!-- Others -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.16.10</version>
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- Test -->
 		<dependency>
-			<groupId>io.reactivex</groupId>
-			<artifactId>rxjava</artifactId>
-			<version>1.2.0</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -140,8 +162,8 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.1</version>
 					<configuration>
-						<source>${javaVersion}</source>
-						<target>${javaVersion}</target>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
 						<encoding>${project.build.sourceEncoding}</encoding>
 						<showDeprecation>true</showDeprecation>
 						<showWarnings>true</showWarnings>
@@ -239,14 +261,7 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
-				<artifactId>maven-source-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<artifactId>maven-site-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>com.github.github</groupId>
-				<artifactId>site-maven-plugin</artifactId>
+				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
@@ -313,6 +328,12 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>samples</id>
+			<modules>
+				<module>json-mystique-samples</module>
+			</modules>
+		</profile>
+		<profile>
 			<id>release</id>
 			<build>
 				<plugins>
@@ -335,30 +356,12 @@
 		</profile>
 	</profiles>
 
-	<distributionManagement>
-		<repository>
-			<id>OSSRH Releases</id>
-			<name>OSSRH Release Repository</name>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-		</repository>
-		<snapshotRepository>
-			<id>OSSRH Snapshots</id>
-			<name>OSSRH Snapshot Repository</name>
-			<uniqueVersion>true</uniqueVersion>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-
 	<properties>
-		<javaVersion>1.8</javaVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<junit.version>4.12</junit.version>
-		<spring.version>4.2.6.RELEASE</spring.version>
-		<springtest.version>4.2.6.RELEASE</springtest.version>
-		<jackson2.version>2.4.3</jackson2.version>
-		<github.global.server>github</github.global.server>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<year>2016</year>
+		<java.version>1.8</java.version>
+		<github.global.server>github</github.global.server>
+		<year>2017</year>
 	</properties>
 
 </project>
