@@ -63,4 +63,4 @@ The maven dependency snippet is as below
 
 > There is absolutely no change in the usage or the syntax and semantics of the versions. The parallel processing spring boot compliant versions are mainstream
 
-For more information on the usage refer the [wiki]("https://github.com/balajeetm/json-mystique/wiki")
+For more information on the usage and detailed usage guides, refer the [wiki](https://github.com/balajeetm/json-mystique/wiki)
