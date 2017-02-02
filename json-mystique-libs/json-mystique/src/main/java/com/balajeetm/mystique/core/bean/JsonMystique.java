@@ -84,8 +84,7 @@ public class JsonMystique {
 		Resource[] resources = null;
 		try {
 			resources = resourceResolver.getResources(locationPattern);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			logger.info(String.format("Error loading mystiques from %s - %s", locationPattern, e.getMessage()), e);
 			return;
 		}
@@ -111,8 +110,7 @@ public class JsonMystique {
 							ruleList.add(tarot);
 						}
 
-					}
-					catch (JsonSyntaxException | IllegalArgumentException | IOException exception) {
+					} catch (JsonSyntaxException | IllegalArgumentException | IOException exception) {
 						logger.info(String.format(
 								"Unable to load mystiques %s from %s - %s. Trying to load other mystiques if any",
 								specName, locationPattern, exception.getMessage()), exception);
@@ -120,8 +118,7 @@ public class JsonMystique {
 					}
 				}
 			}
-		}
-		else {
+		} else {
 			logger.warn(String.format("No mystiques found @ %s for transformation", locationPattern));
 		}
 		INSTANCE = this;
@@ -286,14 +283,13 @@ public class JsonMystique {
 			for (Tarot tarot : tarotList) {
 				JsonObject turn = tarot.getTurn();
 
-				CompletableFuture<JsonObject> getAces = CompletableFuture.supplyAsync(
-						() -> {
-							JsonObject aces = tarot.getAces();
-							JsonObject updatedAces = jsonLever.getUpdatedAces(source, aces, dependencies,
-									gsonConvertor.deserialize(aces, JsonObject.class));
-							jsonLever.simpleMerge(updatedAces, parentAces);
-							return updatedAces;
-						}).exceptionally(e -> {
+				CompletableFuture<JsonObject> getAces = CompletableFuture.supplyAsync(() -> {
+					JsonObject aces = tarot.getAces();
+					JsonObject updatedAces = jsonLever.getUpdatedAces(source, aces, dependencies,
+							gsonConvertor.deserialize(aces, JsonObject.class));
+					jsonLever.simpleMerge(updatedAces, parentAces);
+					return updatedAces;
+				}).exceptionally(e -> {
 					String msg = String.format("Error updating aces for turn %s - %s", turn, e.getMessage());
 					logger.info(msg, e);
 					return parentAces;
@@ -305,22 +301,21 @@ public class JsonMystique {
 					MystTurn mystique = factory.getMystTurn(turn);
 					transform = spell.cast(mystique);
 					return transform;
-				}).exceptionally(
-						(e) -> {
-							String msg = String.format("Error transforming input with specification for turn %s - %s",
-									turn, e.getMessage());
-							logger.info(msg, e);
-							return JsonNull.INSTANCE;
-						});
-
-				CompletableFuture<JsonObject> setResult = getAces.thenCombine(
-						transformAsync,
-						(aces, transform) -> jsonLever.setField(resultWrapper, tarot.getTo(), transform, aces,
-								tarot.getOptional())).exceptionally(e -> {
-					String msg = String.format("Error setting output for turn %s - %s", turn, e.getMessage());
+				}).exceptionally((e) -> {
+					String msg = String.format("Error transforming input with specification for turn %s - %s", turn,
+							e.getMessage());
 					logger.info(msg, e);
-					return resultWrapper;
+					return JsonNull.INSTANCE;
 				});
+
+				CompletableFuture<JsonObject> setResult = getAces
+						.thenCombine(transformAsync, (aces, transform) -> jsonLever.setField(resultWrapper,
+								tarot.getTo(), transform, aces, tarot.getOptional()))
+						.exceptionally(e -> {
+							String msg = String.format("Error setting output for turn %s - %s", turn, e.getMessage());
+							logger.info(msg, e);
+							return resultWrapper;
+						});
 
 				cfs.add(setResult);
 			}
@@ -328,8 +323,7 @@ public class JsonMystique {
 			for (CompletableFuture<JsonObject> completableFuture : cfs) {
 				completableFuture.join();
 			}
-		}
-		else {
+		} else {
 			logger.info(String.format("Invalid tarots. Tarots cannot be empty"));
 		}
 		return resultWrapper.get(MysCon.RESULT);
@@ -350,9 +344,9 @@ public class JsonMystique {
 			JsonObject turn, JsonObject resultWrapper) {
 		List<JsonElement> fields = new ArrayList<>();
 		Boolean isFromLoopy = getFields(source, dependencies, aces, from, fields);
-		//Ideally isDeps should never be loopy
-		Spell spell = isFromLoopy ? new LoopySpell(fields, dependencies, aces, turn, resultWrapper) : new SimpleSpell(
-				fields, dependencies, aces, turn, resultWrapper);
+		// Ideally isDeps should never be loopy
+		Spell spell = isFromLoopy ? new LoopySpell(fields, dependencies, aces, turn, resultWrapper)
+				: new SimpleSpell(fields, dependencies, aces, turn, resultWrapper);
 		return spell;
 	}
 
@@ -375,15 +369,13 @@ public class JsonMystique {
 					if (jsonElement.isJsonArray()) {
 						JsonArray fromArray = jsonElement.getAsJsonArray();
 						isLoopy = isLoopy || jsonLever.updateFields(source, dependencies, aces, fields, fromArray);
-						//Once isloopy, the loop doesn't execute anymore
-					}
-					else {
+						// Once isloopy, the loop doesn't execute anymore
+					} else {
 						isLoopy = isLoopy || jsonLever.updateFields(source, dependencies, aces, fields, path);
 						break;
 					}
 				}
-			}
-			else {
+			} else {
 				isLoopy = isLoopy || jsonLever.updateFields(source, dependencies, aces, fields, path);
 			}
 		}
@@ -403,8 +395,7 @@ public class JsonMystique {
 				JsonObject transformJson = jsonLever.getAsJsonObject(transform(source, deps, dependencies),
 						new JsonObject());
 				jsonLever.simpleMerge(dependencies, transformJson);
-			}
-			catch (RuntimeException e) {
+			} catch (RuntimeException e) {
 				logger.info(String.format("Could not update dependencies : %s", e.getMessage()));
 			}
 		}

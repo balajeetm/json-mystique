@@ -104,8 +104,32 @@ public class JsonLever {
 	 *
 	 * @return the json parser
 	 */
+
+	/**
+	 * Gets the json parser.
+	 *
+	 * @return the json parser
+	 */
+
+	/**
+	 * Gets the json parser.
+	 *
+	 * @return the json parser
+	 */
 	@Getter
 	private JsonParser jsonParser;
+
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
+
+	/**
+	 * Gets the gson.
+	 *
+	 * @return the gson
+	 */
 
 	/**
 	 * Gets the gson.
@@ -407,7 +431,7 @@ public class JsonLever {
 	 *            can be an Object, Array or a Primitive
 	 * @param aces the pre-processed dependency list in the form of key value
 	 *            pair (json)
-	 * @param optional the flag that determines if a null valye must be set in
+	 * @param optional the flag that determines if a null value must be set in
 	 *            the destination. If optional is TRUE, null values are not set
 	 *            in the destination
 	 * @return the json result wraper object which contains the result in the
@@ -527,6 +551,112 @@ public class JsonLever {
 	 */
 	public JsonObject setField(JsonObject resultWrapper, JsonArray to, JsonElement value, JsonObject aces) {
 		return setField(resultWrapper, to, value, aces, Boolean.FALSE);
+	}
+
+	/**
+	 * Creates a new JsonElement (Either JsonObject, JsonArray based on the json
+	 * path) and sets the field as per the json path provided.
+	 *
+	 * @param value the json value that needs to be set to the destination. This
+	 *            can be an Object, Array or a Primitive
+	 * @param to the jPath json array defining the full qualified json path to
+	 *            the destination field where the value must be set
+	 * @return the json element created and the field set
+	 */
+	public JsonElement setField(JsonElement value, JsonArray to) {
+		JsonObject resultWrapper = new JsonObject();
+		resultWrapper.add(MysCon.RESULT, JsonNull.INSTANCE);
+		setField(resultWrapper, to, (JsonElement) null, null);
+		return resultWrapper.get(MysCon.RESULT);
+	}
+
+	/**
+	 * Creates a new JsonElement (Either JsonObject, JsonArray based on the json
+	 * path) and sets the field as per the json path provided.
+	 *
+	 * @param value the json value that needs to be set to the destination. This
+	 *            can be an Object, Array or a Primitive
+	 * @param to jPath the string array defining the full qualified json path to
+	 *            the field required
+	 * @return the json element created and the field set
+	 */
+	public JsonElement setField(JsonElement value, String... to) {
+		JsonObject resultWrapper = new JsonObject();
+		resultWrapper.add(MysCon.RESULT, JsonNull.INSTANCE);
+		setField(resultWrapper, newJsonArray(to), (JsonElement) null, null);
+		return resultWrapper.get(MysCon.RESULT);
+	}
+
+	/**
+	 * Sets the field of a json source.
+	 * 
+	 * If the json source is null, a new json element is created and the value
+	 * is then set to the destination. Do not use this method, if multiple
+	 * threads are setting different fields of the json source. Use the other
+	 * "setField" methods that use result wrapper instead to be thread safe.
+	 *
+	 * @param result the json resource whose field is to be set. Can be null, in
+	 *            which case a new json element is created as per the jPath
+	 * @param value the json value that needs to be set to the destination. This
+	 *            can be an Object, Array or a Primitive
+	 * @param to the jPath json array defining the full qualified json path to
+	 *            the destination field where the value must be set
+	 * @return the json source
+	 */
+	public JsonElement setField(JsonElement result, JsonElement value, JsonArray to) {
+		JsonObject resultWrapper = new JsonObject();
+		resultWrapper.add(MysCon.RESULT, result);
+		setField(resultWrapper, to, (JsonElement) null, null);
+		return resultWrapper.get(MysCon.RESULT);
+	}
+
+	/**
+	 * Sets the field of a json source.
+	 * 
+	 * If the json source is null, a new json element is created and the value
+	 * is then set to the destination. Do not use this method, if multiple
+	 * threads are setting different fields of the json source. Use the other
+	 * "setField" methods that use result wrapper instead to be thread safe.
+	 *
+	 * @param result the json resource whose field is to be set. Can be null, in
+	 *            which case a new json element is created as per the jPath
+	 * @param value the json value that needs to be set to the destination. This
+	 *            can be an Object, Array or a Primitive
+	 * @param optional the flag that determines if a null value must be set in
+	 *            the destination. If optional is TRUE, null values are not set
+	 *            in the destination
+	 * @param to the jPath json array defining the full qualified json path to
+	 *            the destination field where the value must be set
+	 * @return the json source
+	 */
+	public JsonElement setField(JsonElement result, JsonElement value, Boolean optional, JsonArray to) {
+		JsonObject resultWrapper = new JsonObject();
+		resultWrapper.add(MysCon.RESULT, result);
+		setField(resultWrapper, to, (JsonElement) null, null, optional);
+		return resultWrapper.get(MysCon.RESULT);
+	}
+
+	/**
+	 * Sets the field of a json source.
+	 * 
+	 * If the json source is null, a new json element is created and the value
+	 * is then set to the destination. Do not use this method, if multiple
+	 * threads are setting different fields of the json source. Use the other
+	 * "setField" methods that use result wrapper instead to be thread safe.
+	 *
+	 * @param result the json resource whose field is to be set. Can be null, in
+	 *            which case a new json element is created as per the jPath
+	 * @param value the json value that needs to be set to the destination. This
+	 *            can be an Object, Array or a Primitive
+	 * @param to jPath the string array defining the full qualified json path to
+	 *            the field required
+	 * @return the json source
+	 */
+	public JsonElement setField(JsonElement result, JsonElement value, String... to) {
+		JsonObject resultWrapper = new JsonObject();
+		resultWrapper.add(MysCon.RESULT, result);
+		setField(resultWrapper, newJsonArray(to), (JsonElement) null, null);
+		return resultWrapper.get(MysCon.RESULT);
 	}
 
 	/**

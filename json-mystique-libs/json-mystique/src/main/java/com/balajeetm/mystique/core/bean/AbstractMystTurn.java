@@ -36,12 +36,17 @@ public abstract class AbstractMystTurn implements MystTurn {
 	/** The factory. */
 	@Autowired
 	protected MystiqueFactory factory;
-	
+
 	/** The logger. */
 	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-	/* (non-Javadoc)
-	 * @see com.futuresight.util.mystique.SimpleTurnMystique#transform(java.util.List, com.google.gson.JsonObject, com.google.gson.JsonObject, com.google.gson.JsonElement)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.futuresight.util.mystique.SimpleTurnMystique#transform(java.util.
+	 * List, com.google.gson.JsonObject, com.google.gson.JsonObject,
+	 * com.google.gson.JsonElement)
 	 */
 	public JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn,
 			JsonObject resultWrapper) {
@@ -64,8 +69,8 @@ public abstract class AbstractMystTurn implements MystTurn {
 			transform = transmute(source, deps, updatedAces, turn);
 		} catch (RuntimeException e) {
 			// Any error during transmute, log error
-			String msg = String.format("Error transforming input with specification for turn %s - %s",
-					turn, e.getMessage());
+			String msg = String.format("Error transforming input with specification for turn %s - %s", turn,
+					e.getMessage());
 			logger.info(msg, e);
 		}
 
@@ -75,7 +80,7 @@ public abstract class AbstractMystTurn implements MystTurn {
 				transform = transformToDefault(defaultJson, source, deps, updatedAces);
 			}
 
-			//set the result
+			// set the result
 			JsonArray to = mystiqueLever.getAsJsonArray(turn.get(MysCon.TO));
 			Boolean optional = mystiqueLever.getAsBoolean(turn.get(MysCon.OPTIONAL), Boolean.FALSE);
 
@@ -99,12 +104,11 @@ public abstract class AbstractMystTurn implements MystTurn {
 			JsonObject aces, JsonObject resultWrapper) {
 		JsonElement transform = JsonNull.INSTANCE;
 		if (mystiqueLever.isNotNull(conditionalJson)) {
-			//Should not be null, can be json null
+			// Should not be null, can be json null
 			JsonElement value = conditionalJson.get(MysCon.VALUE);
 			if (null != value) {
 				transform = value;
-			}
-			else {
+			} else {
 				JsonObject defaultTurn = mystiqueLever.getAsJsonObject(conditionalJson.get(MysCon.TURN));
 				if (mystiqueLever.isNotNull(defaultTurn)) {
 					MystTurn mystique = factory.getMystTurn(defaultTurn);
@@ -153,7 +157,8 @@ public abstract class AbstractMystTurn implements MystTurn {
 	 */
 	protected JsonElement getGranularSource(JsonElement source, JsonObject turn, JsonObject deps, JsonObject aces) {
 		JsonArray from = mystiqueLever.isNotNull(turn) ? mystiqueLever.getAsJsonArray(turn.get(MysCon.FROM)) : null;
-		JsonElement conditionSource = mystiqueLever.isNull(from) ? source : mystiqueLever.getField(source, from, deps, aces);
+		JsonElement conditionSource = mystiqueLever.isNull(from) ? source
+				: mystiqueLever.getField(source, from, deps, aces);
 		return conditionSource;
 	}
 }
