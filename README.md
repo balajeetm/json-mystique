@@ -27,7 +27,12 @@ The actual versions can be found in the pom file
 There are three variants of JsonMystique
 * 0.x.x - Where all the processing of JsonMystique is sequential
 * 1.x.x - JsonMystique parallely processes various parts of the input Json
-* 2.x.x - Speing Boot compliant Json Mystique with starters and auto configuration
+* 2.x.x - Spring Boot compliant Json Mystique with starters and auto configuration
+
+#### NOTE
+2.x.x is the only supported version currently. The other versions (0.x.x and 1.x.x) have been deprecated.
+It is highly recommended and suggested, to only use the 2.x.x versions of Mystique.
+Please raise issues, for support on earlier versions.
 
 ### Maven Dependency Snippet
 The maven dependency snippet is as below
@@ -46,14 +51,16 @@ The maven dependency snippet is as below
   <artifactId>json-mystique</artifactId>
   <version>1.0.7</version>
 </dependency>
+```
 
+```xml
 <dependency>
   <groupId>com.balajeetm.mystique</groupId>
   <artifactId>json-mystique</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
 </dependency>
 ```
 
-> There is absolutely no change in the usage or the syntax and semantics of the two versions. Moving forward, the parallel processing logic would be mainstream
+> There is absolutely no change in the usage or the syntax and semantics of the versions. The parallel processing spring boot compliant versions are mainstream
 
 For more information on the usage refer the [wiki]("https://github.com/balajeetm/json-mystique/wiki")
