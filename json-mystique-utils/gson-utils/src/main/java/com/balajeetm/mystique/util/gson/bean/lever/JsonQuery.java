@@ -67,8 +67,7 @@ public class JsonQuery {
 				resultarray.add(json);
 				return resultarray;
 			}).toBlocking().first();
-		}
-		catch (RuntimeException e) {
+		} catch (RuntimeException e) {
 			result = new JsonPrimitive(e.getMessage());
 		}
 
@@ -82,22 +81,17 @@ public class JsonQuery {
 	 * @return the observable
 	 */
 	public Observable<JsonElement> queryAsync(JsonObject query) {
-		return Observable
-				.just(query)
-				.map(q -> validate(q))
-				.flatMap(
-						s -> {
-							Observable<JsonElement> obs = null;
-							if (null == s) {
-								JsonElement from = query.get("from");
-								obs = jsonLever.isJsonArray(from) ? queryAsync(from.getAsJsonArray(), query)
-										: queryAsync(from.getAsJsonObject(), query);
-							}
-							else {
-								Exceptions.propagate(new Throwable(s));
-							}
-							return obs;
-						});
+		return Observable.just(query).map(q -> validate(q)).flatMap(s -> {
+			Observable<JsonElement> obs = null;
+			if (null == s) {
+				JsonElement from = query.get("from");
+				obs = jsonLever.isJsonArray(from) ? queryAsync(from.getAsJsonArray(), query)
+						: queryAsync(from.getAsJsonObject(), query);
+			} else {
+				Exceptions.propagate(new Throwable(s));
+			}
+			return obs;
+		});
 	}
 
 	/**
@@ -108,19 +102,14 @@ public class JsonQuery {
 	 * @return the observable
 	 */
 	private Observable<JsonElement> queryAsync(JsonArray array, JsonObject query) {
-		return Observable
-				.from(array)
-				.observeOn(Schedulers.computation())
-				.filter(json -> filter(json, query.get("where")))
-				.compose(obs -> {
+		return Observable.from(array).observeOn(Schedulers.computation())
+				.filter(json -> filter(json, query.get("where"))).compose(obs -> {
 					Long limit = jsonLever.getAsLong(query.get("limit"), 0L);
 					return limit > 0 ? obs.limit(limit.intValue()) : obs;
-				})
-				.observeOn(Schedulers.computation())
-				.compose(
-						obs -> StringUtils.equals(jsonLever.getFieldAsString(query, "select"), "count") ? obs.count()
-								.map(count -> new JsonPrimitive(count)) : obs.map(json -> select(json,
-								query.get("select"))));
+				}).observeOn(Schedulers.computation())
+				.compose(obs -> StringUtils.equals(jsonLever.getFieldAsString(query, "select"), "count")
+						? obs.count().map(count -> new JsonPrimitive(count))
+						: obs.map(json -> select(json, query.get("select"))));
 	}
 
 	/**
@@ -131,19 +120,14 @@ public class JsonQuery {
 	 * @return the observable
 	 */
 	private Observable<JsonElement> queryAsync(JsonElement obj, JsonObject query) {
-		return Observable
-				.just(obj)
-				.observeOn(Schedulers.computation())
-				.filter(json -> filter(json, query.get("where")))
+		return Observable.just(obj).observeOn(Schedulers.computation()).filter(json -> filter(json, query.get("where")))
 				.compose(obs -> {
 					Long limit = jsonLever.getAsLong(query.get("limit"), 0L);
 					return limit > 0 ? obs.limit(limit.intValue()) : obs;
-				})
-				.observeOn(Schedulers.computation())
-				.compose(
-						obs -> StringUtils.equals(jsonLever.getFieldAsString(query, "select"), "count") ? obs.count()
-								.map(count -> new JsonPrimitive(count)) : obs.map(json -> select(json,
-								query.get("select"))));
+				}).observeOn(Schedulers.computation())
+				.compose(obs -> StringUtils.equals(jsonLever.getFieldAsString(query, "select"), "count")
+						? obs.count().map(count -> new JsonPrimitive(count))
+						: obs.map(json -> select(json, query.get("select"))));
 	}
 
 	/**
@@ -159,8 +143,7 @@ public class JsonQuery {
 		if (null != selectStr) {
 			if (equalsAny(selectStr, "*"))
 				result = json;
-		}
-		else {
+		} else {
 			if (jsonLever.isJsonArray(selectElement)) {
 				result = jsonLever.getSubset(json, selectElement.getAsJsonArray());
 			}
@@ -184,21 +167,18 @@ public class JsonQuery {
 				if (equalsAny(operator, "&", "&&", "and")) {
 					if (filter) {
 						continue;
-					}
-					else {
+					} else {
 						return filter;
 					}
 				}
 				if (equalsAny(operator, "|", "||", "or")) {
 					if (!filter) {
 						continue;
-					}
-					else {
+					} else {
 						return filter;
 					}
 				}
-			}
-			else if (jsonLever.isJsonObject(condition)) {
+			} else if (jsonLever.isJsonObject(condition)) {
 				String type = jsonLever.getFieldAsString(condition, "type");
 				type = null != type && queryTypes.containsKey(type) ? type : "=";
 				filter = queryTypes.get(type).apply(json, condition.getAsJsonObject());
@@ -215,8 +195,8 @@ public class JsonQuery {
 	 * @return the boolean
 	 */
 	private Boolean equalsFilter(JsonElement json, JsonObject condition) {
-		return jsonLever.getAsJsonElement(condition.get("value"), JsonNull.INSTANCE).equals(
-				jsonLever.getField(json, jsonLever.getAsJsonArray(condition.get("field"), new JsonArray())));
+		return jsonLever.getAsJsonElement(condition.get("value"), JsonNull.INSTANCE)
+				.equals(jsonLever.getField(json, jsonLever.getAsJsonArray(condition.get("field"), new JsonArray())));
 	}
 
 	/**
@@ -238,8 +218,8 @@ public class JsonQuery {
 	 * @return the boolean
 	 */
 	private Boolean inFilter(JsonElement json, JsonObject condition) {
-		return jsonLever.getAsJsonArray(condition.get("value"), new JsonArray()).contains(
-				jsonLever.getField(json, jsonLever.getAsJsonArray(condition.get("field"), new JsonArray())));
+		return jsonLever.getAsJsonArray(condition.get("value"), new JsonArray())
+				.contains(jsonLever.getField(json, jsonLever.getAsJsonArray(condition.get("field"), new JsonArray())));
 	}
 
 	/**
