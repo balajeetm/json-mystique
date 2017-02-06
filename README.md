@@ -49,7 +49,7 @@ The maven dependency snippet is as below
 <dependency>
   <groupId>com.github.balajeetm</groupId>
   <artifactId>json-mystique</artifactId>
-  <version>1.0.7</version>
+  <version>1.0.8</version>
 </dependency>
 ```
 
