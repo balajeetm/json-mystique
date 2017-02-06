@@ -32,7 +32,7 @@ There are three variants of JsonMystique
 #### NOTE
 2.x.x is the only supported version currently. The other versions (0.x.x and 1.x.x) have been deprecated.
 It is highly recommended and suggested, to only use the 2.x.x versions of Mystique.
-Please raise issues, for support on earlier versions.
+Please raise issues, for support if any, on earlier versions.
 
 ### Maven Dependency Snippet
 The maven dependency snippet is as below
@@ -57,7 +57,7 @@ The maven dependency snippet is as below
 <dependency>
   <groupId>com.balajeetm.mystique</groupId>
   <artifactId>json-mystique</artifactId>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
 </dependency>
 ```
 
