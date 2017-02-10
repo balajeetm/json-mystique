@@ -62,7 +62,9 @@ Please raise issues, for support if any, on earlier versions.
 ```
 
 The json mystique spring boot starter autoconfigures the json mystique environment appropriately, creating all the necessary beans.
-It also appropriately configures the [Jackson](https://github.com/FasterXML/jackson) Object Mapper to ensure it can serialise deserialise [Gson](https://github.com/google/gson) objects, iff jackson is in the classpath. In a web environment, it also configures Spring RestTemplate to ensure it can serialise deserialise [Gson](https://github.com/google/gson) objects seamlessly, iff, RestTemplate is in the classpath
+It also appropriately configures the [Jackson](https://github.com/FasterXML/jackson) Object Mapper to ensure it can serialise deserialise [Gson](https://github.com/google/gson) objects, iff jackson is in the classpath. In a web environment, it also configures Spring RestTemplate to ensure it can serialise deserialise [Gson](https://github.com/google/gson) objects seamlessly, iff, RestTemplate is in the classpath.
+
+For more details refer the [usage guide](https://github.com/balajeetm/json-mystique/wiki/Usage-Guide) or the [sample projects](https://github.com/balajeetm/json-mystique/tree/master/json-mystique-samples/mystique-web-sample) for usage
 
 #### Json Mystique - Gson Utilities
 ---
