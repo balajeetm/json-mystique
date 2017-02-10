@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import com.balajeetm.mystique.core.config.JsonMystiqueConfig;
-import com.balajeetm.mystique.core.config.MystiqueMvcConfig;
+import com.balajeetm.mystique.core.config.MystiqueModuleConfig;
 import com.balajeetm.mystique.util.jackson.bean.convertor.JacksonConvertor;
 import com.balajeetm.mystique.util.jackson.config.JacksonUtilConfig;
 import com.balajeetm.mystique.util.json.error.ConvertorException;
@@ -35,7 +35,7 @@ import com.google.gson.JsonElement;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = { JsonMystiqueConfig.class,
-		JacksonUtilConfig.class, MystiqueMvcConfig.class })
+		JacksonUtilConfig.class, MystiqueModuleConfig.class })
 public class GsonJacksonConvertorBDDTest {
 
 	/** The instance. */

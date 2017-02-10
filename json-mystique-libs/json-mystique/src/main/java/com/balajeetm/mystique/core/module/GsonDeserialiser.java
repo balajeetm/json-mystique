@@ -7,7 +7,7 @@
 /*
  * Created on 9 Oct, 2016 by balajeetm
  */
-package com.balajeetm.mystique.core.mvc;
+package com.balajeetm.mystique.core.module;
 
 import java.io.IOException;
 import java.util.Iterator;

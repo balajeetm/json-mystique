@@ -9,7 +9,14 @@
  */
 package com.balajeetm.mystique.samples.controller;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.balajeetm.mystique.core.bean.JsonMystique;
+import com.balajeetm.mystique.samples.util.MystiqueSampleConfig;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -34,6 +43,14 @@ public class SampleController {
 	/** The json mystique. */
 	@Autowired
 	JsonMystique jsonMystique;
+
+	/** The rest template. */
+	@Autowired
+	RestTemplate restTemplate;
+
+	/** The config. */
+	@Autowired
+	MystiqueSampleConfig config;
 
 	/**
 	 * Ping.
@@ -58,6 +75,22 @@ public class SampleController {
 		jsonObject.addProperty("status", Boolean.TRUE);
 		jsonObject.addProperty("msg", msg);
 		return jsonObject;
+	}
+
+	/**
+	 * Rest template.
+	 *
+	 * @return the json element
+	 */
+	@GetMapping(value = { "/resttemplate" })
+	public JsonElement restTemplate() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("JsonStub-User-Key", config.getUserKey());
+		headers.set("JsonStub-Project-Key", config.getProjectKey());
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		RequestEntity<?> requestEntity = new RequestEntity<>(headers, HttpMethod.GET, URI.create(config.getEndpoint()));
+		ResponseEntity<JsonElement> exchange = restTemplate.exchange(requestEntity, JsonElement.class);
+		return exchange.getBody();
 	}
 
 	/**

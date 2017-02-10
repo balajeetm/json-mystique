@@ -40,5 +40,4 @@ public class MystiqueAutoConfiguration {
 	@Import(value = { JsonMystiqueConfig.class })
 	protected static class MystiqueConfiguration {
 	}
-
 }

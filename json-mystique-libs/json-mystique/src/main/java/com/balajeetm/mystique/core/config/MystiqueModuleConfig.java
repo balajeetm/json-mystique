@@ -15,15 +15,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import com.balajeetm.mystique.core.mvc.MystiqueModule;
+import com.balajeetm.mystique.core.module.MystiqueModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * The Class MystiqueMvcConfig.
  */
 @Configuration
-@ComponentScan(basePackages = { "com.balajeetm.mystique.core.mvc" })
-public class MystiqueMvcConfig {
+@ComponentScan(basePackages = { "com.balajeetm.mystique.core.module" })
+public class MystiqueModuleConfig {
 
 	/**
 	 * Object mapper configurer.
@@ -32,7 +32,7 @@ public class MystiqueMvcConfig {
 	 * @return the object mapper configurer
 	 */
 	@Bean
-	public static ObjectMapperConfigurer objectMapperConfigurer(MystiqueModule mystiqueModule) {
+	public ObjectMapperConfigurer objectMapperConfigurer(MystiqueModule mystiqueModule) {
 		return new ObjectMapperConfigurer(mystiqueModule);
 	}
 
