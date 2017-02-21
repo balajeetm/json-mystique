@@ -1,0 +1,22 @@
+{
+  "select": [
+    "name"
+  ],
+  "where": [
+    {
+      "field": [
+        "physique",
+        "height"
+      ],
+      "value": 180
+    },
+    "&&",
+     {
+      "field": [
+        "physique",
+        "weight"
+      ],
+      "value": 75
+    }  
+  ]
+}

@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.util.gson.bean.convertor;
 
@@ -98,7 +99,8 @@ public class GsonConvertor implements JsonConvertor {
 					throws JsonParseException {
 				Date date = null;
 				if (null != json && json.isJsonPrimitive()) {
-					date = new Date(json.getAsJsonPrimitive().getAsLong());
+					date = new Date(json.getAsJsonPrimitive()
+							.getAsLong());
 				}
 				return date;
 			}
@@ -110,7 +112,8 @@ public class GsonConvertor implements JsonConvertor {
 			public JsonElement serialize(XMLGregorianCalendar src, Type typeOfSrc, JsonSerializationContext context) {
 				Date date = null;
 				if (null != src) {
-					date = src.toGregorianCalendar().getTime();
+					date = src.toGregorianCalendar()
+							.getTime();
 				}
 				return new JsonPrimitive(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(date));
 			}

@@ -6,6 +6,7 @@
 
 /*
  * Created on 12 Oct, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.util.gson.bean.lever;
 
@@ -66,7 +67,9 @@ public class JsonQuery {
 			result = queryAsync(query).reduce(new JsonArray(), (resultarray, json) -> {
 				resultarray.add(json);
 				return resultarray;
-			}).toBlocking().first();
+			})
+					.toBlocking()
+					.first();
 		} catch (RuntimeException e) {
 			result = new JsonPrimitive(e.getMessage());
 		}
@@ -81,17 +84,19 @@ public class JsonQuery {
 	 * @return the observable
 	 */
 	public Observable<JsonElement> queryAsync(JsonObject query) {
-		return Observable.just(query).map(q -> validate(q)).flatMap(s -> {
-			Observable<JsonElement> obs = null;
-			if (null == s) {
-				JsonElement from = query.get("from");
-				obs = jsonLever.isJsonArray(from) ? queryAsync(from.getAsJsonArray(), query)
-						: queryAsync(from.getAsJsonObject(), query);
-			} else {
-				Exceptions.propagate(new Throwable(s));
-			}
-			return obs;
-		});
+		return Observable.just(query)
+				.map(q -> validate(q))
+				.flatMap(s -> {
+					Observable<JsonElement> obs = null;
+					if (null == s) {
+						JsonElement from = query.get("from");
+						obs = jsonLever.isJsonArray(from) ? queryAsync(from.getAsJsonArray(), query)
+								: queryAsync(from.getAsJsonObject(), query);
+					} else {
+						Exceptions.propagate(new Throwable(s));
+					}
+					return obs;
+				});
 	}
 
 	/**
@@ -102,13 +107,17 @@ public class JsonQuery {
 	 * @return the observable
 	 */
 	private Observable<JsonElement> queryAsync(JsonArray array, JsonObject query) {
-		return Observable.from(array).observeOn(Schedulers.computation())
-				.filter(json -> filter(json, query.get("where"))).compose(obs -> {
+		return Observable.from(array)
+				.observeOn(Schedulers.computation())
+				.filter(json -> filter(json, query.get("where")))
+				.compose(obs -> {
 					Long limit = jsonLever.getAsLong(query.get("limit"), 0L);
 					return limit > 0 ? obs.limit(limit.intValue()) : obs;
-				}).observeOn(Schedulers.computation())
+				})
+				.observeOn(Schedulers.computation())
 				.compose(obs -> StringUtils.equals(jsonLever.getFieldAsString(query, "select"), "count")
-						? obs.count().map(count -> new JsonPrimitive(count))
+						? obs.count()
+								.map(count -> new JsonPrimitive(count))
 						: obs.map(json -> select(json, query.get("select"))));
 	}
 
@@ -120,13 +129,17 @@ public class JsonQuery {
 	 * @return the observable
 	 */
 	private Observable<JsonElement> queryAsync(JsonElement obj, JsonObject query) {
-		return Observable.just(obj).observeOn(Schedulers.computation()).filter(json -> filter(json, query.get("where")))
+		return Observable.just(obj)
+				.observeOn(Schedulers.computation())
+				.filter(json -> filter(json, query.get("where")))
 				.compose(obs -> {
 					Long limit = jsonLever.getAsLong(query.get("limit"), 0L);
 					return limit > 0 ? obs.limit(limit.intValue()) : obs;
-				}).observeOn(Schedulers.computation())
+				})
+				.observeOn(Schedulers.computation())
 				.compose(obs -> StringUtils.equals(jsonLever.getFieldAsString(query, "select"), "count")
-						? obs.count().map(count -> new JsonPrimitive(count))
+						? obs.count()
+								.map(count -> new JsonPrimitive(count))
 						: obs.map(json -> select(json, query.get("select"))));
 	}
 
@@ -181,7 +194,8 @@ public class JsonQuery {
 			} else if (jsonLever.isJsonObject(condition)) {
 				String type = jsonLever.getFieldAsString(condition, "type");
 				type = null != type && queryTypes.containsKey(type) ? type : "=";
-				filter = queryTypes.get(type).apply(json, condition.getAsJsonObject());
+				filter = queryTypes.get(type)
+						.apply(json, condition.getAsJsonObject());
 			}
 		}
 		return filter;
@@ -233,18 +247,22 @@ public class JsonQuery {
 		return !inFilter(json, condition);
 	}
 
-	/**
-	 * Equals any.
-	 *
-	 * @param str the str
-	 * @param matches the matches
-	 * @return the boolean
-	 */
-	private Boolean equalsAny(String str, String... matches) {
+	private Boolean equalsAll(String str, String... matches) {
 		Boolean equals = Boolean.TRUE;
 		for (String string : matches) {
 			equals = equals && StringUtils.equals(str, string);
 			if (!equals) {
+				break;
+			}
+		}
+		return equals;
+	}
+
+	private Boolean equalsAny(String str, String... matches) {
+		Boolean equals = Boolean.FALSE;
+		for (String string : matches) {
+			equals = equals || StringUtils.equals(str, string);
+			if (equals) {
 				break;
 			}
 		}

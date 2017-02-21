@@ -6,19 +6,24 @@
 
 /*
  * Created on 10 Feb, 2017 by balajeetm
+ * 
  */
 package com.balajeetm.mystique.samples.util;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
 
 /**
  * The Class MystiqueSampleConfig.
+ *
+ * @author balajeetm
  */
 @ConfigurationProperties(prefix = "mystique.rest")
+@Validated
 @Component
 
 /**
@@ -28,15 +33,13 @@ import lombok.Data;
 public class MystiqueSampleConfig {
 
 	/** The user key. */
-	@Value("${userKey}")
 	String userKey;
 
 	/** The project key. */
-	@Value("${projectKey}")
 	String projectKey;
 
 	/** The endpoint. */
-	@Value("${endpoint}")
+	@NotEmpty
 	String endpoint;
 
 }

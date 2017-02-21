@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core.bean;
 
@@ -30,7 +31,8 @@ import com.google.gson.JsonObject;
 public class MystiqueFactory {
 
 	/** The logger. */
-	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	protected Logger logger = LoggerFactory.getLogger(this.getClass()
+			.getName());
 
 	/** The context. */
 	@Autowired
@@ -58,60 +60,46 @@ public class MystiqueFactory {
 
 			if (jsonLever.isNull(turn)) {
 				mystique = context.getBean(CopyMystTurn.class);
-			}
-			else {
+			} else {
 				String turnType = jsonLever.getAsString(turn.get(MysCon.TYPE), MysCon.EMPTY);
 				if (StringUtils.isEmpty(turnType) || StringUtils.equalsIgnoreCase(turnType, MysType.copy.name())) {
 					mystique = context.getBean(CopyMystTurn.class);
-				}
-				else if (StringUtils.equalsIgnoreCase(turnType, MysType.mystique.name())) {
+				} else if (StringUtils.equalsIgnoreCase(turnType, MysType.mystique.name())) {
 					mystique = context.getBean(MystiqueMystTurn.class);
-				}
-				else if (StringUtils.equalsIgnoreCase(turnType, MysType.bean.name())) {
+				} else if (StringUtils.equalsIgnoreCase(turnType, MysType.bean.name())) {
 					String bean = jsonLever.getAsString(turn.get(MysCon.VALUE), MysCon.EMPTY);
 					try {
 						mystique = (MystTurn) context.getBean(Class.forName(bean));
-					}
-					catch (ClassNotFoundException | ClassCastException e) {
+					} catch (ClassNotFoundException | ClassCastException e) {
 						logger.error(
 								String.format("Invalid mystique. Error while getting mystique %s : %s", turn,
-										e.getMessage()), e);
+										e.getMessage()),
+								e);
 					}
-				}
-				else if (StringUtils.equalsIgnoreCase(turnType, MysType.constant.name())) {
+				} else if (StringUtils.equalsIgnoreCase(turnType, MysType.constant.name())) {
 					mystique = context.getBean(ConstantMystTurn.class);
-				}
-				else if (StringUtils.equalsIgnoreCase(turnType, MysType.concat.name())) {
+				} else if (StringUtils.equalsIgnoreCase(turnType, MysType.concat.name())) {
 					mystique = context.getBean(ConcatMystTurn.class);
-				}
-				else if (StringUtils.equalsIgnoreCase(turnType, MysType.arrayToMap.name())) {
+				} else if (StringUtils.equalsIgnoreCase(turnType, MysType.arrayToMap.name())) {
 					mystique = context.getBean(ArrayToMapMystTurn.class);
-				}
-				else if (StringUtils.equalsIgnoreCase(turnType, MysType.getFromDeps.name())) {
+				} else if (StringUtils.equalsIgnoreCase(turnType, MysType.getFromDeps.name())) {
 					mystique = context.getBean(GetFromDepsMystTurn.class);
-				}
-				else if (StringUtils.equalsIgnoreCase(turnType, MysType.condition.name())) {
+				} else if (StringUtils.equalsIgnoreCase(turnType, MysType.condition.name())) {
 					mystique = context.getBean(ConditionMystTurn.class);
-				}
-				else if (StringUtils.equalsIgnoreCase(turnType, MysType.dateConvertor.name())) {
+				} else if (StringUtils.equalsIgnoreCase(turnType, MysType.dateConvertor.name())) {
 					mystique = context.getBean(DateMystTurn.class);
-				}
-				else if (StringUtils.equalsIgnoreCase(turnType, MysType.stringUtils.name())) {
+				} else if (StringUtils.equalsIgnoreCase(turnType, MysType.stringUtils.name())) {
 					mystique = context.getBean(StringUtilsMystTurn.class);
-				}
-				else if (StringUtils.equalsIgnoreCase(turnType, MysType.toggle.name())) {
+				} else if (StringUtils.equalsIgnoreCase(turnType, MysType.toggle.name())) {
 					mystique = context.getBean(ToggleMystTurn.class);
-				}
-				else if (StringUtils.equalsIgnoreCase(turnType, MysType.chain.name())) {
+				} else if (StringUtils.equalsIgnoreCase(turnType, MysType.chain.name())) {
 					mystique = context.getBean(ChainMystTurn.class);
-				}
-				else {
+				} else {
 					logger.error(String.format("Invalid mystique %s", turn));
 				}
 			}
 
-		}
-		catch (NoSuchBeanDefinitionException e) {
+		} catch (NoSuchBeanDefinitionException e) {
 			logger.error(String.format("Invalid turn %s defined", turn), e);
 		}
 
@@ -139,8 +127,7 @@ public class MystiqueFactory {
 			default:
 				break;
 			}
-		}
-		catch (NoSuchBeanDefinitionException e) {
+		} catch (NoSuchBeanDefinitionException e) {
 			mystFunction = context.getBean(NowFunction.class);
 		}
 		return mystFunction;

@@ -6,6 +6,7 @@
 
 /*
  * Created on 17 Nov, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core;
 
@@ -34,7 +35,6 @@ public class JsonMystiqueNegativeBDD extends JsonMystiquePositiveBDD {
 	public void init() {
 	}
 
-	
 	/**
 	 * Null date transform17.
 	 */

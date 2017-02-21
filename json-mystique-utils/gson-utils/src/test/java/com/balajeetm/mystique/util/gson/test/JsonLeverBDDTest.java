@@ -6,6 +6,7 @@
 
 /*
  * Created on 13 Sep, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.util.gson.test;
 
@@ -33,7 +34,7 @@ import com.google.gson.JsonParser;
  * @author balajeetm
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {GsonUtilConfig.class})
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = { GsonUtilConfig.class })
 public class JsonLeverBDDTest {
 
 	/** The json lever. */
@@ -60,8 +61,7 @@ public class JsonLeverBDDTest {
 			Assert.assertTrue(merge.isJsonObject());
 
 			Assert.assertEquals(result, merge);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			Assert.assertFalse(e.getMessage(), true);
 		}
 	}
@@ -86,8 +86,7 @@ public class JsonLeverBDDTest {
 			Assert.assertTrue(merge.isJsonObject());
 
 			Assert.assertEquals(result, merge);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			Assert.assertFalse(e.getMessage(), true);
 		}
 	}

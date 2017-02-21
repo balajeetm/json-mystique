@@ -22,6 +22,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<swagger.version>2.6.1</swagger.version>
+		<jsonmystique.version>2.0.3</jsonmystique.version>
 	</properties>
 
 	<dependencies>
@@ -53,11 +55,17 @@
 			<optional>true</optional>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+
 		<!-- InHouse -->
 		<dependency>
 			<groupId>com.balajeetm.mystique</groupId>
 			<artifactId>json-mystique-starter</artifactId>
-			<version>2.0.3</version>
+			<version>${jsonmystique.version}</version>
 		</dependency>
 
 		<!-- Test -->
@@ -71,13 +79,13 @@
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
-			<version>2.5.0</version>
+			<version>${swagger.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.5.0</version>
+			<version>${swagger.version}</version>
 		</dependency>
 
 		<dependency>

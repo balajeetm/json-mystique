@@ -5,6 +5,7 @@
 
 /*
  * Created on 2 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core.test.bean;
 
@@ -37,8 +38,10 @@ public class TestMystTurn implements MystTurn {
 		if (CollectionUtils.isNotEmpty(source)) {
 			JsonElement jsonElement = source.get(0);
 			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.append(StringUtils.strip(jsonElement.toString(), "\"")).append(
-					deps.get("bala").getAsString());
+			stringBuilder.append(StringUtils.strip(jsonElement.toString(), "\""))
+					.append(
+							deps.get("bala")
+									.getAsString());
 			transform = new JsonPrimitive(stringBuilder.toString());
 		}
 		return transform;

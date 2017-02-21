@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.util.gson.bean.convertor;
 
@@ -44,7 +45,8 @@ public final class GsonParametrizedType implements ParameterizedType, Serializab
 	private final List<Type> typeArguments;
 
 	/** The logger. */
-	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	protected Logger logger = LoggerFactory.getLogger(this.getClass()
+			.getName());
 
 	/**
 	 * Instantiates a new gson parametrized type.

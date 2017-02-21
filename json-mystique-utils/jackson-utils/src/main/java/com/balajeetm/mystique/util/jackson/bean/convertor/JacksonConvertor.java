@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.util.jackson.bean.convertor;
 
@@ -240,9 +241,11 @@ public class JacksonConvertor implements JsonConvertor {
 	private <T, U> JavaType getJavaType(Class<T> groupClass, Class<U> pojoType) {
 		JavaType javaType = null;
 		if (List.class.isAssignableFrom(groupClass)) {
-			javaType = TypeFactory.defaultInstance().constructCollectionType(List.class, pojoType);
+			javaType = TypeFactory.defaultInstance()
+					.constructCollectionType(List.class, pojoType);
 		} else if (Collection.class.isAssignableFrom(groupClass)) {
-			javaType = TypeFactory.defaultInstance().constructCollectionType(Collection.class, pojoType);
+			javaType = TypeFactory.defaultInstance()
+					.constructCollectionType(Collection.class, pojoType);
 		}
 		return javaType;
 	}

@@ -6,6 +6,7 @@
 
 /*
  * Created on 19 Sep, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core.test.bean;
 
@@ -27,7 +28,7 @@ import com.google.gson.JsonPrimitive;
  */
 @Component
 public class CustomMystTurn extends AbstractMystTurn {
-	
+
 	public CustomMystTurn() {
 		System.out.println("A");
 	}

@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core.bean;
 
@@ -38,7 +39,8 @@ public abstract class AbstractMystTurn implements MystTurn {
 	protected MystiqueFactory factory;
 
 	/** The logger. */
-	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	protected Logger logger = LoggerFactory.getLogger(this.getClass()
+			.getName());
 
 	/*
 	 * (non-Javadoc)

@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Jan, 2017 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.samples.controller;
 
@@ -83,14 +84,14 @@ public class SampleController {
 	 * @return the json element
 	 */
 	@GetMapping(value = { "/resttemplate" })
-	public JsonElement restTemplate() {
+	public ResponseEntity<JsonElement> restTemplate() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("JsonStub-User-Key", config.getUserKey());
 		headers.set("JsonStub-Project-Key", config.getProjectKey());
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		RequestEntity<?> requestEntity = new RequestEntity<>(headers, HttpMethod.GET, URI.create(config.getEndpoint()));
 		ResponseEntity<JsonElement> exchange = restTemplate.exchange(requestEntity, JsonElement.class);
-		return exchange.getBody();
+		return exchange;
 	}
 
 	/**

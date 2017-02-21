@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core.config;
 
@@ -21,7 +22,7 @@ import com.balajeetm.mystique.util.gson.config.GsonUtilConfig;
  * @author balajeetm
  */
 @Configuration
-@ComponentScan(basePackages = {"com.balajeetm.mystique.core.bean"})
+@ComponentScan(basePackages = { "com.balajeetm.mystique.core.bean" })
 @Import(GsonUtilConfig.class)
 public class JsonMystiqueConfig {
 }

@@ -6,6 +6,7 @@
 
 /*
  * Created on 9 Oct, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core.module;
 
@@ -69,7 +70,8 @@ public class GsonDeserialiser<T extends JsonElement> extends StdDeserializer<T> 
 	 */
 	@Override
 	public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-		JsonNode node = p.getCodec().readTree(p);
+		JsonNode node = p.getCodec()
+				.readTree(p);
 		return deserialize(node);
 	}
 
@@ -92,8 +94,7 @@ public class GsonDeserialiser<T extends JsonElement> extends StdDeserializer<T> 
 					jsonObject.add(next.getKey(), deserialize(next.getValue()));
 				}
 				result = jsonObject;
-			}
-			else if (node.isArray()) {
+			} else if (node.isArray()) {
 				ArrayNode anode = (ArrayNode) node;
 				JsonArray jsonArray = new JsonArray();
 				Iterator<JsonNode> elements = anode.elements();
@@ -101,15 +102,12 @@ public class GsonDeserialiser<T extends JsonElement> extends StdDeserializer<T> 
 					jsonArray.add(deserialize(elements.next()));
 				}
 				result = jsonArray;
-			}
-			else if (node.isBoolean()) {
+			} else if (node.isBoolean()) {
 				result = new JsonPrimitive(node.asBoolean());
-			}
-			else if (node.isNumber()) {
+			} else if (node.isNumber()) {
 				NumericNode nnode = (NumericNode) node;
 				result = new JsonPrimitive(nnode.numberValue());
-			}
-			else if (node.isTextual()) {
+			} else if (node.isTextual()) {
 				TextNode tnode = (TextNode) node;
 				result = new JsonPrimitive(tnode.textValue());
 			}

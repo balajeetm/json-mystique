@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.util.gson.bean.lever;
 
@@ -46,7 +47,8 @@ import lombok.Getter;
 public class JsonLever {
 
 	/** The logger. */
-	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	protected Logger logger = LoggerFactory.getLogger(this.getClass()
+			.getName());
 
 	/** The index pat. */
 	private static String indexPat = "^\\[(\\d+)\\]$";
@@ -271,10 +273,12 @@ public class JsonLever {
 		 * This means, the path refers to a json object field
 		 **/
 		if (null == index) {
-			output = source.getAsJsonObject().get(key);
+			output = source.getAsJsonObject()
+					.get(key);
 		} else {
 			/** Get the field from the array **/
-			output = source.getAsJsonArray().get(index);
+			output = source.getAsJsonArray()
+					.get(index);
 		}
 		return output;
 	}
@@ -399,7 +403,8 @@ public class JsonLever {
 					JsonElement subset = getField(source, pathArray, deps, aces);
 					setField(finalValue.getAsJsonObject(), pathArray, subset, aces);
 				}
-				finalValue = finalValue.getAsJsonObject().get(MysCon.RESULT);
+				finalValue = finalValue.getAsJsonObject()
+						.get(MysCon.RESULT);
 			} else {
 				finalValue = getField(source, jPathArray, deps, aces);
 			}
@@ -461,12 +466,14 @@ public class JsonLever {
 					Integer currentIndex = null;
 					Iterator<JsonElement> iterator = to.iterator();
 					if (iterator.hasNext()) {
-						previous = getPathField(iterator.next().getAsString(), aces);
+						previous = getPathField(iterator.next()
+								.getAsString(), aces);
 						prevIndex = getIndex(previous);
 					}
 
 					while (iterator.hasNext()) {
-						current = getPathField(iterator.next().getAsString(), aces);
+						current = getPathField(iterator.next()
+								.getAsString(), aces);
 
 						prevIndex = null != prevIndex ? prevIndex : getIndex(previous);
 						currentIndex = null != currentIndex ? currentIndex : getIndex(current);
@@ -499,12 +506,14 @@ public class JsonLever {
 					if (null == prevIndex) {
 						field = getRepleteField(field, JsonType.Object);
 						result = updateResult(result, field);
-						field.getAsJsonObject().add(previous, value);
+						field.getAsJsonObject()
+								.add(previous, value);
 					} else {
 						field = getRepleteField(field, JsonType.Array);
 						result = updateResult(result, field);
 						updateFieldValue(field.getAsJsonArray(), prevIndex, JsonType.Null);
-						field.getAsJsonArray().set(prevIndex, value);
+						field.getAsJsonArray()
+								.set(prevIndex, value);
 					}
 				} else {
 					result = merge(result, value);
@@ -791,7 +800,8 @@ public class JsonLever {
 	 * @return the boolean denoting if the source json is a string
 	 */
 	public Boolean isString(JsonElement source) {
-		return isNotNull(source) && source.isJsonPrimitive() && source.getAsJsonPrimitive().isString();
+		return isNotNull(source) && source.isJsonPrimitive() && source.getAsJsonPrimitive()
+				.isString();
 	}
 
 	/**
@@ -801,7 +811,8 @@ public class JsonLever {
 	 * @return the boolean denoting if the source json is a boolean
 	 */
 	public Boolean isBoolean(JsonElement source) {
-		return isNotNull(source) && source.isJsonPrimitive() && source.getAsJsonPrimitive().isBoolean();
+		return isNotNull(source) && source.isJsonPrimitive() && source.getAsJsonPrimitive()
+				.isBoolean();
 	}
 
 	/**
@@ -811,7 +822,8 @@ public class JsonLever {
 	 * @return the boolean denoting if the source json is a long
 	 */
 	public Boolean isLong(JsonElement source) {
-		return isNotNull(source) && source.isJsonPrimitive() && source.getAsJsonPrimitive().isNumber();
+		return isNotNull(source) && source.isJsonPrimitive() && source.getAsJsonPrimitive()
+				.isNumber();
 	}
 
 	/**
@@ -1197,7 +1209,8 @@ public class JsonLever {
 		JsonElement result = JsonNull.INSTANCE;
 		source1 = getAsJsonElement(source1, JsonNull.INSTANCE);
 		source2 = getAsJsonElement(source2, JsonNull.INSTANCE);
-		if (source1.getClass().equals(source2.getClass())) {
+		if (source1.getClass()
+				.equals(source2.getClass())) {
 			if (source1.isJsonObject()) {
 				JsonObject obj1 = getAsJsonObject(source1);
 				JsonObject obj2 = getAsJsonObject(source2);

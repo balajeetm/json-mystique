@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core.bean;
 
@@ -36,7 +37,7 @@ public class GetFromDepsMystTurn extends AbstractMystTurn {
 		JsonElement transform = JsonNull.INSTANCE;
 		JsonElement elementSource = mystiqueLever.getFirst(source);
 		if (null != elementSource) {
-			//element source is key
+			// element source is key
 
 			turn = mystiqueLever.getAsJsonObject(turn, new JsonObject());
 			JsonElement granularSource = getGranularSource(elementSource, turn, deps, aces);
@@ -46,7 +47,7 @@ public class GetFromDepsMystTurn extends AbstractMystTurn {
 			JsonElement value = turn.get(MysCon.VALUE);
 			value = mystiqueLever.isNull(value) ? new JsonArray() : value;
 
-			//keymap - The source is deps
+			// keymap - The source is deps
 			JsonObject keyMap = mystiqueLever.getAsJsonObject(mystiqueLever.getField(deps, keyPath, deps, aces),
 					new JsonObject());
 

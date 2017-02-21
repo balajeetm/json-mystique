@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core.bean;
 
@@ -52,13 +53,13 @@ public class ConditionMystTurn extends AbstractMystTurn {
 	 */
 	private Boolean isEquals(JsonElement source, JsonElement expected) {
 		Boolean isEqual = Boolean.FALSE;
-		// This is to check the existence case. The condition is to check the existence of the element
+		// This is to check the existence case. The condition is to check the
+		// existence of the element
 		if (null == expected) {
 			if (mystiqueLever.isNotNull(source)) {
 				isEqual = Boolean.TRUE;
 			}
-		}
-		else {
+		} else {
 			if (mystiqueLever.isNull(source) && expected.isJsonNull()) {
 				isEqual = Boolean.TRUE;
 			}

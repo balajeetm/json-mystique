@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core.bean;
 
@@ -49,7 +50,8 @@ public class LoopySpell implements Spell {
 	private JsonObject resultWrapper;
 
 	/** The logger. */
-	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	protected Logger logger = LoggerFactory.getLogger(this.getClass()
+			.getName());
 
 	/** The json lever. */
 	private MystiqueLever jsonLever;
@@ -86,7 +88,8 @@ public class LoopySpell implements Spell {
 		if (CollectionUtils.isNotEmpty(source)) {
 			transform = new JsonArray();
 			List<CompletableFuture<JsonElement>> cfs = new ArrayList<>();
-			JsonArray jsonArray = source.get(0).getAsJsonArray();
+			JsonArray jsonArray = source.get(0)
+					.getAsJsonArray();
 			for (JsonElement jsonElement : jsonArray) {
 
 				CompletableFuture<JsonElement> transformElement = CompletableFuture.supplyAsync(() -> mystique
@@ -114,7 +117,8 @@ public class LoopySpell implements Spell {
 				}
 				Boolean optional = jsonLever.getAsBoolean(turn.get(MysCon.OPTIONAL), Boolean.FALSE);
 				if (jsonLever.isNotNull(element) || !optional) {
-					transform.getAsJsonArray().add(element);
+					transform.getAsJsonArray()
+							.add(element);
 				}
 			}
 		}

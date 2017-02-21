@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core.bean;
 
@@ -39,10 +40,10 @@ public class CopyMystTurn extends AbstractMystTurn {
 				for (JsonElement jsonElement : source) {
 					JsonElement granularSource = getGranularSource(jsonElement, turn, deps, aces);
 					granularSource = getSubset(granularSource, deps, aces, turn);
-					transform.getAsJsonArray().add(granularSource);
+					transform.getAsJsonArray()
+							.add(granularSource);
 				}
-			}
-			else {
+			} else {
 				JsonElement granularSource = getGranularSource(source.get(0), turn, deps, aces);
 				transform = getSubset(granularSource, deps, aces, turn);
 			}

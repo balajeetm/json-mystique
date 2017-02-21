@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core.bean;
 
@@ -37,7 +38,8 @@ public class TransformFunction implements MystFunction {
 	private MystiqueLever jsonLever;
 
 	/** The logger. */
-	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	protected Logger logger = LoggerFactory.getLogger(this.getClass()
+			.getName());
 
 	/* (non-Javadoc)
 	 * @see com.futuresight.util.mystique.MystFunction#execute(com.google.gson.JsonElement, com.google.gson.JsonObject)
@@ -75,11 +77,11 @@ public class TransformFunction implements MystFunction {
 					break;
 
 				}
-			}
-			catch (ParseException e) {
+			} catch (ParseException e) {
 				logger.warn(
 						String.format("Error while parsing input date %s for format %s : %s", source, formatIn,
-								e.getMessage()), e);
+								e.getMessage()),
+						e);
 			}
 			String outFormat = jsonLever.getAsString(turn.get(MysCon.OUTFORMAT), MysCon.LONG);
 			result = jsonLever.getFormattedDate(inputDate, outFormat);

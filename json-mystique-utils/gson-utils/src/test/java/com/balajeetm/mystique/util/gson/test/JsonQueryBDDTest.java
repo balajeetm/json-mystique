@@ -6,6 +6,7 @@
 
 /*
  * Created on 13 Sep, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.util.gson.test;
 
@@ -37,7 +38,7 @@ import rx.Observable;
  * @author balajeetm
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {GsonUtilConfig.class})
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = { GsonUtilConfig.class })
 public class JsonQueryBDDTest {
 
 	/** The json lever. */
@@ -63,16 +64,111 @@ public class JsonQueryBDDTest {
 			JsonParser jsonParser = jsonLever.getJsonParser();
 			JsonElement sample = jsonParser.parse(new InputStreamReader(samres.getInputStream()));
 			JsonElement query = jsonParser.parse(new InputStreamReader(qres.getInputStream()));
-			jsonLever.getAsJsonObject(query).add("from", sample);
+			jsonLever.getAsJsonObject(query)
+					.add("from", sample);
 
 			JsonElement result = jq.query(query.getAsJsonObject());
 
 			Assert.assertTrue(jsonLever.isJsonArray(result));
-			Assert.assertEquals(1, result.getAsJsonArray().size());
+			Assert.assertEquals(1, result.getAsJsonArray()
+					.size());
 
-			Assert.assertEquals("prajwal", jsonLever.getAsString(result.getAsJsonArray().get(0)));
+			Assert.assertEquals("prajwal", jsonLever.getAsString(result.getAsJsonArray()
+					.get(0)));
+		} catch (Exception e) {
+			Assert.assertFalse(e.getMessage(), true);
 		}
-		catch (Exception e) {
+	}
+
+	/**
+	 * Gets the field equals or.
+	 *
+	 * @return the field equals or
+	 */
+	@Test
+	public void getFieldEqualsOr() {
+		try {
+			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+			Resource samres = resourceResolver.getResource("classpath:jsonQuery/sample1.json");
+			Resource qres = resourceResolver.getResource("classpath:jsonQuery/query5.json");
+
+			JsonParser jsonParser = jsonLever.getJsonParser();
+			JsonElement sample = jsonParser.parse(new InputStreamReader(samres.getInputStream()));
+			JsonElement query = jsonParser.parse(new InputStreamReader(qres.getInputStream()));
+			jsonLever.getAsJsonObject(query)
+					.add("from", sample);
+
+			JsonElement result = jq.query(query.getAsJsonObject());
+
+			Assert.assertTrue(jsonLever.isJsonArray(result));
+			Assert.assertEquals(2, result.getAsJsonArray()
+					.size());
+
+			Assert.assertEquals("prajwal", jsonLever.getAsString(result.getAsJsonArray()
+					.get(0)));
+			Assert.assertEquals("paneesh", jsonLever.getAsString(result.getAsJsonArray()
+					.get(1)));
+		} catch (Exception e) {
+			Assert.assertFalse(e.getMessage(), true);
+		}
+	}
+
+	/**
+	 * Gets the field equals and.
+	 *
+	 * @return the field equals and
+	 */
+	@Test
+	public void getFieldEqualsAnd() {
+		try {
+			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+			Resource samres = resourceResolver.getResource("classpath:jsonQuery/sample1.json");
+			Resource qres = resourceResolver.getResource("classpath:jsonQuery/query6.json");
+
+			JsonParser jsonParser = jsonLever.getJsonParser();
+			JsonElement sample = jsonParser.parse(new InputStreamReader(samres.getInputStream()));
+			JsonElement query = jsonParser.parse(new InputStreamReader(qres.getInputStream()));
+			jsonLever.getAsJsonObject(query)
+					.add("from", sample);
+
+			JsonElement result = jq.query(query.getAsJsonObject());
+
+			Assert.assertTrue(jsonLever.isJsonArray(result));
+			Assert.assertEquals(1, result.getAsJsonArray()
+					.size());
+
+			Assert.assertEquals("prajwal", jsonLever.getAsString(result.getAsJsonArray()
+					.get(0)));
+		} catch (Exception e) {
+			Assert.assertFalse(e.getMessage(), true);
+		}
+	}
+
+	/**
+	 * Gets the field equals and failure.
+	 *
+	 * @return the field equals and failure
+	 */
+	@Test
+	public void getFieldEqualsAndFailure() {
+		try {
+			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+			Resource samres = resourceResolver.getResource("classpath:jsonQuery/sample1.json");
+			Resource qres = resourceResolver.getResource("classpath:jsonQuery/query7.json");
+
+			JsonParser jsonParser = jsonLever.getJsonParser();
+			JsonElement sample = jsonParser.parse(new InputStreamReader(samres.getInputStream()));
+			JsonElement query = jsonParser.parse(new InputStreamReader(qres.getInputStream()));
+			jsonLever.getAsJsonObject(query)
+					.add("from", sample);
+
+			JsonElement result = jq.query(query.getAsJsonObject());
+
+			Assert.assertTrue(jsonLever.isJsonArray(result));
+			Assert.assertEquals(0, result.getAsJsonArray()
+					.size());
+
+		} catch (Exception e) {
 			Assert.assertFalse(e.getMessage(), true);
 		}
 	}
@@ -92,15 +188,16 @@ public class JsonQueryBDDTest {
 			JsonParser jsonParser = jsonLever.getJsonParser();
 			JsonElement sample = jsonParser.parse(new InputStreamReader(samres.getInputStream()));
 			JsonElement query = jsonParser.parse(new InputStreamReader(qres.getInputStream()));
-			jsonLever.getAsJsonObject(query).add("from", sample);
+			jsonLever.getAsJsonObject(query)
+					.add("from", sample);
 
 			JsonElement result = jq.query(query.getAsJsonObject());
 
 			Assert.assertTrue(jsonLever.isJsonArray(result));
-			Assert.assertEquals(2, result.getAsJsonArray().size());
+			Assert.assertEquals(2, result.getAsJsonArray()
+					.size());
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			Assert.assertFalse(e.getMessage(), true);
 		}
 	}
@@ -120,7 +217,8 @@ public class JsonQueryBDDTest {
 			JsonParser jsonParser = jsonLever.getJsonParser();
 			JsonElement sample = jsonParser.parse(new InputStreamReader(samres.getInputStream()));
 			JsonElement query = jsonParser.parse(new InputStreamReader(qres.getInputStream()));
-			jsonLever.getAsJsonObject(query).add("from", sample);
+			jsonLever.getAsJsonObject(query)
+					.add("from", sample);
 
 			Observable<JsonElement> queryAsync = jq.queryAsync(query.getAsJsonObject());
 			queryAsync.subscribe(json -> {
@@ -129,8 +227,7 @@ public class JsonQueryBDDTest {
 				Assert.assertNotEquals("prajwal", str);
 
 			});
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			Assert.assertFalse(e.getMessage(), true);
 		}
 	}
@@ -150,15 +247,16 @@ public class JsonQueryBDDTest {
 			JsonParser jsonParser = jsonLever.getJsonParser();
 			JsonElement sample = jsonParser.parse(new InputStreamReader(samres.getInputStream()));
 			JsonElement query = jsonParser.parse(new InputStreamReader(qres.getInputStream()));
-			jsonLever.getAsJsonObject(query).add("from", sample);
+			jsonLever.getAsJsonObject(query)
+					.add("from", sample);
 
 			JsonElement result = jq.query(query.getAsJsonObject());
 
 			Assert.assertTrue(jsonLever.isJsonArray(result));
-			Assert.assertEquals(2, result.getAsJsonArray().size());
+			Assert.assertEquals(2, result.getAsJsonArray()
+					.size());
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			Assert.assertFalse(e.getMessage(), true);
 		}
 	}
@@ -178,15 +276,16 @@ public class JsonQueryBDDTest {
 			JsonParser jsonParser = jsonLever.getJsonParser();
 			JsonElement sample = jsonParser.parse(new InputStreamReader(samres.getInputStream()));
 			JsonElement query = jsonParser.parse(new InputStreamReader(qres.getInputStream()));
-			jsonLever.getAsJsonObject(query).add("from", sample);
+			jsonLever.getAsJsonObject(query)
+					.add("from", sample);
 
 			JsonElement result = jq.query(query.getAsJsonObject());
 
 			Assert.assertTrue(jsonLever.isJsonArray(result));
-			Assert.assertEquals(3, result.getAsJsonArray().size());
+			Assert.assertEquals(3, result.getAsJsonArray()
+					.size());
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			Assert.assertFalse(e.getMessage(), true);
 		}
 	}
@@ -206,16 +305,18 @@ public class JsonQueryBDDTest {
 			JsonParser jsonParser = jsonLever.getJsonParser();
 			JsonElement sample = jsonParser.parse(new InputStreamReader(samres.getInputStream()));
 			JsonElement query = jsonParser.parse(new InputStreamReader(qres.getInputStream()));
-			jsonLever.getAsJsonObject(query).add("from", sample);
-			jsonLever.getAsJsonObject(query).add("limit", new JsonPrimitive(2));
+			jsonLever.getAsJsonObject(query)
+					.add("from", sample);
+			jsonLever.getAsJsonObject(query)
+					.add("limit", new JsonPrimitive(2));
 
 			JsonElement result = jq.query(query.getAsJsonObject());
 
 			Assert.assertTrue(jsonLever.isJsonArray(result));
-			Assert.assertEquals(2, result.getAsJsonArray().size());
+			Assert.assertEquals(2, result.getAsJsonArray()
+					.size());
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			Assert.assertFalse(e.getMessage(), true);
 		}
 	}

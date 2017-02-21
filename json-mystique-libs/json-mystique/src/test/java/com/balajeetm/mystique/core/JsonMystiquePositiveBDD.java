@@ -6,6 +6,7 @@
 
 /*
  * Created on 17 Nov, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core;
 
@@ -80,16 +81,18 @@ public class JsonMystiquePositiveBDD {
 
 			String string = IOUtils.toString(resource.getInputStream());
 			Resource outputRes = resourceResolver.getResource(outputPattern);
-			JsonElement output = jsonLever.getJsonParser().parse(new InputStreamReader(outputRes.getInputStream()));
+			JsonElement output = jsonLever.getJsonParser()
+					.parse(new InputStreamReader(outputRes.getInputStream()));
 			JsonElement transform = jsonMystique.transform(string, "ptest1");
 			Boolean transformSuccess = transform != null && !transform.isJsonNull() && transform.isJsonObject();
 			Assert.assertTrue(transformSuccess);
-			JsonElement jsonElement = transform.getAsJsonObject().get("ba14");
-			transform.getAsJsonObject().remove("ba14");
+			JsonElement jsonElement = transform.getAsJsonObject()
+					.get("ba14");
+			transform.getAsJsonObject()
+					.remove("ba14");
 			Assert.assertTrue(null != jsonElement && !jsonElement.isJsonNull());
 			Assert.assertEquals(output, transform);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
@@ -224,7 +227,7 @@ public class JsonMystiquePositiveBDD {
 	public void custom16() {
 		testEqual("16Custom");
 	}
-	
+
 	/**
 	 * Test equal.
 	 *
@@ -259,10 +262,10 @@ public class JsonMystiquePositiveBDD {
 					outputPattern);
 			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
 			Resource outputRes = resourceResolver.getResource(outputPattern);
-			JsonElement output = jsonLever.getJsonParser().parse(new InputStreamReader(outputRes.getInputStream()));
+			JsonElement output = jsonLever.getJsonParser()
+					.parse(new InputStreamReader(outputRes.getInputStream()));
 			Assert.assertEquals(output, transform);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
@@ -292,11 +295,11 @@ public class JsonMystiquePositiveBDD {
 					outputPattern);
 			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
 			Resource outputRes = resourceResolver.getResource(outputPattern);
-			JsonElement output = jsonLever.getJsonParser().parse(new InputStreamReader(outputRes.getInputStream()));
+			JsonElement output = jsonLever.getJsonParser()
+					.parse(new InputStreamReader(outputRes.getInputStream()));
 			MystResult subset = jsonComparator.isSubset(output, transform);
 			Assert.assertTrue(subset.getResult());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}

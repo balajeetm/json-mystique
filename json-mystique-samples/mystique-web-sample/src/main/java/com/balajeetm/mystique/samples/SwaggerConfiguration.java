@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Jan, 2017 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.samples;
 
@@ -59,16 +60,8 @@ public class SwaggerConfiguration {
 	 */
 	@Bean
 	public Docket mystiqueApi() {
-		return new Docket(DocumentationType.SWAGGER_2).groupName("mystique-apis").select()
-				.apis(Predicates.or(RequestHandlerSelectors.any())).paths(paths()).build().apiInfo(apiInfo())
-				.pathMapping("/").directModelSubstitute(LocalDate.class, String.class)
-				.genericModelSubstitutes(ResponseEntity.class)
-				.alternateTypeRules(new AlternateTypeRule(
-						typeResolver.resolve(DeferredResult.class,
-								typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
-						typeResolver.resolve(WildcardType.class)))
-				.useDefaultResponseMessages(false).enableUrlTemplating(false)
-				.tags(new Tag("Mystique Web Sample", "Mystique Web Sample ReST Apis"));
+		return getDocket("mystique-apis", paths(), RequestHandlerSelectors.any(), apiInfo(),
+				new Tag("Mystique Web Sample", "Mystique Web Sample ReST Apis"));
 	}
 
 	/**
@@ -78,16 +71,29 @@ public class SwaggerConfiguration {
 	 */
 	@Bean
 	public Docket manapi() {
-		return new Docket(DocumentationType.SWAGGER_2).groupName("mystique-management").select()
-				.apis(Predicates.or(getterMethods())).paths(PathSelectors.regex("/manage.*")).build()
-				.apiInfo(managementInfo()).pathMapping("/").directModelSubstitute(LocalDate.class, String.class)
+		return getDocket("mystique-management", PathSelectors.regex("/manage.*"), Predicates.or(getterMethods()),
+				managementInfo(),
+				new Tag("Mystique Web Sample Management", "Mystique Web Sample Management Apis"));
+	}
+
+	private Docket getDocket(String groupName, Predicate<String> pathPattern, Predicate<RequestHandler> apis,
+			ApiInfo apiinfo, Tag tag) {
+		return new Docket(DocumentationType.SWAGGER_2).groupName(groupName)
+				.select()
+				.apis(apis)
+				.paths(pathPattern)
+				.build()
+				.apiInfo(apiinfo)
+				.pathMapping("/")
+				.directModelSubstitute(LocalDate.class, String.class)
 				.genericModelSubstitutes(ResponseEntity.class)
 				.alternateTypeRules(new AlternateTypeRule(
 						typeResolver.resolve(DeferredResult.class,
 								typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
 						typeResolver.resolve(WildcardType.class)))
-				.useDefaultResponseMessages(false).enableUrlTemplating(false)
-				.tags(new Tag("Mystique Web Sample Management", "Mystique Web Sample Management Apis"));
+				.useDefaultResponseMessages(false)
+				.enableUrlTemplating(false)
+				.tags(tag);
 	}
 
 	/**
@@ -106,7 +112,7 @@ public class SwaggerConfiguration {
 	 */
 	private Predicate<RequestHandler> getterMethods() {
 		return input -> {
-			Set<RequestMethod> methods = input.getRequestMapping().getMethodsCondition().getMethods();
+			Set<RequestMethod> methods = input.supportedMethods();
 			return CollectionUtils.isEmpty(methods) || methods.contains(RequestMethod.GET);
 		};
 	}

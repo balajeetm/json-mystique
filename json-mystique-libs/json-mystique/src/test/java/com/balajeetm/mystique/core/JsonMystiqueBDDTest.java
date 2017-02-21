@@ -6,6 +6,7 @@
 
 /*
  * Created on 17 Nov, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core;
 
@@ -24,7 +25,8 @@ import com.balajeetm.mystique.core.test.bean.TestConfig;
  * @author balajeetm
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {JsonMystiqueConfig.class, TestConfig.class})
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = { JsonMystiqueConfig.class,
+		TestConfig.class })
 public class JsonMystiqueBDDTest extends JsonMystiqueNegativeBDD {
 
 	/**
@@ -32,7 +34,7 @@ public class JsonMystiqueBDDTest extends JsonMystiqueNegativeBDD {
 	 */
 	public JsonMystiqueBDDTest() {
 	}
-	
+
 	/**
 	 * Inits the.
 	 */

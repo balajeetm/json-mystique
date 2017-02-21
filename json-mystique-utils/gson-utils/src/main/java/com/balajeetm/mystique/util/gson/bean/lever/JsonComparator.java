@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.util.gson.bean.lever;
 
@@ -85,8 +86,7 @@ public class JsonComparator {
 			JsonElement actual = jsonParser.parse(actualStr);
 			JsonElement subset = jsonParser.parse(subsetStr);
 			isSubset("root", subset, actual, result);
-		}
-		catch (RuntimeException e) {
+		} catch (RuntimeException e) {
 			result.setResult(Boolean.FALSE);
 			result.addMsg(String.format("Exception % s occured", e.getMessage()));
 		}
@@ -104,8 +104,7 @@ public class JsonComparator {
 		MystResult result = new MystResult();
 		try {
 			isSubset("root", subset, actual, result);
-		}
-		catch (RuntimeException e) {
+		} catch (RuntimeException e) {
 			result.setResult(Boolean.FALSE);
 			result.addMsg(String.format("Exception % s occured", e.getMessage()));
 		}
@@ -129,11 +128,13 @@ public class JsonComparator {
 			result.addMsg(String.format("The field %s of actual is null", tag));
 		}
 
-		else if (!subset.getClass().getCanonicalName().equals(actual.getClass().getCanonicalName())) {
+		else if (!subset.getClass()
+				.getCanonicalName()
+				.equals(actual.getClass()
+						.getCanonicalName())) {
 			result.setResult(Boolean.FALSE);
 			result.addMsg(String.format("The field %s of expected and actual are not of the same type", tag));
-		}
-		else {
+		} else {
 			if (subset.isJsonObject()) {
 				JsonObject subJson = jsonLever.getAsJsonObject(subset);
 				JsonObject actJson = jsonLever.getAsJsonObject(actual);
@@ -144,23 +145,20 @@ public class JsonComparator {
 					JsonElement actualValue = actJson.get(key);
 					isSubset(key, value, actualValue, result);
 				}
-			}
-			else if (subset.isJsonArray()) {
+			} else if (subset.isJsonArray()) {
 				JsonArray subJson = jsonLever.getAsJsonArray(subset);
 				JsonArray actJson = jsonLever.getAsJsonArray(actual);
 				if (subJson.size() != actJson.size()) {
 					result.setResult(Boolean.FALSE);
 					result.addMsg(String.format("The field %s of expected and actual are not of same size", tag));
 
-				}
-				else {
+				} else {
 					for (int i = 0; i < subJson.size(); i++) {
 						isSubset(tag, subJson.get(i), actJson.get(i), result);
 					}
 				}
 
-			}
-			else {
+			} else {
 				if (!subset.equals(actual)) {
 					result.setResult(Boolean.FALSE);
 					result.addMsg(String.format("The field %s of expected and actual are not same", tag));

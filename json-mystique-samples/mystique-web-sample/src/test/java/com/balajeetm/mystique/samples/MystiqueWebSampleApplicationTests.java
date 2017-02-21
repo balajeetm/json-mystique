@@ -6,6 +6,7 @@
 
 /*
  * Created on 26 Jan, 2017 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.samples;
 
@@ -71,7 +72,8 @@ public class MystiqueWebSampleApplicationTests {
 	@Test
 	public void pingTest() {
 		String body = this.restTemplate.getForObject("/mystique/ping", String.class);
-		Assertions.assertThat(body).isEqualTo("Ping Working");
+		Assertions.assertThat(body)
+				.isEqualTo("Ping Working");
 	}
 
 	/**
@@ -102,8 +104,10 @@ public class MystiqueWebSampleApplicationTests {
 					JsonElement.class);
 			JsonElement resource = getResource("gsonDeserialise");
 			MystResult subset = comparator.isSubset(resource, response);
-			Assert.assertTrue(Arrays.toString(subset.getMsgs().toArray()), subset.getResult());
-			Assert.assertEquals(payload, jsonLever.getAsJsonObject(response).get("payload"));
+			Assert.assertTrue(Arrays.toString(subset.getMsgs()
+					.toArray()), subset.getResult());
+			Assert.assertEquals(payload, jsonLever.getAsJsonObject(response)
+					.get("payload"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
@@ -138,7 +142,8 @@ public class MystiqueWebSampleApplicationTests {
 	private JsonElement getResource(String fileName) throws JsonIOException, JsonSyntaxException, IOException {
 		ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
 		Resource outputRes = resourceResolver.getResource(String.format(fileFormat, fileName));
-		return jsonLever.getJsonParser().parse(new InputStreamReader(outputRes.getInputStream()));
+		return jsonLever.getJsonParser()
+				.parse(new InputStreamReader(outputRes.getInputStream()));
 	}
 
 }

@@ -6,6 +6,7 @@
 
 /*
  * Created on 9 Oct, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core.module;
 
@@ -62,8 +63,7 @@ public class GsonSerialiser extends StdSerializer<JsonElement> {
 	public void serialize(JsonElement value, JsonGenerator gen, SerializerProvider provider) throws IOException {
 		if (jsonLever.isNull(value)) {
 			gen.writeNull();
-		}
-		else if (jsonLever.isJsonObject(value)) {
+		} else if (jsonLever.isJsonObject(value)) {
 			gen.writeStartObject();
 			JsonObject jsonObject = value.getAsJsonObject();
 			for (Entry<String, JsonElement> entry : jsonObject.entrySet()) {
@@ -71,16 +71,14 @@ public class GsonSerialiser extends StdSerializer<JsonElement> {
 				serialize(entry.getValue(), gen, provider);
 			}
 			gen.writeEndObject();
-		}
-		else if (jsonLever.isJsonArray(value)) {
+		} else if (jsonLever.isJsonArray(value)) {
 			gen.writeStartArray();
 			JsonArray jsonArray = value.getAsJsonArray();
 			for (JsonElement jsonElement : jsonArray) {
 				serialize(jsonElement, gen, provider);
 			}
 			gen.writeEndArray();
-		}
-		else if (jsonLever.isJsonPrimitive(value)) {
+		} else if (jsonLever.isJsonPrimitive(value)) {
 			JsonPrimitive jsonPrimitive = value.getAsJsonPrimitive();
 			if (jsonPrimitive.isBoolean()) {
 				gen.writeBoolean(jsonPrimitive.getAsBoolean());
@@ -89,20 +87,15 @@ public class GsonSerialiser extends StdSerializer<JsonElement> {
 				Number nnode = jsonPrimitive.getAsNumber();
 				if (nnode instanceof LazilyParsedNumber) {
 					gen.writeNumber(nnode.toString());
-				}
-				else if (nnode instanceof Integer) {
+				} else if (nnode instanceof Integer) {
 					gen.writeNumber(nnode.intValue());
-				}
-				else if (nnode instanceof Short) {
+				} else if (nnode instanceof Short) {
 					gen.writeNumber(nnode.shortValue());
-				}
-				else if (nnode instanceof BigInteger || nnode instanceof Long) {
+				} else if (nnode instanceof BigInteger || nnode instanceof Long) {
 					gen.writeNumber(nnode.longValue());
-				}
-				else if (nnode instanceof Float) {
+				} else if (nnode instanceof Float) {
 					gen.writeNumber(nnode.floatValue());
-				}
-				else if (nnode instanceof Double || nnode instanceof BigDecimal) {
+				} else if (nnode instanceof Double || nnode instanceof BigDecimal) {
 					gen.writeNumber(nnode.doubleValue());
 				}
 			}

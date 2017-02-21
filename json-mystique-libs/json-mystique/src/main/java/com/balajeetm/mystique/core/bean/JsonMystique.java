@@ -6,6 +6,7 @@
 
 /*
  * Created on 25 Aug, 2016 by balajeetm
+ * http://www.balajeetm.com
  */
 package com.balajeetm.mystique.core.bean;
 
@@ -47,7 +48,8 @@ import com.google.gson.JsonSyntaxException;
 public class JsonMystique {
 
 	/** The logger. */
-	protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	protected Logger logger = LoggerFactory.getLogger(this.getClass()
+			.getName());
 
 	/** The factory. */
 	@Autowired
@@ -141,7 +143,8 @@ public class JsonMystique {
 	 * @return the json element
 	 */
 	public JsonElement transform(String inputJson, String specName) {
-		JsonElement source = jsonLever.getJsonParser().parse(inputJson);
+		JsonElement source = jsonLever.getJsonParser()
+				.parse(inputJson);
 		return transform(source, specName);
 	}
 
@@ -165,7 +168,8 @@ public class JsonMystique {
 	 * @return the json element
 	 */
 	public JsonElement transform(String inputJson, String specName, JsonObject deps) {
-		JsonElement source = jsonLever.getJsonParser().parse(inputJson);
+		JsonElement source = jsonLever.getJsonParser()
+				.parse(inputJson);
 		return transform(source, specName, deps);
 	}
 
@@ -289,11 +293,12 @@ public class JsonMystique {
 							gsonConvertor.deserialize(aces, JsonObject.class));
 					jsonLever.simpleMerge(updatedAces, parentAces);
 					return updatedAces;
-				}).exceptionally(e -> {
-					String msg = String.format("Error updating aces for turn %s - %s", turn, e.getMessage());
-					logger.info(msg, e);
-					return parentAces;
-				});
+				})
+						.exceptionally(e -> {
+							String msg = String.format("Error updating aces for turn %s - %s", turn, e.getMessage());
+							logger.info(msg, e);
+							return parentAces;
+						});
 
 				CompletableFuture<JsonElement> transformAsync = getAces.thenApplyAsync((aces) -> {
 					JsonElement transform = JsonNull.INSTANCE;
@@ -301,12 +306,14 @@ public class JsonMystique {
 					MystTurn mystique = factory.getMystTurn(turn);
 					transform = spell.cast(mystique);
 					return transform;
-				}).exceptionally((e) -> {
-					String msg = String.format("Error transforming input with specification for turn %s - %s", turn,
-							e.getMessage());
-					logger.info(msg, e);
-					return JsonNull.INSTANCE;
-				});
+				})
+						.exceptionally((e) -> {
+							String msg = String.format("Error transforming input with specification for turn %s - %s",
+									turn,
+									e.getMessage());
+							logger.info(msg, e);
+							return JsonNull.INSTANCE;
+						});
 
 				CompletableFuture<JsonObject> setResult = getAces
 						.thenCombine(transformAsync, (aces, transform) -> jsonLever.setField(resultWrapper,
