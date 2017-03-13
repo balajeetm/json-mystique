@@ -816,12 +816,12 @@ public class JsonLever {
 	}
 
 	/**
-	 * Checks if the source json is a long.
+	 * Checks if the source json is a number.
 	 *
 	 * @param source the source json element
-	 * @return the boolean denoting if the source json is a long
+	 * @return the boolean denoting if the source json is a number
 	 */
-	public Boolean isLong(JsonElement source) {
+	public Boolean isNumber(JsonElement source) {
 		return isNotNull(source) && source.isJsonPrimitive() && source.getAsJsonPrimitive()
 				.isNumber();
 	}
@@ -1050,7 +1050,7 @@ public class JsonLever {
 	 * @return the source json as a long
 	 */
 	public Long getAsLong(JsonElement source, Long defaultLong) {
-		return isLong(source) ? (Long) source.getAsLong() : defaultLong;
+		return isNumber(source) ? (Long) source.getAsLong() : defaultLong;
 	}
 
 	/**
@@ -1061,6 +1061,28 @@ public class JsonLever {
 	 */
 	public Long getAsLong(JsonElement source) {
 		return getAsLong(source, (Long) null);
+	}
+
+	/**
+	 * Returns the source json as an Integer if possible. Else returns the
+	 * default integer
+	 *
+	 * @param source the source json element
+	 * @param defaultInt the default integer
+	 * @return the source json as an integer
+	 */
+	public Integer getAsInt(JsonElement source, Integer defaultInt) {
+		return isNumber(source) ? (Integer) source.getAsInt() : defaultInt;
+	}
+
+	/**
+	 * Returns the source json as an integer if possible. Else returns null
+	 *
+	 * @param source the source json element
+	 * @return the source json as an integer
+	 */
+	public Integer getAsInt(JsonElement source) {
+		return getAsInt(source, (Integer) null);
 	}
 
 	/**

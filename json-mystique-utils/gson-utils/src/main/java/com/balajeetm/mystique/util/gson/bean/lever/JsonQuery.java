@@ -288,7 +288,7 @@ public class JsonQuery {
 			return "where field must be a valid json array";
 		}
 		JsonElement limit = jsonLever.getField(query, "limit");
-		if (jsonLever.isNotNull(limit) && !jsonLever.isLong(limit)) {
+		if (jsonLever.isNotNull(limit) && !jsonLever.isNumber(limit)) {
 			return "limit must be a valid number";
 		}
 		return null;
