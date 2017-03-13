@@ -1,4 +1,4 @@
-* [Usage Guide](/wiki/Usage-Guide)
+* [Usage Guide](/wiki/Usage-Guide.md)
  * [The RuleSet File](https://github.com/balajeetm/json-mystique/wiki/The-RuleSet-File---*.mys)
  * [Attribute To](https://github.com/balajeetm/json-mystique/wiki/Attribute-To)
  * [Attribute From](https://github.com/balajeetm/json-mystique/wiki/Attribute-From)
