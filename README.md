@@ -14,11 +14,11 @@ The transformation is performed via a ruleSet file that specifies the mappings i
 ## Dependencies
 * The library uses maven as its build management
 * The library primarily depends on 
-    * Spring-Context for Spring based wiring and 
-    * [Gson](https://mvnrepository.com/artifact/com.google.code.gson/gson) for json String to Java pojo transformations
+    * [Spring Boot - 1.5.2.RELEASE](http://docs.spring.io/spring-boot/docs/1.5.2.RELEASE/reference/htmlsingle/)
+    * [Spring-Framework - 4.3.7.RELEASE](http://docs.spring.io/spring/docs/4.3.7.RELEASE/spring-framework-reference/htmlsingle/) for IOC and 
+    * [Gson - 21.0](https://mvnrepository.com/artifact/com.google.code.gson/gson) for json String to Java pojo transformations
 
-The actual versions can be found in the pom file
-
+The actual versions can be found in the [pom file](/pom.xml)
 
 ## Maven Download
 
