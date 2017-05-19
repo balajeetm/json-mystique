@@ -14,8 +14,8 @@ The transformation is performed via a ruleSet file that specifies the mappings i
 ## Dependencies
 * The library uses maven as its build management
 * The library primarily depends on 
-    * [Spring Boot - 1.5.2.RELEASE](http://docs.spring.io/spring-boot/docs/1.5.2.RELEASE/reference/htmlsingle/)
-    * [Spring-Framework - 4.3.7.RELEASE](http://docs.spring.io/spring/docs/4.3.7.RELEASE/spring-framework-reference/htmlsingle/) for IOC and 
+    * [Spring Boot - 1.5.3.RELEASE](http://docs.spring.io/spring-boot/docs/1.5.2.RELEASE/reference/htmlsingle/)
+    * [Spring-Framework - 4.3.8.RELEASE](http://docs.spring.io/spring/docs/4.3.7.RELEASE/spring-framework-reference/htmlsingle/) for IOC and 
     * [Gson - 21.0](https://mvnrepository.com/artifact/com.google.code.gson/gson) for json String to Java pojo transformations
 
 The actual versions can be found in the [pom file](/pom.xml)
@@ -33,13 +33,13 @@ The maven dependency snippet for various libs is as below
 There are three variants of JsonMystique
 * [0.x.x](http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C0.0.1%7Cjar) - All the processing of JsonMystique is sequential
 * [1.x.x](http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C1.0.8%7Cjar) - JsonMystique parallely processes various parts of the input Json
-* [2.x.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique%7C2.0.5%7Cjar) - Spring Boot compliant Json Mystique with starters and auto configuration
+* [2.x.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique%7C2.0.6%7Cjar) - Spring Boot compliant Json Mystique with starters and auto configuration
 
 ```xml
 <dependency>
   <groupId>com.balajeetm.mystique</groupId>
   <artifactId>json-mystique</artifactId>
-  <version>2.0.5</version>
+  <version>2.0.6</version>
 </dependency>
 ```
 
@@ -57,7 +57,7 @@ Please raise issues, for support if any, on earlier versions.
 <dependency>
   <groupId>com.balajeetm.mystique</groupId>
   <artifactId>json-mystique-starter</artifactId>
-  <version>2.0.5</version>
+  <version>2.0.6</version>
 </dependency>
 ```
 
@@ -73,7 +73,7 @@ For more details refer the [usage guide](https://github.com/balajeetm/json-mysti
 <dependency>
   <groupId>com.balajeetm.mystique</groupId>
   <artifactId>gson-utils</artifactId>
-  <version>2.0.5</version>
+  <version>2.0.6</version>
 </dependency>
 ```
 
@@ -91,7 +91,7 @@ The utility classes are
 <dependency>
   <groupId>com.balajeetm.mystique</groupId>
   <artifactId>jackson-utils</artifactId>
-  <version>2.0.5</version>
+  <version>2.0.6</version>
 </dependency>
 ```
 
