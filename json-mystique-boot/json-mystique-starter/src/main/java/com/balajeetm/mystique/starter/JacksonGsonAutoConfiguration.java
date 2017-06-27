@@ -10,6 +10,8 @@
  */
 package com.balajeetm.mystique.starter;
 
+import java.io.IOException;
+
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -21,6 +23,8 @@ import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import com.balajeetm.mystique.core.config.MystiqueModuleConfig;
@@ -78,7 +82,20 @@ public class JacksonGsonAutoConfiguration {
 		@ConditionalOnMissingBean(value = { RestTemplate.class })
 		@ConditionalOnClass(value = { MystiqueRestTemplateConfig.class })
 		public RestTemplate mystiqueRestTemplate() {
-			return new RestTemplate();
+			RestTemplate restTemplate = new RestTemplate();
+			// To ensure non 2xx responses do not throw exceptions
+			restTemplate.setErrorHandler(new ResponseErrorHandler() {
+
+				@Override
+				public boolean hasError(ClientHttpResponse response) throws IOException {
+					return false;
+				}
+
+				@Override
+				public void handleError(ClientHttpResponse response) throws IOException {
+				}
+			});
+			return restTemplate;
 		}
 	}
 }

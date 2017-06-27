@@ -24,9 +24,10 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-import rx.Observable;
-import rx.exceptions.Exceptions;
-import rx.schedulers.Schedulers;
+import reactor.core.Exceptions;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 /**
  * The Class JsonQuery.
@@ -57,19 +58,19 @@ public class JsonQuery {
 	/**
 	 * Query.
 	 *
-	 * @param query the query
+	 * @param query
+	 *            the query
 	 * @return the json element
 	 */
 	public JsonElement query(JsonObject query) {
 
 		JsonElement result = null;
 		try {
-			result = queryAsync(query).reduce(new JsonArray(), (resultarray, json) -> {
+			Mono<JsonArray> reduce = queryAsync(query).reduce(new JsonArray(), (resultarray, json) -> {
 				resultarray.add(json);
 				return resultarray;
-			})
-					.toBlocking()
-					.first();
+			});
+			result = reduce.block();
 		} catch (RuntimeException e) {
 			result = new JsonPrimitive(e.getMessage());
 		}
@@ -77,18 +78,12 @@ public class JsonQuery {
 		return result;
 	}
 
-	/**
-	 * Query async.
-	 *
-	 * @param query the query
-	 * @return the observable
-	 */
-	public Observable<JsonElement> queryAsync(JsonObject query) {
-		return Observable.just(query)
+	public Flux<JsonElement> queryAsync(JsonObject query) {
+		return Flux.just(query)
 				.map(q -> validate(q))
 				.flatMap(s -> {
-					Observable<JsonElement> obs = null;
-					if (null == s) {
+					Flux<JsonElement> obs = null;
+					if ("valid".equals(s)) {
 						JsonElement from = query.get("from");
 						obs = jsonLever.isJsonArray(from) ? queryAsync(from.getAsJsonArray(), query)
 								: queryAsync(from.getAsJsonObject(), query);
@@ -102,52 +97,54 @@ public class JsonQuery {
 	/**
 	 * Query async.
 	 *
-	 * @param array the array
-	 * @param query the query
+	 * @param array
+	 *            the array
+	 * @param query
+	 *            the query
 	 * @return the observable
 	 */
-	private Observable<JsonElement> queryAsync(JsonArray array, JsonObject query) {
-		return Observable.from(array)
-				.observeOn(Schedulers.computation())
+	private Flux<JsonElement> queryAsync(JsonArray array, JsonObject query) {
+		return Flux.fromIterable(array)
+				.publishOn(Schedulers.elastic())
 				.filter(json -> filter(json, query.get("where")))
 				.compose(obs -> {
 					Long limit = jsonLever.getAsLong(query.get("limit"), 0L);
-					return limit > 0 ? obs.limit(limit.intValue()) : obs;
+					return limit > 0 ? obs.take(limit.intValue()) : obs;
 				})
-				.observeOn(Schedulers.computation())
-				.compose(obs -> StringUtils.equals(jsonLever.getFieldAsString(query, "select"), "count")
-						? obs.count()
-								.map(count -> new JsonPrimitive(count))
-						: obs.map(json -> select(json, query.get("select"))));
+				.publishOn(Schedulers.elastic())
+				.compose(obs -> StringUtils.equals(jsonLever.getFieldAsString(query, "select"), "count") ? obs.count()
+						.map(count -> new JsonPrimitive(count)) : obs.map(json -> select(json, query.get("select"))));
 	}
 
 	/**
 	 * Query async.
 	 *
-	 * @param obj the obj
-	 * @param query the query
+	 * @param obj
+	 *            the obj
+	 * @param query
+	 *            the query
 	 * @return the observable
 	 */
-	private Observable<JsonElement> queryAsync(JsonElement obj, JsonObject query) {
-		return Observable.just(obj)
-				.observeOn(Schedulers.computation())
+	private Flux<JsonElement> queryAsync(JsonElement obj, JsonObject query) {
+		return Flux.just(obj)
+				.publishOn(Schedulers.elastic())
 				.filter(json -> filter(json, query.get("where")))
 				.compose(obs -> {
 					Long limit = jsonLever.getAsLong(query.get("limit"), 0L);
-					return limit > 0 ? obs.limit(limit.intValue()) : obs;
+					return limit > 0 ? obs.take(limit.intValue()) : obs;
 				})
-				.observeOn(Schedulers.computation())
-				.compose(obs -> StringUtils.equals(jsonLever.getFieldAsString(query, "select"), "count")
-						? obs.count()
-								.map(count -> new JsonPrimitive(count))
-						: obs.map(json -> select(json, query.get("select"))));
+				.publishOn(Schedulers.elastic())
+				.compose(obs -> StringUtils.equals(jsonLever.getFieldAsString(query, "select"), "count") ? obs.count()
+						.map(count -> new JsonPrimitive(count)) : obs.map(json -> select(json, query.get("select"))));
 	}
 
 	/**
 	 * Select.
 	 *
-	 * @param json the json
-	 * @param selectElement the select element
+	 * @param json
+	 *            the json
+	 * @param selectElement
+	 *            the select element
 	 * @return the json element
 	 */
 	private JsonElement select(JsonElement json, JsonElement selectElement) {
@@ -167,8 +164,10 @@ public class JsonQuery {
 	/**
 	 * Filter.
 	 *
-	 * @param json the json
-	 * @param whereElement the where element
+	 * @param json
+	 *            the json
+	 * @param whereElement
+	 *            the where element
 	 * @return the boolean
 	 */
 	private Boolean filter(JsonElement json, JsonElement whereElement) {
@@ -204,8 +203,10 @@ public class JsonQuery {
 	/**
 	 * Equals filter.
 	 *
-	 * @param json the json
-	 * @param condition the condition
+	 * @param json
+	 *            the json
+	 * @param condition
+	 *            the condition
 	 * @return the boolean
 	 */
 	private Boolean equalsFilter(JsonElement json, JsonObject condition) {
@@ -216,8 +217,10 @@ public class JsonQuery {
 	/**
 	 * Not equals filter.
 	 *
-	 * @param json the json
-	 * @param condition the condition
+	 * @param json
+	 *            the json
+	 * @param condition
+	 *            the condition
 	 * @return the boolean
 	 */
 	private Boolean notEqualsFilter(JsonElement json, JsonObject condition) {
@@ -227,8 +230,10 @@ public class JsonQuery {
 	/**
 	 * In filter.
 	 *
-	 * @param json the json
-	 * @param condition the condition
+	 * @param json
+	 *            the json
+	 * @param condition
+	 *            the condition
 	 * @return the boolean
 	 */
 	private Boolean inFilter(JsonElement json, JsonObject condition) {
@@ -239,8 +244,10 @@ public class JsonQuery {
 	/**
 	 * Notin filter.
 	 *
-	 * @param json the json
-	 * @param condition the condition
+	 * @param json
+	 *            the json
+	 * @param condition
+	 *            the condition
 	 * @return the boolean
 	 */
 	private Boolean notinFilter(JsonElement json, JsonObject condition) {
@@ -272,7 +279,8 @@ public class JsonQuery {
 	/**
 	 * Validate.
 	 *
-	 * @param query the query
+	 * @param query
+	 *            the query
 	 * @return the string
 	 */
 	private String validate(JsonObject query) {
@@ -291,7 +299,7 @@ public class JsonQuery {
 		if (jsonLever.isNotNull(limit) && !jsonLever.isNumber(limit)) {
 			return "limit must be a valid number";
 		}
-		return null;
+		return "valid";
 	}
 
 }

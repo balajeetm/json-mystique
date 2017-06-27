@@ -23,13 +23,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * The Class MystiqueMvcConfig.
  */
 @Configuration
-@ComponentScan(basePackages = { "com.balajeetm.mystique.core.module" })
+@ComponentScan(basePackageClasses = { MystiqueModule.class })
 public class MystiqueModuleConfig {
 
 	/**
 	 * Object mapper configurer.
 	 *
-	 * @param mystiqueModule the mystique module
+	 * @param mystiqueModule
+	 *            the mystique module
 	 * @return the object mapper configurer
 	 */
 	@Bean
@@ -48,7 +49,8 @@ public class MystiqueModuleConfig {
 		/**
 		 * Instantiates a new object mapper configurer.
 		 *
-		 * @param mystiqueModule the mystique module
+		 * @param mystiqueModule
+		 *            the mystique module
 		 */
 		public ObjectMapperConfigurer(MystiqueModule mystiqueModule) {
 			this.mystiqueModule = mystiqueModule;
@@ -71,7 +73,8 @@ public class MystiqueModuleConfig {
 		/**
 		 * Post process object mapper.
 		 *
-		 * @param objectMapper the object mapper
+		 * @param objectMapper
+		 *            the object mapper
 		 */
 		private void postProcessObjectMapper(ObjectMapper objectMapper) {
 			objectMapper.registerModule(mystiqueModule);

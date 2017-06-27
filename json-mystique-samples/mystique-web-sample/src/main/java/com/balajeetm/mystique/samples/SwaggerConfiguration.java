@@ -11,6 +11,7 @@
 package com.balajeetm.mystique.samples;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,8 +73,7 @@ public class SwaggerConfiguration {
 	@Bean
 	public Docket manapi() {
 		return getDocket("mystique-management", PathSelectors.regex("/manage.*"), Predicates.or(getterMethods()),
-				managementInfo(),
-				new Tag("Mystique Web Sample Management", "Mystique Web Sample Management Apis"));
+				managementInfo(), new Tag("Mystique Web Sample Management", "Mystique Web Sample Management Apis"));
 	}
 
 	private Docket getDocket(String groupName, Predicate<String> pathPattern, Predicate<RequestHandler> apis,
@@ -129,14 +129,17 @@ public class SwaggerConfiguration {
 	/**
 	 * Info.
 	 *
-	 * @param title the title
-	 * @param description the description
+	 * @param title
+	 *            the title
+	 * @param description
+	 *            the description
 	 * @return the api info
 	 */
 	private ApiInfo info(String title, String description) {
 		return new ApiInfo(title, description, "v1", "http://www.balajeetm.com/",
 				new Contact("BalajeeTM", "http://www.balajeetm.com/", "balajeetm@gmail.com"),
-				"http://www.balajeetm.com/", "http://www.balajeetm.com/");
+				"Apache License Version 2.0",
+				"https://raw.githubusercontent.com/balajeetm/json-mystique/master/LICENSE", new ArrayList<>());
 	}
 
 	/**

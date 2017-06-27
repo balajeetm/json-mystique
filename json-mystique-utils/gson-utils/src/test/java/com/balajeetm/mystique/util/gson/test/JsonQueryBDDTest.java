@@ -30,7 +30,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
-import rx.Observable;
+import reactor.core.publisher.Flux;
 
 /**
  * The Class JsonQueryBDDTest.
@@ -220,7 +220,7 @@ public class JsonQueryBDDTest {
 			jsonLever.getAsJsonObject(query)
 					.add("from", sample);
 
-			Observable<JsonElement> queryAsync = jq.queryAsync(query.getAsJsonObject());
+			Flux<JsonElement> queryAsync = jq.queryAsync(query.getAsJsonObject());
 			queryAsync.subscribe(json -> {
 				Assert.assertTrue(jsonLever.isString(json));
 				String str = jsonLever.getAsString(json);
