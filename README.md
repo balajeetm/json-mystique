@@ -126,5 +126,5 @@ The utility classes are
 
 #### Documentation
 ---
-For more information on the usage and detailed usage guides, refer the [wiki](documentation/Home.md)
+For more information on the usage and detailed usage guides, refer the [documentation home](documentation/Home.md)<br>
 Hop over here for the [documentation index](documentation/_Sidebar.md)
