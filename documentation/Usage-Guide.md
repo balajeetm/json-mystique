@@ -21,40 +21,12 @@ If you are using maven for dependency management, add the below json-mystique de
 ```
 
 #### Step 2
-As previously stated, Json Mystique uses spring for dependency injection and wiring.
-If you are using the native library, Json Mystique beans should be manually added to the component scan path so that they can be boot loaded
-So if you are using Spring already, add the below Json Mystique config to the Spring Configuration as below
+Next, get the instance of JsonMystique to play around with
 
-`@Import(value={JsonMystiqueConfig.class})`
+`JsonMystique mystique = JsonMystique.getInstance()`
 
 ===
 
-### Spring Web, Spring Boot and Gson
----
-Json Mystique uses [Gson](https://github.com/google/gson) for all json serialisation or deserialisation.
-If you familiar with [spring-web](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/spring-web.html), spring by default uses Jackson for the same.
-
-So there are cases when both gson and jackson are in your classpath, especially in spring web applications 
-This isn't particularly a problem. The only catch however is, Jackson cannot deserialise/serialise gson objects.
-What this means is that, if any of your [RestControllers](https://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#mvc-ann-restcontroller) is returning Gson Json Objects, you would get a marshalling error from spring.
-
-To work around the problem, 
-spring suggests you to use Gson as the default serialiser/deserialiser for json objects instead.
-This works like charm.
-
-However, if you are using [SpringBoot's](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/) [Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready), using Gson as the default serialiser would mess up the response.
-This is because actuator heavily depends on Jackson for serialisation/deserialisation by using Jackson's annotations.
-
-This is a sticky problem.
-Json-Mystique provides a solution out of the box for such issues. It can automatically configure the [Jackson](https://github.com/FasterXML/jackson), to serialise/deserialise Gson Json Objects. To do so, add the below Json Mystique config to the Spring Configuration as below
-
-`@Import(value={MystiqueModuleConfig.class})`
-
-In other client web environments, there might be a need to interact with WebServers via Rest APIs. Spring Web provides a powerful client library to make rest calls via RestTemplate. However, RestTemplate by default uses a JacksonHttpMessageConvertor which internally uses the [Jackson](https://github.com/FasterXML/jackson) ObjectMapper. Even in this case, RestTemplate by default cannot serialise deserialise [Gson](https://github.com/google/gson) Json Objects. Json-Mystique provides a solution out of the box for such issues as well. It can automatically configure RestTemplate bean's (remember RestTemplate must be a spring managed bean) ObjectMapper, to serialise/deserialise [Gson](https://github.com/google/gson) Json Objects. To do so, add the below Json Mystique config to the Spring Configuration as below
-
-`@Import(value={MystiqueRestTemplateConfig.class})`
-
-===
 
 ### Json Mystique - Spring Boot Starter
 ---
@@ -80,24 +52,59 @@ Not just that, in a web environment, the Spring's Jackson Http Message Convertor
 
 Cool huh? Great. We are good to get rolling
 
-For more details refer the [sample projects](https://github.com/balajeetm/json-mystique/tree/master/json-mystique-samples/mystique-web-sample) for usage
+For more details refer the [sample projects](../json-mystique-samples/mystique-web-sample) for usage
 
 #### NOTE
 
 Json Mystique's auto-configuration is noninvasive. For example, if you add your own ObjectMapper or RestTemplate bean, the default ObjectMapper and RestTemplate will back away. However, it will ensure it will autoconfigure these custom beans appropriately for json serialisation
 
+===
+
+
+### Spring Web, Spring Boot and Gson
+---
+Json Mystique uses [Gson](https://github.com/google/gson) for all json serialisation or deserialisation.
+If you familiar with [spring-web](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/spring-web.html), spring by default uses Jackson for the same.
+
+So there are cases when both gson and jackson are in your classpath, especially in spring web applications.<br>
+This isn't particularly a problem. The only catch however is, Jackson cannot deserialise/serialise gson objects.
+What this means is that, if any of your [RestControllers](https://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#mvc-ann-restcontroller) is returning Gson Json Objects, you would get a marshalling error from spring.
+
+To work around the problem, 
+spring suggests you to use Gson as the default serialiser/deserialiser for json objects instead.
+This works like charm.
+
+However, if you are using [SpringBoot's](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/) [Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready), using Gson as the default serialiser would mess up the response.
+This is because actuator heavily depends on Jackson for serialisation/deserialisation by using Jackson's annotations.
+
+This is a sticky problem indeed.<br>
+Json-Mystique provides a solution out of the box for such issues. It can automatically configure the [Jackson](https://github.com/FasterXML/jackson), to serialise/deserialise Gson Json Objects.<br>
+If you are using, `json-mystique-starter`, there is nothing more for you do, however, if you are using regular spring or using ObjectMapper natively, register the MystiqueModule to object mapper
+
+```java
+ObjectMapper mapper = new ObjectMapper();
+mapper.registerModule(new MystiqueModule());
+```
+
+In other client web environments, there might be a need to interact with WebServers via Rest APIs. Spring Web provides a powerful client library to make rest calls via RestTemplate. However, RestTemplate by default uses a JacksonHttpMessageConvertor which internally uses the [Jackson](https://github.com/FasterXML/jackson) ObjectMapper. Even in this case, RestTemplate by default cannot serialise deserialise [Gson](https://github.com/google/gson) Json Objects. Json-Mystique provides a solution out of the box for such issues as well. It can automatically configure RestTemplate bean's (remember RestTemplate must be a spring managed bean) ObjectMapper, to serialise/deserialise [Gson](https://github.com/google/gson) Json Objects.<br>
+Again, if you are using, `json-mystique-starter`, there is nothing more for you do.
+
+===
+
 ## Using Json Mystique
 Once json mystique is appropriately configured and all beans are available, json mystique can be used as below for Json transformation
 
 #### Step 1
-Autowire the JsonMystique class into the class where you wish to perform the json transform. This can be done as below
+Grab the JsonMystique instance.<br>
+If you are using sprinng, autowire the JsonMystique class into the class where you wish to perform the json transform. This can be done as below
 
 `@Autowired`
 `private JsonMystique jsonMystique;`
 
-Or if your class had access to application context
-
-`JsonMystique jsonMystique = context.getBean(JsonMystique.class);`
+If you are usinng JsonMystqiue natively, do the below:
+```java
+private JsonMystique = JsonMystique.getInstance();
+```
 
 #### Step 2
 Next, the rule set files for Json Transformation have to be added to the classpath.
@@ -157,4 +164,4 @@ The overloaded methods from getting a string json are as below :
 Another very important concept to grasp wrt Json Mystique is the Rule Set File.
 The rule set file is where the magic is. It specifies all transformations to be carried on the input json.
 
-These transformations are called rules/tarots. Let's jump into the [Rule Set File](https://github.com/balajeetm/json-mystique/wiki/The-RuleSet-File---*.mys) for more details
+These transformations are called rules/tarots. Let's jump into the [Rule Set File](../The-RuleSet-File---*.mys) for more details
