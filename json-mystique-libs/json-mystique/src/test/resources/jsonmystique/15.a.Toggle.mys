@@ -1,0 +1,21 @@
+[
+  {
+    "from": "wardrobe.id.name",
+    "to": "backpack.tag.name"
+  },
+  {
+    "from": "wardrobe.id",
+    "to": "backpack.tag.bloodGroup",
+    "turn": {
+      "type": "toggle",
+      "turns": [
+        {
+          "from": "bGroup"
+        },
+        {
+          "from": "bloodGroup"
+        }
+      ]
+    }
+  }
+]

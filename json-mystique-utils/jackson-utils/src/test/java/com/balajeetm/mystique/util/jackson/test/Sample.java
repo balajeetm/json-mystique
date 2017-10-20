@@ -13,16 +13,13 @@ import java.util.List;
 
 import lombok.Data;
 
-/**
- * Instantiates a new sample.
- */
+/** Instantiates a new sample. */
 @Data
 public class Sample {
 
-	/** The to. */
-	private List<String> to;
+  /** The to. */
+  private List<String> to;
 
-	/** The deps. */
-	private List<Sample> deps;
-
+  /** The deps. */
+  private List<Sample> deps;
 }

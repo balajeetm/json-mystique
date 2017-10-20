@@ -10,11 +10,6 @@
  */
 package com.balajeetm.mystique.core.module;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -27,37 +22,37 @@ import com.google.gson.JsonPrimitive;
  *
  * @author balajeetm
  */
-@Component
 public class MystiqueModule extends SimpleModule {
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 1L;
+  /** The Constant serialVersionUID. */
+  private static final long serialVersionUID = 1L;
 
-	/** The gson deserialiser. */
-	@SuppressWarnings("rawtypes")
-	@Autowired
-	private GsonDeserialiser gsonDeserialiser;
+  /** The gson deserialiser. */
+  @SuppressWarnings("rawtypes")
+  private GsonDeserialiser gsonDeserialiser;
 
-	/** The gson serialiser. */
-	@Autowired
-	private GsonSerialiser gsonSerialiser;
+  /** The gson serialiser. */
+  private GsonSerialiser gsonSerialiser;
 
-	/**
-	 * Inits the.
-	 */
-	@SuppressWarnings("unchecked")
-	@PostConstruct
-	private void init() {
-		this.addDeserializer(JsonElement.class, gsonDeserialiser);
-		this.addSerializer(JsonElement.class, gsonSerialiser);
-		this.addDeserializer(JsonObject.class, gsonDeserialiser);
-		this.addSerializer(JsonObject.class, gsonSerialiser);
-		this.addDeserializer(JsonArray.class, gsonDeserialiser);
-		this.addSerializer(JsonArray.class, gsonSerialiser);
-		this.addDeserializer(JsonPrimitive.class, gsonDeserialiser);
-		this.addSerializer(JsonPrimitive.class, gsonSerialiser);
-		this.addDeserializer(JsonNull.class, gsonDeserialiser);
-		this.addSerializer(JsonNull.class, gsonSerialiser);
-	}
+  /** Instantiates a new mystique module. */
+  public MystiqueModule() {
+    gsonDeserialiser = new GsonDeserialiser<>();
+    gsonSerialiser = new GsonSerialiser();
+    init();
+  }
 
+  /** Inits the. */
+  @SuppressWarnings("unchecked")
+  private void init() {
+    this.addDeserializer(JsonElement.class, gsonDeserialiser);
+    this.addSerializer(JsonElement.class, gsonSerialiser);
+    this.addDeserializer(JsonObject.class, gsonDeserialiser);
+    this.addSerializer(JsonObject.class, gsonSerialiser);
+    this.addDeserializer(JsonArray.class, gsonDeserialiser);
+    this.addSerializer(JsonArray.class, gsonSerialiser);
+    this.addDeserializer(JsonPrimitive.class, gsonDeserialiser);
+    this.addSerializer(JsonPrimitive.class, gsonSerialiser);
+    this.addDeserializer(JsonNull.class, gsonDeserialiser);
+    this.addSerializer(JsonNull.class, gsonSerialiser);
+  }
 }

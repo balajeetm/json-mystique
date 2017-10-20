@@ -6,7 +6,7 @@
 
 /*
  * Created on 10 Feb, 2017 by balajeetm
- * 
+ *
  */
 package com.balajeetm.mystique.samples.util;
 
@@ -26,20 +26,16 @@ import lombok.Data;
 @Validated
 @Component
 
-/**
- * Instantiates a new mystique sample config.
- */
+/** Instantiates a new mystique sample config. */
 @Data
 public class MystiqueSampleConfig {
 
-	/** The user key. */
-	String userKey;
+  /** The user key. */
+  String userKey;
 
-	/** The project key. */
-	String projectKey;
+  /** The project key. */
+  String projectKey;
 
-	/** The endpoint. */
-	@NotEmpty
-	String endpoint;
-
+  /** The endpoint. */
+  @NotEmpty String endpoint;
 }

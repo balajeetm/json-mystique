@@ -1,12 +1,14 @@
-[{
-	"from": ["@ace(readingGlasses)", "[0]"],
-	"to": ["backpack", "@value(case, name)"],
-	"aces" : {
-		"readingGlasses": {
-			"from": ["wardrobe", "spectacles"]
-		},
-		"case": {
-			"from": ["wardrobe", "spectacleCase"]
-		}
-	}
-}]
+[
+  {
+    "from": "@ace(readingGlasses).0",
+    "to": "backpack.@value(case, name)",
+    "aces": {
+      "readingGlasses": {
+        "from": "wardrobe.spectacles"
+      },
+      "case": {
+        "from": "wardrobe.spectacleCase"
+      }
+    }
+  }
+]

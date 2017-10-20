@@ -15,16 +15,10 @@
 		<!-- Spring AOP + AspectJ -->
 		<!-- Google -->
 		<!-- Apache -->
-		<!-- Object Mappers -->
 		<!-- Logging -->
 		<!-- InHouse -->
 		<!-- Test -->
 		<!-- Others -->
 
-		<!-- Spring -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-		</dependency>
 	</dependencies>
 </project>

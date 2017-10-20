@@ -1,0 +1,9 @@
+[
+  {
+    "from": "wardrobe.shirt.[*]",
+    "to": "backpack.shirts",
+    "turn": {
+      "from": "color"
+    }
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "from": "wardrobe.shirt.0",
+    "to": "backpack.shirt"
+  },
+  {
+    "from": "wardrobe.pant.color",
+    "to": "backpack.trouser.color"
+  },
+  {
+    "from": "wardrobe.pant.size",
+    "to": "backpack.trouser.length"
+  },
+  {
+    "from": "wardrobe.towel.color",
+    "to": "backpack.handtowel.1.color"
+  }
+]

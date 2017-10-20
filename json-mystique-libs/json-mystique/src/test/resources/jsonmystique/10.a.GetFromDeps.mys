@@ -1,0 +1,34 @@
+[
+  {
+    "from": "wardrobe.dvd.name",
+    "to": "backpack.movie.name"
+  },
+  {
+    "from": "wardrobe.dvd.genre",
+    "to": "backpack.movie.genre",
+    "turn": {
+      "type": "getFromDeps",
+      "key": "genres.genres.0"
+    },
+    "deps": [
+      {
+        "from": "wardrobe.videoGenreCatalog",
+        "to": "genres.genres.0"
+      }
+    ]
+  },
+  {
+    "from": "wardrobe.dvd.label",
+    "to": "backpack.movie.label",
+    "turn": {
+      "type": "getFromDeps",
+      "key": "genres"
+    },
+    "deps": [
+      {
+        "from": "wardrobe.videoGenres",
+        "to": "genres.genres.1"
+      }
+    ]
+  }
+]

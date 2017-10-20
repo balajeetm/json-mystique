@@ -5,7 +5,7 @@
 	],
 	"to": ["backpack", "player"],
 	"turn": {
-		"type": "bean",
-		"value": "com.balajeetm.mystique.core.test.bean.CustomMystTurn"
+		"type": "custom",
+		"value": "com.balajeetm.mystique.core.test.CustomMystTurn"
 	}
 }]
