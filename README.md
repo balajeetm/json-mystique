@@ -59,7 +59,7 @@ The `1.x.x` and `0.x.x` have reached EOL. `2.x.x` is the only active version as 
 <dependency>
   <groupId>com.balajeetm.mystique</groupId>
   <artifactId>json-mystique</artifactId>
-  <version>2.0.7</version>
+  <version>2.0.8</version>
 </dependency>
 ```
 
@@ -77,7 +77,7 @@ Please raise issues, for support if any, on earlier versions.
 <dependency>
   <groupId>com.balajeetm.mystique</groupId>
   <artifactId>json-mystique-starter</artifactId>
-  <version>2.0.7</version>
+  <version>2.0.8</version>
 </dependency>
 ```
 
@@ -98,7 +98,7 @@ For more details refer the [usage guide](https://github.com/balajeetm/json-mysti
 <dependency>
   <groupId>com.balajeetm.mystique</groupId>
   <artifactId>gson-utils</artifactId>
-  <version>2.0.7</version>
+  <version>2.0.8</version>
 </dependency>
 ```
 
@@ -116,7 +116,7 @@ The utility classes are
 <dependency>
   <groupId>com.balajeetm.mystique</groupId>
   <artifactId>jackson-utils</artifactId>
-  <version>2.0.7</version>
+  <version>2.0.8</version>
 </dependency>
 ```
 
@@ -124,6 +124,7 @@ The json mystique jackson utility library provides a set of utility classes to o
 The utility classes are
 * [Jackson Convertor](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-utils/jackson-utils/src/main/java/com/balajeetm/mystique/util/jackson/bean/convertor/JacksonConvertor.java) - Utility for POJO Object Model Mappingndency>
 
-#### Hop on to the Wiki
+#### Documentation
 ---
-For more information on the usage and detailed usage guides, refer the [wiki](https://github.com/balajeetm/json-mystique/wiki)
+For more information on the usage and detailed usage guides, refer the [wiki](documentation/Home.md)
+Hop over here for the [documentation index](documentation/_Sidebar.md)

@@ -9,69 +9,72 @@ The maven dependency snippet for various libs is as below
 
 #### Json Mystique - Native Library
 ---
-
-There are three variants of JsonMystique
-* [0.x.x](http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C0.0.1%7Cjar) - All the processing of JsonMystique is sequential
-* [1.x.x](http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C1.0.8%7Cjar) - JsonMystique parallely processes various parts of the input Json
-* [2.x.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique%7C2.0.7%7Cjar) - Spring Boot compliant Json Mystique with starters and auto configuration
+[2.x.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique%7C2.0.8%7Cjar) - JsonMystique with parallel processing capabilities
 
 ```xml
 <dependency>
   <groupId>com.balajeetm.mystique</groupId>
   <artifactId>json-mystique</artifactId>
-  <version>2.0.7</version>
+  <version>2.0.8</version>
 </dependency>
 ```
 
-> There is absolutely no change in the usage or the syntax and semantics of the two versions. Moving forward, the parallel processing logic would be mainstream
-
 #### Json Mystique - Spring Boot Starter
 ---
+[2.x.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique-starter%7C2.0.8%7Cjar) - Spring Boot compliant Json Mystique with starters and auto configuration
 
 ```xml
 <dependency>
   <groupId>com.balajeetm.mystique</groupId>
   <artifactId>json-mystique-starter</artifactId>
-  <version>2.0.7</version>
+  <version>2.0.8</version>
 </dependency>
 ```
 
-The json mystique spring boot starter autoconfigures the json mystique environment appropriately, creating all the necessary beans.
-It also appropriately configures the [Jackson](https://github.com/FasterXML/jackson) Object Mapper to ensure it can serialise deserialise [Gson](https://github.com/google/gson) objects, iff jackson is in the classpath. In a web environment, it also configures Spring RestTemplate to ensure it can serialise deserialise [Gson](https://github.com/google/gson) objects seamlessly, iff, RestTemplate is in the classpath
+The json mystique ships with a spring boot starter which autoconfigures the json mystique environment appropriately, creating all the necessary beans. Its primary features are
+* Configures the simple [Jackson](https://github.com/FasterXML/jackson) Json Convertor as a bean
+* Configures the simple Gson](https://github.com/google/gson) Json Convertor as a bean
+* Configures Jackson Object Mapper with the ability to serialise and deserialise Gson Objects (JsonElement)
+* Configures JsonMystique with its appropriate turns as a bean
+* If Spring-web is in the classpath, it connfigures a RestTemplate with the ability to serialise and deserialise Gson Objects (JsonElement)
+* Automatically registers custom Json Mystique `MystTurns` with JsonMystique
 
 #### Json Mystique - Gson Utilities
 ---
+[2.x.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cgson-utils%7C2.0.8%7Cjar) Gson based, Json Manipulation Utilities
 
 ```xml
 <dependency>
   <groupId>com.balajeetm.mystique</groupId>
   <artifactId>gson-utils</artifactId>
-  <version>2.0.7</version>
+  <version>2.0.8</version>
 </dependency>
 ```
 
 The json mystique gson utility library provides a set of utility classes to operate on raw json objects and serialise deserialise POJOs.
 The utility classes are
-* [Gson Convertor](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/bean/convertor/GsonConvertor.java) - Utility for POJO Object Model Mapping
-* [Json Lever](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/bean/lever/JsonLever.java) - Utility to operate on raw json objects. Simplified and type safe use of the Gson library. Allows deep and shallow merge of jsons
-* [Json Query](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/bean/lever/JsonQuery.java) - Utility to perform queries on a json element (can be an object or an array)
-* [Json Comparator](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/bean/lever/JsonComparator.java) - Utility to compare two jsons
+* [Gson Convertor](../json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/convertor/GsonConvertor.java) - Utility for POJO Object Model Mapping
+* [Json Lever](../json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/lever/JsonLever.java) - Utility to operate on raw json objects. Simplified and type safe use of the Gson library. Allows deep and shallow merge of jsons
+* [Json Query](../json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/bean/lever/JsonQuery.java) - Utility to perform queries on a json element (can be an object or an array)
+* [Json Comparator](../json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/bean/lever/JsonComparator.java) - Utility to compare two jsons
 
 #### Json Mystique - Jackson Utilities
 ---
+[2.x.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjackson-utils%7C2.0.8%7Cjar) Jackson based, Json Manipulation Utilities
 
 ```xml
 <dependency>
   <groupId>com.balajeetm.mystique</groupId>
   <artifactId>jackson-utils</artifactId>
-  <version>2.0.7</version>
+  <version>2.0.8</version>
 </dependency>
 ```
 
 The json mystique jackson utility library provides a set of utility classes to operate on raw json objects and serialise deserialise POJOs.
 The utility classes are
-* [Jackson Convertor](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-utils/jackson-utils/src/main/java/com/balajeetm/mystique/util/jackson/bean/convertor/JacksonConvertor.java) - Utility for POJO Object Model Mapping
+* [Jackson Convertor](../json-mystique-utils/jackson-utils/src/main/java/com/balajeetm/mystique/util/jackson/bean/convertor/JacksonConvertor.java) - Utility for POJO Object Model Mapping
 
 ## Usage Guide
 
-For more information on usage, refer [Usage Guide](https://github.com/balajeetm/json-mystique/wiki/Usage-Guide)
+For more information on usage, refer [Usage Guide](../Usage-Guide)
+Hop over here for the [documentation index](documentation/_Sidebar.md)
