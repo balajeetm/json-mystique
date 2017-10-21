@@ -5,9 +5,15 @@
       "com": "Comedy",
       "adu": "Adult"
     },
+  "videoGenres": [
+      "act",
+      "com",
+      "adu"
+    ],
     "dvd": {
       "name": "Rambo",
-      "genre": "act"
+      "genre": "act",
+      "label": "genres.1.0"
     }
   }
 }

@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.4.RELEASE</version>
+		<version>1.5.8.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -23,8 +23,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<swagger.version>2.7.0</swagger.version>
-		<reactor.version>3.0.7.RELEASE</reactor.version>
-		<jsonmystique.version>2.0.7</jsonmystique.version>
+		<reactor.version>3.1.0.RELEASE</reactor.version>
+		<jsonmystique.version>2.0.8-SNAPSHOT</jsonmystique.version>
 	</properties>
 
 	<dependencies>

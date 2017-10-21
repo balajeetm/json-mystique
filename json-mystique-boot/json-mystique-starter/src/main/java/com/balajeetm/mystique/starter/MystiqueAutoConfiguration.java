@@ -10,35 +10,101 @@
  */
 package com.balajeetm.mystique.starter;
 
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import java.io.IOException;
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.HttpMessageConvertersAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.web.client.ResponseErrorHandler;
+import org.springframework.web.client.RestTemplate;
 
-import com.balajeetm.mystique.core.bean.JsonMystique;
-import com.balajeetm.mystique.core.config.JsonMystiqueConfig;
+import com.balajeetm.mystique.core.JsonMystique;
+import com.balajeetm.mystique.core.lever.MystiqueLever;
+import com.balajeetm.mystique.core.module.MystiqueModule;
+import com.balajeetm.mystique.starter.config.JacksonGsonConfig;
+import com.balajeetm.mystique.starter.config.MystiqueConfigurer;
+import com.balajeetm.mystique.starter.config.RestTemplateConfig;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * The Class MystiqueAutoConfiguration. This configuration class is responsible
- * for creating all the necessary beans of Json Mystique and automically load
- * and prepare json mystique files available in the classpath for transformation
+ * The Class MystiqueAutoConfiguration. This configuration class is responsible for creating all the
+ * necessary beans of Json Mystique and automically load and prepare json mystique files available
+ * in the classpath for transformation
  *
  * @author balajeetm
  */
 @Configuration
-@ConditionalOnClass(value = { JsonMystique.class })
-@AutoConfigureAfter(value = { WebMvcAutoConfiguration.class, JacksonAutoConfiguration.class,
-		HttpMessageConvertersAutoConfiguration.class })
 public class MystiqueAutoConfiguration {
 
-	/**
-	 * The Class MystiqueConfiguration.
-	 */
-	@Configuration
-	@Import(value = { JsonMystiqueConfig.class })
-	protected static class MystiqueConfiguration {
-	}
+  /**
+   * Mystique lever.
+   *
+   * @return the mystique lever
+   */
+  @Bean
+  public MystiqueLever mystiqueLever() {
+    return MystiqueLever.getInstance();
+  }
+
+  /**
+   * Json mystique.
+   *
+   * @return the json mystique
+   */
+  @Bean
+  public JsonMystique jsonMystique() {
+    return JsonMystique.getInstance();
+  }
+
+  /**
+   * Mystique configurer.
+   *
+   * @param jsonMystique the json mystique
+   * @return the mystique configurer
+   */
+  public MystiqueConfigurer mystiqueConfigurer(JsonMystique jsonMystique) {
+    return new MystiqueConfigurer(jsonMystique);
+  }
+
+  /** The Class MystiqueModuleConfiguration. */
+  @Configuration
+  @ConditionalOnClass(value = {ObjectMapper.class})
+  @Import(value = {JacksonGsonConfig.class})
+  protected static class MystiqueModuleConfiguration {}
+
+  /** The Class RestTemplateConfiguration. */
+  @Configuration
+  @ConditionalOnBean(value = {MystiqueModule.class})
+  @ConditionalOnClass(value = {RestTemplate.class})
+  @Import(value = {RestTemplateConfig.class})
+  protected static class RestTemplateConfiguration {}
+
+  /**
+   * Mystique rest template.
+   *
+   * @return the rest template
+   */
+  @Bean
+  @ConditionalOnClass(value = {RestTemplate.class})
+  @ConditionalOnMissingBean(value = {RestTemplate.class})
+  public RestTemplate mystiqueRestTemplate() {
+    RestTemplate restTemplate = new RestTemplate();
+    // To ensure non 2xx responses do not throw exceptions
+    restTemplate.setErrorHandler(
+        new ResponseErrorHandler() {
+
+          @Override
+          public boolean hasError(ClientHttpResponse response) throws IOException {
+            return false;
+          }
+
+          @Override
+          public void handleError(ClientHttpResponse response) throws IOException {}
+        });
+    return restTemplate;
+  }
 }

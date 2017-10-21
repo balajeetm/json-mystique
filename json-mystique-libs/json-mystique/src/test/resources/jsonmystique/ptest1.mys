@@ -16,12 +16,12 @@
 		"to": ["ba2"]
 	}, {
 		"from": ["a", "d", "d1"],
-		"to": ["ba3", "ba31", "[0]"]
+		"to": ["ba3", "ba31", 0]
 	}, {
 		"from": ["e"],
-		"to": ["ba3", "ba32", "[1]"]
+		"to": ["ba3", "ba32", 1]
 	}, {
-		"from": ["f", "[0]", "f2", "[1]"],
+		"from": ["f", 0, "f2", 1],
 		"to": ["ba4"]
 	}, {
 		"from": [
@@ -71,8 +71,8 @@
 			"to": ["bala"]
 		}],
 		"turn": {
-			"type": "bean",
-			"value": "com.balajeetm.mystique.core.test.bean.TestMystTurn"
+			"type": "custom",
+			"value": "com.balajeetm.mystique.core.test.TestMystTurn"
 		}
 	}, {
 		"from": ["h", "[*]"],

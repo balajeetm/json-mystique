@@ -12,42 +12,57 @@ package com.balajeetm.mystique.starter;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
-import com.balajeetm.mystique.util.jackson.bean.convertor.JacksonConvertor;
-import com.balajeetm.mystique.util.jackson.config.JacksonMapperConfig;
-import com.balajeetm.mystique.util.jackson.config.JacksonScanConfig;
+import com.balajeetm.mystique.util.jackson.JacksonFactory;
+import com.balajeetm.mystique.util.jackson.convertor.JacksonConvertor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * The Class JacksonUtilAutoConfig. This config class is responsible for
- * automatically creating mystique jackson convertors and registering them with
- * the available jackson object mappers
+ * The Class JacksonUtilAutoConfig. This config class is responsible for automatically creating
+ * mystique jackson convertors and registering them with the available jackson object mappers
  *
  * @author balajeetm
  */
 @Configuration
-@ConditionalOnClass(value = { ObjectMapper.class })
+@ConditionalOnClass(value = {JacksonConvertor.class, JacksonFactory.class})
 public class JacksonUtilAutoConfig {
 
-	/**
-	 * The Class JacksonConvertorConfiguration.
-	 */
-	@Configuration
-	@ConditionalOnClass(value = { JacksonScanConfig.class, JacksonConvertor.class })
-	@Import(value = { JacksonScanConfig.class })
-	protected static class JacksonConvertorConfiguration {
-	}
+  /**
+   * Mystique jacksonn factory.
+   *
+   * @return the jackson factory
+   */
+  @Bean
+  public JacksonFactory mystiqueJacksonnFactory() {
+    return JacksonFactory.getInstance();
+  }
 
-	/**
-	 * The Class ObjectMapperCreationConfiguration.
-	 */
-	@Configuration
-	@ConditionalOnMissingBean(value = { ObjectMapper.class })
-	@ConditionalOnClass(value = { JacksonMapperConfig.class })
-	@Import(value = { JacksonMapperConfig.class })
-	protected static class ObjectMapperCreationConfiguration {
-	}
+  /**
+   * Jackson convertor.
+   *
+   * @return the jackson convertor
+   */
+  @Bean
+  public JacksonConvertor jacksonConvertor() {
+    return (JacksonConvertor) JacksonConvertor.getInstance();
+  }
 
+  /** The Class ObjectMapperCreationConfiguration. */
+  @Configuration
+  @ConditionalOnMissingBean(value = {ObjectMapper.class})
+  protected static class ObjectMapperCreationConfiguration {
+
+    /**
+     * Mystique object mapper.
+     *
+     * @param factory the factory
+     * @return the object mapper
+     */
+    @Bean
+    public ObjectMapper mystiqueObjectMapper(JacksonFactory factory) {
+      return factory.getObjectMapper();
+    }
+  }
 }

@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.balajeetm.mystique.starter.MystiqueAutoConfiguration,\
-com.balajeetm.mystique.starter.JacksonGsonAutoConfiguration,\
-com.balajeetm.mystique.starter.JacksonUtilAutoConfig
+com.balajeetm.mystique.starter.GsonUtilAutoConfig,\
+com.balajeetm.mystique.starter.JacksonUtilAutoConfig,\
+com.balajeetm.mystique.starter.MystiqueAutoConfiguration

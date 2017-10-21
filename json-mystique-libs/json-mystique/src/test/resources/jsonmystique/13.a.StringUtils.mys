@@ -1,0 +1,21 @@
+[
+  {
+    "from": "wardrobe.dvds.[*]",
+    "to": "backpack.movies",
+    "turn": {
+      "type": "mystique",
+      "value": "13.a.Custom"
+    },
+    "deps": [
+      {
+        "from": "wardrobe.videoGenreCatalog",
+        "to": "genres",
+        "turn": {
+          "type": "arrayToMap",
+          "key": "genreCode",
+          "value": "descr"
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "from": "wardrobe.shoes.trekking",
+    "to": "backpack.shoe",
+    "turn": {
+      "type": "condition",
+      "true": {
+        "turn": {
+          "from": "@ace(available).trekking"
+        }
+      },
+      "false": {
+        "turn": {
+          "from": "@ace(available).sports"
+        }
+      },
+      "default": {
+        "value": {
+          "type": "nike",
+          "descr": "new shoe",
+          "size": "13"
+        }
+      }
+    },
+    "aces": {
+      "available": {
+        "from": "wardrobe.shoes"
+      }
+    }
+  }
+]

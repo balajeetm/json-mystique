@@ -46,109 +46,136 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2
-@ComponentScan(basePackages = { "com.balajeetm.mystique.samples" })
+@ComponentScan(basePackages = {"com.balajeetm.mystique.samples"})
 @SuppressWarnings("unchecked")
 public class SwaggerConfiguration {
 
-	/** The type resolver. */
-	@Autowired
-	private TypeResolver typeResolver;
+  /** The type resolver. */
+  @Autowired private TypeResolver typeResolver;
 
-	/**
-	 * Mystique api.
-	 *
-	 * @return the docket
-	 */
-	@Bean
-	public Docket mystiqueApi() {
-		return getDocket("mystique-apis", paths(), RequestHandlerSelectors.any(), apiInfo(),
-				new Tag("Mystique Web Sample", "Mystique Web Sample ReST Apis"));
-	}
+  /**
+   * Mystique api.
+   *
+   * @return the docket
+   */
+  @Bean
+  public Docket mystiqueApi() {
+    return getDocket(
+        "mystique-apis",
+        paths(),
+        RequestHandlerSelectors.any(),
+        apiInfo(),
+        new Tag("Mystique Web Sample", "Mystique Web Sample ReST Apis"));
+  }
 
-	/**
-	 * Manapi.
-	 *
-	 * @return the docket
-	 */
-	@Bean
-	public Docket manapi() {
-		return getDocket("mystique-management", PathSelectors.regex("/manage.*"), Predicates.or(getterMethods()),
-				managementInfo(), new Tag("Mystique Web Sample Management", "Mystique Web Sample Management Apis"));
-	}
+  /**
+   * Manapi.
+   *
+   * @return the docket
+   */
+  @Bean
+  public Docket manapi() {
+    return getDocket(
+        "mystique-management",
+        PathSelectors.regex("/manage.*"),
+        Predicates.or(getterMethods()),
+        managementInfo(),
+        new Tag("Mystique Web Sample Management", "Mystique Web Sample Management Apis"));
+  }
 
-	private Docket getDocket(String groupName, Predicate<String> pathPattern, Predicate<RequestHandler> apis,
-			ApiInfo apiinfo, Tag tag) {
-		return new Docket(DocumentationType.SWAGGER_2).groupName(groupName)
-				.select()
-				.apis(apis)
-				.paths(pathPattern)
-				.build()
-				.apiInfo(apiinfo)
-				.pathMapping("/")
-				.directModelSubstitute(LocalDate.class, String.class)
-				.genericModelSubstitutes(ResponseEntity.class)
-				.alternateTypeRules(new AlternateTypeRule(
-						typeResolver.resolve(DeferredResult.class,
-								typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
-						typeResolver.resolve(WildcardType.class)))
-				.useDefaultResponseMessages(false)
-				.enableUrlTemplating(false)
-				.tags(tag);
-	}
+  /**
+   * Gets the docket.
+   *
+   * @param groupName the group name
+   * @param pathPattern the path pattern
+   * @param apis the apis
+   * @param apiinfo the apiinfo
+   * @param tag the tag
+   * @return the docket
+   */
+  private Docket getDocket(
+      String groupName,
+      Predicate<String> pathPattern,
+      Predicate<RequestHandler> apis,
+      ApiInfo apiinfo,
+      Tag tag) {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName(groupName)
+        .select()
+        .apis(apis)
+        .paths(pathPattern)
+        .build()
+        .apiInfo(apiinfo)
+        .pathMapping("/")
+        .directModelSubstitute(LocalDate.class, String.class)
+        .genericModelSubstitutes(ResponseEntity.class)
+        .alternateTypeRules(
+            new AlternateTypeRule(
+                typeResolver.resolve(
+                    DeferredResult.class,
+                    typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
+                typeResolver.resolve(WildcardType.class)))
+        .useDefaultResponseMessages(false)
+        .enableUrlTemplating(false)
+        .tags(tag);
+  }
 
-	/**
-	 * Paths.
-	 *
-	 * @return the predicate
-	 */
-	private Predicate<String> paths() {
-		return Predicates.or(PathSelectors.regex("/mystique.*"));
-	}
+  /**
+   * Paths.
+   *
+   * @return the predicate
+   */
+  private Predicate<String> paths() {
+    return Predicates.or(PathSelectors.regex("/mystique.*"));
+  }
 
-	/**
-	 * Gets the ter methods.
-	 *
-	 * @return the ter methods
-	 */
-	private Predicate<RequestHandler> getterMethods() {
-		return input -> {
-			Set<RequestMethod> methods = input.supportedMethods();
-			return CollectionUtils.isEmpty(methods) || methods.contains(RequestMethod.GET);
-		};
-	}
+  /**
+   * Gets the ter methods.
+   *
+   * @return the ter methods
+   */
+  private Predicate<RequestHandler> getterMethods() {
+    return input -> {
+      Set<RequestMethod> methods = input.supportedMethods();
+      return CollectionUtils.isEmpty(methods) || methods.contains(RequestMethod.GET);
+    };
+  }
 
-	/**
-	 * Api info.
-	 *
-	 * @return the api info
-	 */
-	private ApiInfo apiInfo() {
-		return info("Mystique Web Sample APIs", "The ReST APIs for Mystique Web Sample");
-	}
+  /**
+   * Api info.
+   *
+   * @return the api info
+   */
+  private ApiInfo apiInfo() {
+    return info("Mystique Web Sample APIs", "The ReST APIs for Mystique Web Sample");
+  }
 
-	/**
-	 * Info.
-	 *
-	 * @param title
-	 *            the title
-	 * @param description
-	 *            the description
-	 * @return the api info
-	 */
-	private ApiInfo info(String title, String description) {
-		return new ApiInfo(title, description, "v1", "http://www.balajeetm.com/",
-				new Contact("BalajeeTM", "http://www.balajeetm.com/", "balajeetm@gmail.com"),
-				"Apache License Version 2.0",
-				"https://raw.githubusercontent.com/balajeetm/json-mystique/master/LICENSE", new ArrayList<>());
-	}
+  /**
+   * Info.
+   *
+   * @param title the title
+   * @param description the description
+   * @return the api info
+   */
+  private ApiInfo info(String title, String description) {
+    return new ApiInfo(
+        title,
+        description,
+        "v1",
+        "http://www.balajeetm.com/",
+        new Contact("BalajeeTM", "http://www.balajeetm.com/", "balajeetm@gmail.com"),
+        "Apache License Version 2.0",
+        "https://raw.githubusercontent.com/balajeetm/json-mystique/master/LICENSE",
+        new ArrayList<>());
+  }
 
-	/**
-	 * Management info.
-	 *
-	 * @return the api info
-	 */
-	private ApiInfo managementInfo() {
-		return info("Mystique Web Sample Management APIs", "The Management APIs for Mystique Web Sample");
-	}
-
+  /**
+   * Management info.
+   *
+   * @return the api info
+   */
+  private ApiInfo managementInfo() {
+    return info(
+        "Mystique Web Sample Management APIs", "The Management APIs for Mystique Web Sample");
+  }
 }

@@ -19,20 +19,13 @@ import lombok.Data;
  * @author balajeetm
  */
 
-/**
- * Instantiates a new tarot.
- */
-
-/**
- * Instantiates a new test tarot.
- */
+/** Instantiates a new sample. */
 @Data
 public class Sample {
 
-	/** The to. */
-	private List<String> to;
+  /** The to. */
+  private List<String> to;
 
-	/** The deps. */
-	private List<Sample> deps;
-
+  /** The deps. */
+  private List<Sample> deps;
 }

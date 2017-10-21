@@ -1,5 +1,5 @@
 [{
-	"from": ["wardrobe", "shirt", "[0]"],
+	"from": ["wardrobe", "shirt", 0],
 	"to": ["backpack", "shirt"]
 }, {
 	"from": ["wardrobe", "pant", "color"],
@@ -9,5 +9,5 @@
 	"to": ["backpack", "trouser", "length"]
 }, {
 	"from": ["wardrobe", "towel", "color"],
-	"to": ["backpack", "handtowel", "[1]", "color"]
+	"to": ["backpack", "handtowel", 1, "color"]
 }]

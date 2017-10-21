@@ -14,10 +14,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.balajeetm.mystique.util.gson.bean.convertor.GsonConvertor;
+import com.balajeetm.mystique.util.gson.convertor.GsonConvertor;
+import com.balajeetm.mystique.util.json.convertor.JsonConvertor;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -39,81 +37,77 @@ import com.google.gson.JsonPrimitive;
  * @author balajeetm
  * @param <T> the generic type
  */
-@Component
 public class GsonDeserialiser<T extends JsonElement> extends StdDeserializer<T> {
 
-	/** The gson convertor. */
-	@Autowired
-	GsonConvertor gsonConvertor;
+  /** The gson convertor. */
+  JsonConvertor gsonConvertor;
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 1L;
+  /** The Constant serialVersionUID. */
+  private static final long serialVersionUID = 1L;
 
-	/**
-	 * Instantiates a new gson deserialiser.
-	 */
-	public GsonDeserialiser() {
-		this(JsonElement.class);
-	}
+  /** Instantiates a new gson deserialiser. */
+  public GsonDeserialiser() {
+    this(JsonElement.class);
+    gsonConvertor = GsonConvertor.getInstance();
+  }
 
-	/**
-	 * Instantiates a new gson deserialiser.
-	 *
-	 * @param vc the vc
-	 */
-	public GsonDeserialiser(Class<?> vc) {
-		super(vc);
-	}
+  /**
+   * Instantiates a new gson deserialiser.
+   *
+   * @param vc the vc
+   */
+  public GsonDeserialiser(Class<?> vc) {
+    super(vc);
+  }
 
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.JsonDeserializer#deserialize(com.fasterxml.jackson.core.JsonParser, com.fasterxml.jackson.databind.DeserializationContext)
-	 */
-	@Override
-	public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-		JsonNode node = p.getCodec()
-				.readTree(p);
-		return deserialize(node);
-	}
+  /* (non-Javadoc)
+   * @see com.fasterxml.jackson.databind.JsonDeserializer#deserialize(com.fasterxml.jackson.core.JsonParser, com.fasterxml.jackson.databind.DeserializationContext)
+   */
+  @Override
+  public T deserialize(JsonParser p, DeserializationContext ctxt)
+      throws IOException, JsonProcessingException {
+    JsonNode node = p.getCodec().readTree(p);
+    return deserialize(node);
+  }
 
-	/**
-	 * Deserialize.
-	 *
-	 * @param node the node
-	 * @return the json element
-	 */
-	@SuppressWarnings("unchecked")
-	private T deserialize(JsonNode node) {
-		JsonElement result = JsonNull.INSTANCE;
-		if (null != node && !node.isNull()) {
-			if (node.isObject()) {
-				ObjectNode onode = (ObjectNode) node;
-				JsonObject jsonObject = new JsonObject();
-				Iterator<Entry<String, JsonNode>> fields = onode.fields();
-				while (fields.hasNext()) {
-					Entry<String, JsonNode> next = fields.next();
-					jsonObject.add(next.getKey(), deserialize(next.getValue()));
-				}
-				result = jsonObject;
-			} else if (node.isArray()) {
-				ArrayNode anode = (ArrayNode) node;
-				JsonArray jsonArray = new JsonArray();
-				Iterator<JsonNode> elements = anode.elements();
-				while (elements.hasNext()) {
-					jsonArray.add(deserialize(elements.next()));
-				}
-				result = jsonArray;
-			} else if (node.isBoolean()) {
-				result = new JsonPrimitive(node.asBoolean());
-			} else if (node.isNumber()) {
-				NumericNode nnode = (NumericNode) node;
-				result = new JsonPrimitive(nnode.numberValue());
-			} else if (node.isTextual()) {
-				TextNode tnode = (TextNode) node;
-				result = new JsonPrimitive(tnode.textValue());
-			}
-		}
+  /**
+   * Deserialize.
+   *
+   * @param node the node
+   * @return the json element
+   */
+  @SuppressWarnings("unchecked")
+  private T deserialize(JsonNode node) {
+    JsonElement result = JsonNull.INSTANCE;
+    if (null != node && !node.isNull()) {
+      if (node.isObject()) {
+        ObjectNode onode = (ObjectNode) node;
+        JsonObject jsonObject = new JsonObject();
+        Iterator<Entry<String, JsonNode>> fields = onode.fields();
+        while (fields.hasNext()) {
+          Entry<String, JsonNode> next = fields.next();
+          jsonObject.add(next.getKey(), deserialize(next.getValue()));
+        }
+        result = jsonObject;
+      } else if (node.isArray()) {
+        ArrayNode anode = (ArrayNode) node;
+        JsonArray jsonArray = new JsonArray();
+        Iterator<JsonNode> elements = anode.elements();
+        while (elements.hasNext()) {
+          jsonArray.add(deserialize(elements.next()));
+        }
+        result = jsonArray;
+      } else if (node.isBoolean()) {
+        result = new JsonPrimitive(node.asBoolean());
+      } else if (node.isNumber()) {
+        NumericNode nnode = (NumericNode) node;
+        result = new JsonPrimitive(nnode.numberValue());
+      } else if (node.isTextual()) {
+        TextNode tnode = (TextNode) node;
+        result = new JsonPrimitive(tnode.textValue());
+      }
+    }
 
-		return (T) result;
-	}
-
+    return (T) result;
+  }
 }

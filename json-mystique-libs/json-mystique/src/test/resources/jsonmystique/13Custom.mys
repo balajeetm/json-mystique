@@ -1,16 +1,19 @@
-[{
-	"from": ["name"],
-	"to": ["name"],
-	"turn": {
-		"type": "stringUtils",
-		"action": "substringAfterLast",
-		"separator": "/"
-	}
-}, {
-	"from": ["genre"],
-	"to": ["genre"],
-	"turn": {
-		"type": "getFromDeps",
-		"key": ["genres"]
-	}
-}]
+[
+  {
+    "from": "name",
+    "to": "name",
+    "turn": {
+      "type": "stringUtils",
+      "action": "substringAfterLast",
+      "separator": "/"
+    }
+  },
+  {
+    "from": "genre",
+    "to": "genre",
+    "turn": {
+      "type": "getFromDeps",
+      "key": "genres"
+    }
+  }
+]

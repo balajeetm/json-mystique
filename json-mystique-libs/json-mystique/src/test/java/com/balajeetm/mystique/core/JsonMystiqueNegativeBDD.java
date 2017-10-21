@@ -22,24 +22,16 @@ import org.junit.Test;
 @Ignore
 public class JsonMystiqueNegativeBDD extends JsonMystiquePositiveBDD {
 
-	/**
-	 * Instantiates a new json mystique negative bdd test.
-	 */
-	public JsonMystiqueNegativeBDD() {
-	}
+  /** Instantiates a new json mystique negative bdd test. */
+  public JsonMystiqueNegativeBDD() {}
 
-	/**
-	 * Inits the.
-	 */
-	@Before
-	public void init() {
-	}
+  /** Inits the. */
+  @Before
+  public void init() {}
 
-	/**
-	 * Null date transform17.
-	 */
-	@Test
-	public void NullDateTransform17() {
-		testEqual("17_-ve_NullDateTransform");
-	}
+  /** Null date transform17. */
+  @Test
+  public void NullDateTransform17() {
+    testEqual("17_-ve_NullDateTransform");
+  }
 }

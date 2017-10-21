@@ -1,0 +1,23 @@
+{
+  "mappings": {
+    "docs": {
+      "properties": {
+        "orderId": {
+          "type": "keyword"
+        },
+        "customerNumber": {
+          "type": "keyword"
+        },
+        "orderState": {
+          "type": "keyword"
+        },
+        "channel": {
+          "type": "keyword"
+        },
+        "ordereDate": {
+          "type": "date"
+        }
+      }
+    }
+  }
+}

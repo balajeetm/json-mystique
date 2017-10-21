@@ -12,19 +12,12 @@ package com.balajeetm.mystique.core;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import com.balajeetm.mystique.core.config.JsonMystiqueConfig;
-import com.balajeetm.mystique.core.config.MystiqueModuleConfig;
-import com.balajeetm.mystique.util.jackson.bean.convertor.JacksonConvertor;
-import com.balajeetm.mystique.util.jackson.config.JacksonUtilConfig;
+import com.balajeetm.mystique.core.module.MystiqueModule;
+import com.balajeetm.mystique.util.jackson.convertor.JacksonConvertor;
 import com.balajeetm.mystique.util.json.error.ConvertorException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonElement;
@@ -34,48 +27,49 @@ import com.google.gson.JsonElement;
  *
  * @author balajeetm
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = { JsonMystiqueConfig.class,
-		JacksonUtilConfig.class, MystiqueModuleConfig.class })
 public class GsonJacksonConvertorBDDTest {
 
-	/** The instance. */
-	@Autowired
-	private JacksonConvertor instance;
+  /** The instance. */
+  private JacksonConvertor instance;
 
-	/**
-	 * Inits the.
-	 */
-	@Before
-	public void init() {
-	}
+  /** Instantiates a new gson jackson convertor BDD test. */
+  public GsonJacksonConvertorBDDTest() {
+    instance = (JacksonConvertor) JacksonConvertor.getInstance();
+    instance.getObjectMapper().registerModule(new MystiqueModule());
+  }
 
-	@Test
-	public void jacksonGsonTest() {
-		try {
-			String locationPattern = "classpath:gsonJackson/gsonJackson.json";
-			ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
-			Resource resource = resourceResolver.getResource(locationPattern);
+  /** Inits the. */
+  @Before
+  public void init() {}
 
-			JsonNode jacksonObject = instance.deserialize(resource.getInputStream(), JsonNode.class);
-			JsonElement gsonObject = instance.deserialize(resource.getInputStream(), JsonElement.class);
-			JsonElement transGsonObject = instance.deserialize(jacksonObject, JsonElement.class);
-			JsonNode transJacksonObject = instance.deserialize(gsonObject, JsonNode.class);
+  /** Jackson gson test. */
+  @Test
+  public void jacksonGsonTest() {
+    try {
+      String locationPattern = "classpath:gsonJackson/gsonJackson.json";
+      ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+      Resource resource = resourceResolver.getResource(locationPattern);
 
-			Assert.assertEquals(gsonObject, transGsonObject);
-			Assert.assertEquals(jacksonObject, transJacksonObject);
-		} catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
-	}
+      JsonNode jacksonObject = instance.deserialize(resource.getInputStream(), JsonNode.class);
+      JsonElement gsonObject = instance.deserialize(resource.getInputStream(), JsonElement.class);
+      JsonElement transGsonObject = instance.deserialize(jacksonObject, JsonElement.class);
+      JsonNode transJacksonObject = instance.deserialize(gsonObject, JsonNode.class);
 
-	@Test
-	public void jacksonNegativeTest7() {
-		try {
-			JsonElement deserialize = instance.deserialize((String) null, JsonElement.class);
-			Assert.assertNull(deserialize);
-		} catch (ConvertorException e) {
-			Assert.assertTrue(e.getMessage(), false);
-		}
-	}
+      Assert.assertEquals(gsonObject, transGsonObject);
+      Assert.assertEquals(jacksonObject, transJacksonObject);
+    } catch (Exception e) {
+      Assert.fail(e.getMessage());
+    }
+  }
+
+  /** Jackson negative test 7. */
+  @Test
+  public void jacksonNegativeTest7() {
+    try {
+      JsonElement deserialize = instance.deserialize((String) null, JsonElement.class);
+      Assert.assertNull(deserialize);
+    } catch (ConvertorException e) {
+      Assert.assertTrue(e.getMessage(), false);
+    }
+  }
 }
