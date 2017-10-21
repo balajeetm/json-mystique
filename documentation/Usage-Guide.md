@@ -25,9 +25,6 @@ Next, get the instance of JsonMystique to play around with
 
 `JsonMystique mystique = JsonMystique.getInstance()`
 
-===
-
-
 ### Json Mystique - Spring Boot Starter
 ---
 
@@ -58,9 +55,6 @@ For more details refer the [sample projects](../json-mystique-samples/mystique-w
 
 Json Mystique's auto-configuration is noninvasive. For example, if you add your own ObjectMapper or RestTemplate bean, the default ObjectMapper and RestTemplate will back away. However, it will ensure it will autoconfigure these custom beans appropriately for json serialisation
 
-===
-
-
 ### Spring Web, Spring Boot and Gson
 ---
 Json Mystique uses [Gson](https://github.com/google/gson) for all json serialisation or deserialisation.
@@ -88,8 +82,6 @@ mapper.registerModule(new MystiqueModule());
 
 In other client web environments, there might be a need to interact with WebServers via Rest APIs. Spring Web provides a powerful client library to make rest calls via RestTemplate. However, RestTemplate by default uses a JacksonHttpMessageConvertor which internally uses the [Jackson](https://github.com/FasterXML/jackson) ObjectMapper. Even in this case, RestTemplate by default cannot serialise deserialise [Gson](https://github.com/google/gson) Json Objects. Json-Mystique provides a solution out of the box for such issues as well. It can automatically configure RestTemplate bean's (remember RestTemplate must be a spring managed bean) ObjectMapper, to serialise/deserialise [Gson](https://github.com/google/gson) Json Objects.<br>
 Again, if you are using, `json-mystique-starter`, there is nothing more for you do.
-
-===
 
 ## Using Json Mystique
 Once json mystique is appropriately configured and all beans are available, json mystique can be used as below for Json transformation
@@ -157,11 +149,9 @@ The overloaded methods from getting a string json are as below :
 * `String transformToString(String inputJson, String specName, JsonObject deps)`
 * `String transformToString(JsonElement source, String specName, JsonObject deps)`
 
-====
-
 ## The Rule Set File
 
 Another very important concept to grasp wrt Json Mystique is the Rule Set File.
 The rule set file is where the magic is. It specifies all transformations to be carried on the input json.
 
-These transformations are called rules/tarots. Let's jump into the [Rule Set File](../The-RuleSet-File---*.mys) for more details
+These transformations are called rules/tarots. Let's jump into the [Rule Set File](The-RuleSet-File---*.mys.md) for more details

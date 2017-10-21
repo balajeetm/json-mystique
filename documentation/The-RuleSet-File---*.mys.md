@@ -75,7 +75,7 @@ The ruleset file for the above is
 }]
 ```
 
-As you can see above, the fully qualified path to the json element, is represented as an array of strings/numbers. For simplicity, you can use a `'.'` seperated string to denote the path. FOr eg, the above rule set can also be written as below:<br>
+As you can see above, the fully qualified path to the json element, is represented as an array of strings/numbers. For simplicity, you can use a `'.'` seperated string to denote the path. For eg, the above rule set can also be written as below:<br>
 **Ruleset**
 ```json
 [
@@ -115,16 +115,16 @@ Though this is the primary usecase, there are cases wherein we want to transform
 This transformation of one or more input fields to an output field is called a **turn**.
 Ruleset file as we know, is an array of rules/tarots. So far, we only saw the "from" and "to" fields of the tarot. There are other attributes that you can use to get more granular control on the turn. Let's go through them
 
-* [**to**](../Attribute-To) 
+* [**to**](Attribute-To.md) 
   * A fully qualified path that denotes the field in the output json that needs to be populated
   * Will refer to only one field in the output json
   * Is an array of strings
-  * Items in an array are denoted by the [array index notation](../Attribute-To#array-index-notation---n)
+  * Items in an array are denoted by the [array index notation](Attribute-To.md#array-index-notation---n)
   * eg `"to": ["backpack", "shirt", 0]`
 
-Click [here](../Attribute-To) for more details on **to**
+Click [here](Attribute-To.md) for more details on **to**
 
-* [**from**](../Attribute-From)
+* [**from**](Attribute-From.md)
   * Denotes one or more fields in the input json that needs to be transformed to an output
   * Uses a fully qualified path to denote a field
   * When referring to a single field, is an array of strings.
@@ -136,24 +136,24 @@ Click [here](../Attribute-To) for more details on **to**
 		["personal", "id"]
 	]`
 
-Click [here](../Attribute-From) for more details on **from**
+Click [here](Attribute-From.md) for more details on **from**
 
-* [**turn**](../Attribute-Turn) 
+* [**turn**](Attribute-Turn.md) 
   * Denotes the rule/tarot to apply and thereby transform the input field/fields to output
   * Is a json object, with attributes defining the type of turn and other specifications defining the tarot for the transformation
   * In most cases, the json structure of a turn is similar to that of a tarot "rule" with additional fields specific to the type of transformation applied
 
-Click [here](../Attribute-Turn) for more details on **turn**
+Click [here](Attribute-Turn.md) for more details on **turn**
 
-* [**optional**](../Attribute-Optional) 
+* [**optional**](Attribute-Optional.md) 
   * Not all transformations will return a non null value
   * Denotes if a transformed null value, should be copied to the output
   * Is a boolean, defaulted to false
   * If optional is true and the transformed value is null, the value is not copied to the output
 
-Click [here](../Attribute-Optional) for more details on **optional**
+Click [here](Attribute-Optional.md) for more details on **optional**
 
-* [**deps**](../Attribute-Deps) 
+* [**deps**](Attribute-Deps.md) 
   * Some transformations require external/domain dependencies
   * Some dependencies are available in the input json and can thus be processed before starting the transformation
   * The attribute denotes the dependencies that may be required during transformation
@@ -161,15 +161,15 @@ Click [here](../Attribute-Optional) for more details on **optional**
   * The json structure of the object within the array is exactly the same as the turn. Basically, we can define a list of turns to populate the dependencies
   * Is available globally throughtout the transformation session
 
-Click [here](../Attribute-Deps) for more details on **deps**
+Click [here](Attribute-Deps.md) for more details on **deps**
 
-* [**aces**](../Attribute-Aces) 
+* [**aces**](Attribute-Aces.md) 
   * Sometimes, we may need to preprocess part of the input source before executing the transform
   * Is a json object
-  * The json object contains a number of fields, where each field is a [**turn**](../Attribute-Turn)
+  * The json object contains a number of fields, where each field is a [**turn**](Attribute-Turn.md)
   * Json Mystique parses the ace and executes these turns and updates the ace object with the output of the turn
   * This transformed output can now be used to during the execution of the tarot
 
-Click [here](../Attribute-Aces) for more details on **aces**
+Click [here](Attribute-Aces.md) for more details on **aces**
 
-Let's try to understand **[Turns](../The-Turns)** further.
+Let's try to understand **[Turns](The-Turns.md)** further.
