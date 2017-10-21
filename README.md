@@ -83,13 +83,13 @@ Please raise issues, for support if any, on earlier versions.
 
 The json mystique ships with a spring boot starter which autoconfigures the json mystique environment appropriately, creating all the necessary beans. Its primary features are
 * Configures the simple [Jackson](https://github.com/FasterXML/jackson) Json Convertor as a bean
-* Configures the simple Gson](https://github.com/google/gson) Json Convertor as a bean
+* Configures the simple [Gson](https://github.com/google/gson) Json Convertor as a bean
 * Configures Jackson Object Mapper with the ability to serialise and deserialise Gson Objects (JsonElement)
 * Configures JsonMystique with its appropriate turns as a bean
 * If Spring-web is in the classpath, it connfigures a RestTemplate with the ability to serialise and deserialise Gson Objects (JsonElement)
 * Automatically registers custom Json Mystique `MystTurns` with JsonMystique
 
-For more details refer the [usage guide](https://github.com/balajeetm/json-mystique/wiki/Usage-Guide) or the [sample projects](https://github.com/balajeetm/json-mystique/tree/master/json-mystique-samples/mystique-web-sample) for usage
+For more details refer the [usage guide](Usage-Guide.md) or the [sample projects](json-mystique-samples/mystique-web-sample) for usage
 
 #### Json Mystique - Gson Utilities
 ---
@@ -104,10 +104,10 @@ For more details refer the [usage guide](https://github.com/balajeetm/json-mysti
 
 The json mystique gson utility library provides a set of utility classes to operate on raw json objects and serialise deserialise POJOs.
 The utility classes are
-* [Gson Convertor](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/bean/convertor/GsonConvertor.java) - Utility for POJO Object Model Mapping
-* [Json Lever](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/bean/lever/JsonLever.java) - Utility to operate on raw json objects. Simplified and type safe use of the Gson library. Allows deep and shallow merge of jsons
-* [Json Query](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/bean/lever/JsonQuery.java) - Utility to perform queries on a json element (can be an object or an array)
-* [Json Comparator](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/bean/lever/JsonComparator.java) - Utility to compare two jsons
+* [Gson Convertor](json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/convertor/GsonConvertor.java) - Utility for POJO Object Model Mapping
+* [Json Lever](json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/lever/JsonLever.java) - Utility to operate on raw json objects. Simplified and type safe use of the Gson library. Allows deep and shallow merge of jsons
+* [Json Query](json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/lever/JsonQuery.java) - Utility to perform queries on a json element (can be an object or an array)
+* [Json Comparator](json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/lever/JsonComparator.java) - Utility to compare two jsons
 
 #### Json Mystique - Jackson Utilities
 ---
@@ -122,7 +122,7 @@ The utility classes are
 
 The json mystique jackson utility library provides a set of utility classes to operate on raw json objects and serialise deserialise POJOs.
 The utility classes are
-* [Jackson Convertor](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-utils/jackson-utils/src/main/java/com/balajeetm/mystique/util/jackson/bean/convertor/JacksonConvertor.java) - Utility for POJO Object Model Mappingndency>
+* [Jackson Convertor](json-mystique-utils/jackson-utils/src/main/java/com/balajeetm/mystique/util/jackson/convertor/JacksonConvertor.java) - Utility for POJO Object Model Mappingndency>
 
 ## Documentation
 
