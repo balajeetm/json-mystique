@@ -154,4 +154,5 @@ The overloaded methods from getting a string json are as below :
 Another very important concept to grasp wrt Json Mystique is the Rule Set File.
 The rule set file is where the magic is. It specifies all transformations to be carried on the input json.
 
-These transformations are called rules/tarots. Let's jump into the [Rule Set File](The-RuleSet-File---*.mys.md) for more details
+These transformations are called rules/tarots. Let's jump into the [Rule Set File](The-RuleSet-File---*.mys.md) for more details<br>
+Hop over here for the [documentation index](_Sidebar.md)

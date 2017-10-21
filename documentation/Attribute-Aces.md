@@ -3,7 +3,7 @@ The features of aces are as below
 This transformed output can now be used to during the execution of the tarot
 
 * Aces define the part of the json that needs to be pre-processed for later use
-* Is a json Object with each field being a [turn](https://github.com/balajeetm/json-mystique/wiki/Attribute-Turn)
+* Is a json Object with each field being a [turn](Attribute-Turn.md)
 * Json Mystique parses the ace and executes these turns and updates the ace object with the transformed object returned from the turn
 
 ### Order of Execution of Turns within Tarot
@@ -72,7 +72,7 @@ So the rule set file will be as below
 
 ```json
 [{
-	"from": ["@ace(readingGlasses)", "[0]"],
+	"from": ["@ace(readingGlasses)", 0],
 	"to": ["backpack", "leatherCase"],
 	"aces" : {
 		"readingGlasses": {
@@ -105,7 +105,7 @@ Let's modify the rule file as below
 
 ```json
 [{
-	"from": ["@ace(readingGlasses)", "[0]"],
+	"from": ["@ace(readingGlasses)", 0],
 	"to": ["backpack", "@value(case, name)"],
 	"aces" : {
 		"readingGlasses": {

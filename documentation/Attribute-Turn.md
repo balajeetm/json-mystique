@@ -7,7 +7,7 @@ The features of "turn" are as below
 
   The turn specifies this transformation
 * The turn is a json object. The structure of the json object is defined below
-* If a turn object is not specified, it is presumed to be a turn of type ["copy"]("TODO")
+* If a turn object is not specified, it is presumed to be a turn of type ["copy"](MystTurn-Copy.md)
 * The primary responsibility of the turn is to transform the input and produce a transformed object
 
 ## The Turn Structure
@@ -16,13 +16,13 @@ Turn can contain any number of fields as the need demands. But few fields will e
 
 * type
  * Is a string that defines the type of the turn and thus practically, the transformation logic that needs to be applied
- * Each variation of this type has been detailed in the [Turns]("TODO") section
- * If the type is not specified, it is assumed to be a turn of type ["copy"]("TODO")
+ * Each variation of this type has been detailed in the [Turns](The-Turns.md) section
+ * If the type is not specified, it is assumed to be a turn of type ["copy"](MystTurn-Copy.md)
 
 * from
  * As explained before, this is to granularly choose a field from the input json
  * Is a fully qualified path denoted by an array of strings
- * More details can be found [here](https://github.com/balajeetm/json-mystique/wiki/Attribute-From)
+ * More details can be found [here](Attribute-From.md)
 
   For eg. Let's assume the input json is as below
 
@@ -66,11 +66,11 @@ Turn can contain any number of fields as the need demands. But few fields will e
 * to
  * Though the primarly responsibility of the turn is to produce a transformed object, the turn can also put the object in the prescribed destination. This is done via the "to" attribute that defines the destination
  * Is a fully qualified path denoted by an array of strings
- * More details can be found [here](https://github.com/balajeetm/json-mystique/wiki/Attribute-To)
+ * More details can be found [here](Attribute-To.md)
 
 * optional
  * This field bears the same meaning as the optional in the tarot/rule
- * More details can be found [here](https://github.com/balajeetm/json-mystique/wiki/Attribute-Optional)
+ * More details can be found [here](Attribute-Optional.md)
 
 * default
  * As already said, not all transformations will return a non null value
@@ -182,7 +182,7 @@ Default is a json object that can contain the below attributes
  }]
   ```
 
-  > The same can be found as **default04** in the JsonMystique [BDD](https://github.com/balajeetm/json-mystique/blob/master/src/test/java/com/futuresight/util/mystique/JsonMystiqueBDDTest.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
+  > The same can be found as **default04** in the JsonMystique [BDD](../json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
 
 Apart from the above, there can be many other attributes, each attributes defined depends on the type of turn used.
-For more details on turn refer [Turn]("TODO")
+For more details on turn refer [Turn](The-Turns.md)

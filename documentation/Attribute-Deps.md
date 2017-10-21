@@ -3,7 +3,7 @@ The features of deps are as below
 * Some transformations require external/domain dependencies
 * Some dependecnies are available in the input json and may often be needed for processing some other part of the json
 * This attribute lets us populate these dependencies
-* The attribute is a Json Array, with each item in an array denoting a [turn](https://github.com/balajeetm/json-mystique/wiki/Attribute-Turn)
+* The attribute is a Json Array, with each item in an array denoting a [turn](Attribute-Turn.md)
 * Thus we basically tranform some parts of the input json but instead of storing this into the output field, we keep it as dependencies to process other parts of the json
 * Dependencies are percolated throughout the transformation session. They can be basically seen as global variables available for any turn during the transformation session
 
@@ -40,12 +40,12 @@ So the language and colors can be accessed anywhere during the transformation se
 ## Structure of Deps
 
 * Deps is a Json Array
-* Each item within the array is a [tarot/rule](https://github.com/balajeetm/json-mystique/wiki#the-rulesettarot-structure)
+* Each item within the array is a [tarot/rule](Home.md#the-rulesettarot-structure)
 * So the deps, basically defines rules to transform parts of the input json via the Tarots
 * These transformed objects are populated in the dependency json and not the output json
 * For each Tarot, the rules specified in the deps are executed before executing the tarot
 
-More details of deps can be seen @ [GetFromDeps]("TODO")
+More details of deps can be seen @ [GetFromDeps](MystTurn-GetFromDeps.md)
 
 ## How does one read values from deps - @deps notation
 
@@ -53,7 +53,7 @@ Let's say while execution of a tarot, one the source fields needs to be picked f
 
 In the above example, let say we want to read the first language. The from for the above should be defined as below :
 
-`"from": ["@deps", "languages", "[0]"]`
+`"from": ["@deps", "languages", 0]`
 
 Observe that the first string in the fully qualified path denoted by the array of strings is "@deps". This tells mystique to look for the source fields in dependencies and not in the input json
 

@@ -7,12 +7,12 @@ The features of **from** are as below
  * aces (preprocessed data)
 * The attribute can refer to single or multiple fields from any combination of above said parts
 * The referred fields are passed to the turn, in the order in which they are specified
-* Each field, similar to "to", are denoted by a fully qualified path which is an [array of strings](https://github.com/balajeetm/json-mystique/wiki/Attribute-To#why-is-the-fully-qualified-path-an-array-of-strings)
+* Each field, similar to "to", are denoted by a fully qualified path which is an [array of strings](Attribute-To.md#why-is-the-fully-qualified-path-an-array-of-strings)
 * Multiple fields can be denoted by using an array of fully qualified paths, i.e, an array of array of strings 
   
   For eg  `"from": [ ["personal", "name"], ["personal", "id"] ]`. This picks two fields from the input source json
-* Items in an array are denoted by the [array index notation](https://github.com/balajeetm/json-mystique/wiki/Attribute-To#array-index-notation---n)
-* If a particular turn needs to be executed for each item of an input source array field, use the [for each](https://github.com/balajeetm/json-mystique/wiki/Attribute-From#for-each-notation) notation
+* Items in an array are denoted by the [array index notation](Attribute-To.md#array-index-notation---n)
+* If a particular turn needs to be executed for each item of an input source array field, use the [for each](Attribute-From.md#for-each-notation) notation
 
 ## For Each Notation
 
@@ -78,4 +78,4 @@ Since we are interested in only the color, we picked only the color
 
 **Observe** - That since the "foreach" operates on every item in an array, the return type of this transformation is an array. Every transformation performed by the turn is put into an array and copied to the destination as specified by the "to" attribute
 
-> The same can be found as **forEach03** in the JsonMystique [BDD](https://github.com/balajeetm/json-mystique/blob/master/src/test/java/com/futuresight/util/mystique/JsonMystiqueBDDTest.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
+> The same can be found as **forEach03** in the JsonMystique [BDD](../json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself

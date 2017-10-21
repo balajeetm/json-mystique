@@ -172,4 +172,5 @@ Click [here](Attribute-Deps.md) for more details on **deps**
 
 Click [here](Attribute-Aces.md) for more details on **aces**
 
-Let's try to understand **[Turns](The-Turns.md)** further.
+Let's try to understand **[Turns](The-Turns.md)** further.<br>
+Hop over here for the [documentation index](_Sidebar.md)
