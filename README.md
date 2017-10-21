@@ -127,4 +127,35 @@ The utility classes are
 ## Documentation
 
 For more information on the usage and detailed usage guides, refer the [documentation home](documentation/Home.md)<br>
-Hop over here for the [documentation index](documentation/_Sidebar.md)
+
+### Documentation Index
+
+* [Usage Guide](Usage-Guide.md)
+    * [The RuleSet File](The-RuleSet-File---*.mys.md)
+    * [Attribute To](Attribute-To.md)
+    * [Attribute From](Attribute-From.md)
+    * [Attribute Turn](Attribute-Turn.md)
+    * [Attribute Optional](Attribute-Optional.md)
+    * [Attribute Deps](Attribute-Deps.md)
+    * [Attribute Aces](Attribute-Aces.md)
+* [The Turns](The-Turns.md)
+    * [Copy MystTurn](MystTurn-Copy.md)
+    * [Concat MystTurn](MystTurn-Concat.md)
+    * [Condition MystTurn](MystTurn-Condition.md)
+    * [Constant MystTurn](MystTurn-Constant.md)
+    * [Date MystTurn](MystTurn-Date.md)
+    * [GetFromDeps MystTurn](MystTurn-GetFromDeps.md)
+    * [ArrayToMap MystTurn](MystTurn-ArrayToMap.md)
+    * [Mystique MystTurn](MystTurn-Mystique.md)
+    * [StringUtils MystTurn](MystTurn-StringUtils.md)
+    * [Chain MystTurn](MystTurn-Chain.md)
+    * [Toggle MystTurn](MystTurn-Toggle.md)
+    * [Custom MystTurn](MystTurn-Custom.md)
+* Utilities
+    * [JsonLever](JsonLever.md)
+    * [JsonConvertor](JsonConvertor.md)
+        * [GsonConvertor](GsonConvertor.md)
+        * [JacksonConvertor](JacksonConvertor.md)
+    * [JsonQuery](JsonQuery.md)
+    * [MergeJsons](MergeJsons.md)
+    * [JsonComparator](JsonComparator.md)
