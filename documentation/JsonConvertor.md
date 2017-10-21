@@ -39,6 +39,8 @@ The methods defined by it are as below
    Convenience method to de-serialise an json stringifyable Object Collection into a List of java POJOs defined by the objectType
 
 There are two variants / implementations of this JsonConvertor available off the shelf with Json Mystique. They are
- * [GsonConvertor](https://github.com/balajeetm/json-mystique/wiki/GsonConvertor)
- * [JacksonConvertor](https://github.com/balajeetm/json-mystique/wiki/JacksonConvertor)
+ * [GsonConvertor](GsonConvertor.md)
+ * [JacksonConvertor](JacksonConvertor.md)
+
+ Hop over here for the [documentation index](_Sidebar.md)
 

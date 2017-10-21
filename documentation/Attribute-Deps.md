@@ -63,3 +63,5 @@ Json Mystique looks for "@deps" as the first string in the fully qualified path,
 However, if you want to naviagate through a json whose first field is "@deps", json mystique will not be able to retrieve that field.
 
 Though, json mystique tries its best to keep the fully qualified path unambiguous, there are certain areas where we need to sacrifice unambiguity to handle complexity (complex use cases)
+
+Hop over here for the [documentation index](_Sidebar.md)

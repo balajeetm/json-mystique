@@ -12,3 +12,5 @@ This is like copying a null value to output. There is a compartment, but no item
 
 However, there are no pre-allocated compartment for a suit. If you want to pack a suit, you make space for it.
 So if the suit doesn't exist, you do not make space for it. Optional decides, if you need to make space of not
+
+Hop over here for the [documentation index](_Sidebar.md)

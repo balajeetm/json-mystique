@@ -134,3 +134,5 @@ The "@ace" notation tells JsonMystique to look for a source field in aces. It ba
 The "@value" notation however makes JsonMystique to pick the field from aces, parse it and get the fieldValue which can then be used to specify a string in the fully qualified path of a field.
 
 As previously said, "@value" is generally used when a fieldname in the output is dependent on the input
+
+Hop over here for the [documentation index](_Sidebar.md)

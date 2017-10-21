@@ -79,3 +79,5 @@ Since we are interested in only the color, we picked only the color
 **Observe** - That since the "foreach" operates on every item in an array, the return type of this transformation is an array. Every transformation performed by the turn is put into an array and copied to the destination as specified by the "to" attribute
 
 > The same can be found as **forEach03** in the JsonMystique [BDD](../json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
+
+Hop over here for the [documentation index](_Sidebar.md)

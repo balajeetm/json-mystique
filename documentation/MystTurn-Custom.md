@@ -86,3 +86,5 @@ The ruleset file for the above is
 ```
 
 > The same can be found as **custom16** in the JsonMystique [BDD](../json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself. Also refer to the [CustomMystTurn](../json-mystique-libs/json-mystique/src/test/java/com/futuresight/util/mystique/CustomMystTurn.java)
+
+Hop over here for the [documentation index](_Sidebar.md)

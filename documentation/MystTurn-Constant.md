@@ -75,3 +75,5 @@ The below is the basic structure of the json
 	}
 }
 ```
+
+Hop over here for the [documentation index](_Sidebar.md)

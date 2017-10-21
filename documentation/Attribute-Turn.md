@@ -186,3 +186,5 @@ Default is a json object that can contain the below attributes
 
 Apart from the above, there can be many other attributes, each attributes defined depends on the type of turn used.
 For more details on turn refer [Turn](The-Turns.md)
+
+Hop over here for the [documentation index](_Sidebar.md)

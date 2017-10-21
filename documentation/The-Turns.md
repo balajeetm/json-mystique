@@ -18,3 +18,5 @@ Let's look at the different turns available in JsonMystique. For simplicity, we'
 * The [StringUtils MystTurn](MystTurn-StringUtils.md)
 * The [Chain MystTurn](MystTurn-Chain.md)
 * The [Toggle MystTurn](MystTurn-Toggle.md)
+
+Hop over here for the [documentation index](_Sidebar.md)
