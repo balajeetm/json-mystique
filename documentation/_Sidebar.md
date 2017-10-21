@@ -1,5 +1,6 @@
 <h2>Documentation Index</h2>
 
+* [Home](Home.md)
 * [Usage Guide](Usage-Guide.md)
     * [The RuleSet File](The-RuleSet-File---*.mys.md)
     * [Attribute To](Attribute-To.md)
