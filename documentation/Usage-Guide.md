@@ -41,8 +41,8 @@ If you are using maven for dependency management, add the below json-mystique-st
 </dependency>
 ```
 
-That's it, you are good to go!
-All beans are autoconfigured.
+That's it, you are good to go!<br>
+All beans are autoconfigured.<br>
 Even Jackson is autoconfigured to serialise/deserialise Gson Json Objects automatically, iff, Jackson is found to be available in the classpath
 
 Not just that, in a web environment, the Spring's Jackson Http Message Convertors are auto configured to serialise/deserialise [Gson](https://github.com/google/gson) Json Elements. Any RestTemplate Beans in the classpath are also by default autoconfigured to serialise/deserialise [Gson](https://github.com/google/gson) json elements. All in a snap!

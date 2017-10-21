@@ -12,7 +12,7 @@ The features of the ArrayToMap MystTurn is as below:
 * key
  * While processing every item within the source array, this attribute identifies the field within the item, which should be used as the fieldName for a field to be created in the output json
  * This attribute is a fully qualified path that denotes a field in the array item
- * Thus "key" is an array of strings
+ * Thus "key" is an array of strings or a `'.'`(dot) separated string representing the fully qualified path
  * The field that this key points to **should** be a string since this will be the be used as a fieldName
 
 * value
@@ -59,24 +59,29 @@ In the previous example we planned to copy few movie dvds so that we can watch t
 The ruleset file for the above is
 **Ruleset**
 ```json
-[{
-	"from": ["wardrobe", "dvd", "name"],
-	"to": ["backpack", "movie", "name"]
-}, {
-	"from": ["wardrobe", "dvd", "genre"],
-	"to": ["backpack", "movie", "genre"],
-	"turn": {
-		"type": "getFromDeps",
-		"key": ["genres"]
-	},
-	"deps": [{
-		"from": ["wardrobe", "videoGenreCatalog"],
-		"to": ["genres"],
-		"type": "arrayToMap",
-		"key": ["genreCode"],
-		"value": ["descr"]
-	}]
-}]
+[
+  {
+    "from": "wardrobe.dvd.name",
+    "to": "backpack.movie.name"
+  },
+  {
+    "from": "wardrobe.dvd.genre",
+    "to": "backpack.movie.genre",
+    "turn": {
+      "type": "getFromDeps",
+      "key": "genres"
+    },
+    "deps": [
+      {
+        "from": "wardrobe.videoGenreCatalog",
+        "to": "genres",
+        "type": "arrayToMap",
+        "key": "genreCode",
+        "value": "descr"
+      }
+    ]
+  }
+]
 ```
 
 **outputJson**
@@ -93,7 +98,7 @@ The ruleset file for the above is
 
 So we can see the genre is picked appropriately
 
-> The same can be found as **arrayToMap11** in the JsonMystique [BDD](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
+> The same can be found as **arrayToMap11** in the JsonMystique [BDD](../json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
 
 ## Structure of the ArrayToMap MystTurn
 

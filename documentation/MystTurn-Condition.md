@@ -16,7 +16,7 @@ The features of the Condition MystTurn is as below:
 * true
  * This attribute defines the object to be return when the condition is successfully satisfied
  * This attribute is of type json
- * The structure of this json is exactly similar to that of a [default](https://github.com/balajeetm/json-mystique/wiki/Attribute-Turn#the-structure-of-default)
+ * The structure of this json is exactly similar to that of a [default](Attribute-Turn.md#the-structure-of-default)
  * So, you can basically return a constant value (any jsonelement) if the condition is successfully satisfied or execute a turn that returns a value
 * If this attribute is missing and the condition is successfully satisfied, the turn returns a Boolean value equal to "true"
 
@@ -24,7 +24,7 @@ The features of the Condition MystTurn is as below:
 * false
  * This attribute defines the object to be return when the condition is not successfully satisfied
  * This attribute is of type json
- * The structure of this json is exactly similar to that of a [default](https://github.com/balajeetm/json-mystique/wiki/Attribute-Turn#the-structure-of-default)
+ * The structure of this json is exactly similar to that of a [default](Attribute-Turn.md#the-structure-of-default)
  * So, you can basically return a constant value (any jsonelement) if the condition is successfully satisfied or execute a turn that returns a value
 * If this attribute is missing and the condition is not successfully satisfied, the turn returns a Boolean value equal to "false"
 

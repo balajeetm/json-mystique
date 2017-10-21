@@ -81,14 +81,14 @@ The 12Custom ruleset file is as below
 **Ruleset**
 ```json
 [{
-	"from": ["name"],
-	"to": ["name"]
+	"from": "name",
+	"to": "name"
 }, {
-	"from": ["genre"],
-	"to": ["genre"],
+	"from": "genre",
+	"to": "genre",
 	"turn": {
 		"type": "getFromDeps",
-		"key": ["genres"]
+		"key": "genres"
 	}
 }]
 ```
@@ -116,7 +116,7 @@ The 12Custom ruleset file is as below
 
 So we can see the genre is picked appropriately for every dvd
 
-> The same can be found as **mystique12** in the JsonMystique [BDD](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
+> The same can be found as **mystique12** in the JsonMystique [BDD](../json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
 
 ## Structure of the Mystique MystTurn
 

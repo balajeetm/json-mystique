@@ -38,19 +38,24 @@ We would want to uniquely identify the backpack, just in case it gets jumbled up
 The ruleset file for the above is
 **Ruleset**
 ```json
-[{
-	"from": ["wardrobe", "drivingLincense"],
-	"turn": {
-		"type": "chain",
-		"turns": [{
-			"from": ["name"],
-			"to": ["backpack", "tag", "name"]
-		}, {
-			"from": ["bloodGroup"],
-			"to": ["backpack", "tag", "bloodGroup"]
-		}]
-	}
-}]
+[
+  {
+    "from": "wardrobe.drivingLincense",
+    "turn": {
+      "type": "chain",
+      "turns": [
+        {
+          "from": "name",
+          "to": "backpack.tag.name"
+        },
+        {
+          "from": "bloodGroup",
+          "to": "backpack.tag.bloodGroup"
+        }
+      ]
+    }
+  }
+]
 ```
 
 **outputJson**
@@ -67,7 +72,7 @@ The ruleset file for the above is
 
 So we can see the genre is picked appropriately for every dvd
 
-> The same can be found as **chain14** in the JsonMystique [BDD](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
+> The same can be found as **chain14** in the JsonMystique [BDD](../json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
 
 ## Structure of the Chain MystTurn
 

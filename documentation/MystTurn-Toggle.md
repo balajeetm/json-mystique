@@ -39,21 +39,27 @@ We would want to uniquely identify the backpack, just in case it gets jumbled up
 The ruleset file for the above is
 **Ruleset**
 ```json
-[{
-	"from": ["wardrobe", "id", "name"],
-	"to": ["backpack", "tag", "name"]
-}, {
-	"from": ["wardrobe", "id"],
-	"to": ["backpack", "tag", "bloodGroup"],
-	"turn": {
-		"type": "toggle",
-		"turns": [{
-			"from": ["bGroup"]
-		}, {
-			"from": ["bloodGroup"]
-		}]
-	}
-}]
+[
+  {
+    "from": "wardrobe.id.name",
+    "to": "backpack.tag.name"
+  },
+  {
+    "from": "wardrobe.id",
+    "to": "backpack.tag.bloodGroup",
+    "turn": {
+      "type": "toggle",
+      "turns": [
+        {
+          "from": "bGroup"
+        },
+        {
+          "from": "bloodGroup"
+        }
+      ]
+    }
+  }
+]
 ```
 
 **outputJson**
@@ -70,7 +76,7 @@ The ruleset file for the above is
 
 So we can see the genre is picked appropriately for every dvd
 
-> The same can be found as **toggle15** in the JsonMystique [BDD](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
+> The same can be found as **toggle15** in the JsonMystique [BDD](../json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
 
 ## Structure of the Toggle MystTurn
 

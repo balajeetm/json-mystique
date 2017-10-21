@@ -124,7 +124,7 @@ The json mystique jackson utility library provides a set of utility classes to o
 The utility classes are
 * [Jackson Convertor](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-utils/jackson-utils/src/main/java/com/balajeetm/mystique/util/jackson/bean/convertor/JacksonConvertor.java) - Utility for POJO Object Model Mappingndency>
 
-#### Documentation
----
+## Documentation
+
 For more information on the usage and detailed usage guides, refer the [documentation home](documentation/Home.md)<br>
 Hop over here for the [documentation index](documentation/_Sidebar.md)

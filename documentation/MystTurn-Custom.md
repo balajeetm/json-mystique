@@ -10,7 +10,7 @@ Can use any number of custom attributes
 ## How to write a Custom MystTurn
 
 To write a custom MystTurn, write a class as below:
-* Implement the [com.futuresight.util.mystique.MystTurn](https://github.com/balajeetm/json-mystique/blob/master/src/main/java/com/futuresight/util/mystique/MystTurn.java) interface
+* Implement the [com.futuresight.util.mystique.MystTurn](../json-mystique-libs/json-mystique/src/main/java/com/futuresight/util/mystique/MystTurn.java) interface
 * The interface has a single method with the below signature
 
 `JsonElement transform(List<JsonElement> source, JsonObject deps, JsonObject aces, JsonObject turn, JsonObject resultWrapper)`
@@ -30,7 +30,7 @@ To write a custom MystTurn, write a class as below:
   * Optionally skipping the copy to the output json if the transformed value is null
   * Get granular source field from within the source field passed
 
-* This requirements are very generic to all turns. So if you want to reuse these features, **extend** another class instead called [com.futuresight.util.mystique.AbstractMystTurn](https://github.com/balajeetm/json-mystique/blob/master/src/main/java/com/futuresight/util/mystique/AbstractMystTurn.java)
+* This requirements are very generic to all turns. So if you want to reuse these features, **extend** another class instead called [com.futuresight.util.mystique.AbstractMystTurn](../json-mystique-libs/json-mystique/src/main/java/com/futuresight/util/mystique/AbstractMystTurn.java)
 
 * In this case, implement the below method
 
@@ -41,7 +41,7 @@ To write a custom MystTurn, write a class as below:
 ## Time for a road trip 
 Let's jump back to packing items for our road trip
 
-Remember, we had a music player in our wardrobe which we wished to carry for the road trip. We also had the earphone. We carried this using the [ConcatMystTurn](https://github.com/balajeetm/json-mystique/wiki/MystTurn-Concat). Lets implement a custom mystTurn for the same
+Remember, we had a music player in our wardrobe which we wished to carry for the road trip. We also had the earphone. We carried this using the [ConcatMystTurn](MystTurn-Concat.md). Lets implement a custom mystTurn for the same
 
 
 **inputJson**
@@ -79,10 +79,10 @@ The ruleset file for the above is
 	],
 	"to": ["backpack", "player"],
 	"turn": {
-		"type": "bean",
+		"type": "custom",
 		"value": "com.futuresight.util.mystique.CustomMystTurn"
 	}
 }]
 ```
 
-> The same can be found as **custom16** in the JsonMystique [BDD](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself. Also refer to the [CustomMystTurn](https://github.com/balajeetm/json-mystique/blob/master/src/test/java/com/futuresight/util/mystique/CustomMystTurn.java)
+> The same can be found as **custom16** in the JsonMystique [BDD](../json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself. Also refer to the [CustomMystTurn](../json-mystique-libs/json-mystique/src/test/java/com/futuresight/util/mystique/CustomMystTurn.java)

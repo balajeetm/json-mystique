@@ -51,22 +51,25 @@ The ruleset file for the above is
 **Ruleset**
 ```json
 [
-{
-	"from": ["wardrobe", "dvd", "name"],
-	"to": ["backpack", "movie", "name"]
-},
-{
-	"from": ["wardrobe", "dvd", "genre"],
-	"to": ["backpack", "movie", "genre"],
-	"turn": {
-		"type": "getFromDeps",
-		"key": ["genres"]
-	},
-	"deps": [{
-		"from": ["wardrobe", "videoGenreCatalog"],
-		"to": ["genres"]
-	}]
-}]
+  {
+    "from": "wardrobe.dvd.name",
+    "to": "backpack.movie.name"
+  },
+  {
+    "from": "wardrobe.dvd.genre",
+    "to": "backpack.movie.genre",
+    "turn": {
+      "type": "getFromDeps",
+      "key": "genres"
+    },
+    "deps": [
+      {
+        "from": "wardrobe.videoGenreCatalog",
+        "to": "genres"
+      }
+    ]
+  }
+]
 ```
 
 **outputJson**
@@ -83,7 +86,7 @@ The ruleset file for the above is
 
 So we can see the genre is picked appropriately
 
-> The same can be found as **getFromDeps10** in the JsonMystique [BDD](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
+> The same can be found as **getFromDeps10** in the JsonMystique [BDD](../json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
 
 ## Structure of the GetFromDeps MystTurn
 

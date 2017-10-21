@@ -76,5 +76,5 @@ The utility classes are
 
 ## Usage Guide
 
-For more information on usage, refer [Usage Guide](Usage-Guide.md)
+For more information on usage, refer [Usage Guide](Usage-Guide.md)<br>
 Hop over here for the [documentation index](_Sidebar.md)

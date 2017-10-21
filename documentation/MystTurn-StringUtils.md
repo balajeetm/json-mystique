@@ -60,45 +60,52 @@ In the previous example we planned to copy few movie dvds so that we can watch t
 The ruleset file for the above is
 **Ruleset**
 ```json
-[{
-	"from": ["wardrobe", "dvds", "[*]"],
-	"to": ["backpack", "movies"],
-	"turn": {
-		"type": "mystique",
-		"value": "13Custom"
-	},
-	"deps": [{
-		"from": ["wardrobe", "videoGenreCatalog"],
-		"to": ["genres"],
-		"turn": {
-			"type": "arrayToMap",
-			"key": ["genreCode"],
-			"value": ["descr"]
-		}
-	}]
-}]
+[
+  {
+    "from": "wardrobe.dvds.[*]",
+    "to": "backpack.movies",
+    "turn": {
+      "type": "mystique",
+      "value": "13Custom"
+    },
+    "deps": [
+      {
+        "from": "wardrobe.videoGenreCatalog",
+        "to": "genres",
+        "turn": {
+          "type": "arrayToMap",
+          "key": "genreCode",
+          "value": "descr"
+        }
+      }
+    ]
+  }
+]
 ```
 
 As you can see, it call another mystique file called "12Custom". Let's define that mystique file
 The 13Custom ruleset file is as below
 **Ruleset**
 ```json
-[{
-	"from": ["name"],
-	"to": ["name"],
-	"turn": {
-		"type": "stringUtils",
-		"action": "substringAfterLast",
-		"separator": "/"
-	}
-}, {
-	"from": ["genre"],
-	"to": ["genre"],
-	"turn": {
-		"type": "getFromDeps",
-		"key": ["genres"]
-	}
-}]
+[
+  {
+    "from": "name",
+    "to": "name",
+    "turn": {
+      "type": "stringUtils",
+      "action": "substringAfterLast",
+      "separator": "/"
+    }
+  },
+  {
+    "from": "genre",
+    "to": "genre",
+    "turn": {
+      "type": "getFromDeps",
+      "key": "genres"
+    }
+  }
+]
 ```
 
 **outputJson**
@@ -124,7 +131,7 @@ The 13Custom ruleset file is as below
 
 So we can see the genre is picked appropriately for every dvd
 
-> The same can be found as **stringUtils13** in the JsonMystique [BDD](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
+> The same can be found as **stringUtils13** in the JsonMystique [BDD](../json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
 
 ## Structure of the StringUtils MystTurn
 

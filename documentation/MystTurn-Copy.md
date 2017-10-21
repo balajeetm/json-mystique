@@ -61,22 +61,28 @@ The input json defines my wardrobe which has a shirt, pant and a towel. I want t
 The ruleset file for the above is
 **Ruleset**
 ```json
-[{
-	"from": ["wardrobe", "shirt", "color"],
-	"to": ["backpack", "shirt", "color"]
-}, {
-	"from": ["wardrobe", "shirt", "size"],
-	"to": ["backpack", "shirt", "size"]
-}, {
-	"from": ["wardrobe", "pant", "color"],
-	"to": ["backpack", "trouser", "color"]
-}, {
-	"from": ["wardrobe", "pant", "size"],
-	"to": ["backpack", "trouser", "length"]
-}, {
-	"from": ["wardrobe", "towel", "color"],
-	"to": ["backpack", "handtowel", "color"]
-}]
+[
+  {
+    "from": "wardrobe.shirt.color",
+    "to": "backpack.shirt.color"
+  },
+  {
+    "from": "wardrobe.shirt.size",
+    "to": "backpack.shirt.size"
+  },
+  {
+    "from": "wardrobe.pant.color",
+    "to": "backpack.trouser.color"
+  },
+  {
+    "from": "wardrobe.pant.size",
+    "to": "backpack.trouser.length"
+  },
+  {
+    "from": "wardrobe.towel.color",
+    "to": "backpack.handtowel.color"
+  }
+]
 ```
 
 So we see the ruleset is a simple array of transformations, specifying where to pick the field **"from"** and where to paste the corresponding field **"to"**.
@@ -87,22 +93,27 @@ After all, **json mystique, let's you transform/copy any json field, be it primi
 
 So, let's transform the ruleset as below
 ```json
-[{
-"from": ["wardrobe", "shirt"],
-"to": ["backpack", "shirt"]
-}, {
-"from": ["wardrobe", "pant", "color"],
-"to": ["backpack", "trouser", "color"]
-}, {
-"from": ["wardrobe", "pant", "size"],
-"to": ["backpack", "trouser", "length"]
-}, {
-"from": ["wardrobe", "towel", "color"],
-"to": ["backpack", "handtowel", "color"]
-}] 
+[
+  {
+    "from": "wardrobe.shirt",
+    "to": "backpack.shirt"
+  },
+  {
+    "from": "wardrobe.pant.color",
+    "to": "backpack.trouser.color"
+  },
+  {
+    "from": "wardrobe.pant.size",
+    "to": "backpack.trouser.length"
+  },
+  {
+    "from": "wardrobe.towel.color",
+    "to": "backpack.handtowel.color"
+  }
+]
 ```
 
-> The same can be found as **simpleCopy01** in the JsonMystique [BDD](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
+> The same can be found as **simpleCopy01** in the JsonMystique [BDD](../json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
 
 ### Picking fields from arrays
 
@@ -166,7 +177,7 @@ Also, there is a pouch to keep the handtowel separately, and we wish to keep the
 The ruleset for the above is
 ```json
 [{
-"from": ["wardrobe", "shirt", "[0]"],
+"from": ["wardrobe", "shirt", 0],
 "to": ["backpack", "shirt"]
 }, {
 "from": ["wardrobe", "pant", "color"],
@@ -176,11 +187,11 @@ The ruleset for the above is
 "to": ["backpack", "trouser", "length"]
 }, {
 "from": ["wardrobe", "towel", "color"],
-"to": ["backpack", "handtowel", "[1]", "color"]
+"to": ["backpack", "handtowel", 1, "color"]
 }]
 ```
 
-> The same can be found as **simpleCopy02** in the JsonMystique [BDD](https://github.com/balajeetm/json-mystique/blob/master/json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
+> The same can be found as **simpleCopy02** in the JsonMystique [BDD](../json-mystique-libs/json-mystique/src/test/java/com/balajeetm/mystique/core/JsonMystiquePositiveBDD.java) (Behavior Driven Development) Unit test. Please checkout the codebase and run the BDD as a JUNIT test to see for yourself
 
 ## Additional attributes for Copy MystTurn
 
