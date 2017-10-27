@@ -65,15 +65,15 @@ This is a functionally overloaded method, with abilities to provide the json sou
 >Since - 2.0.8
 
 **Arguments**<br>
-*   source<br>
+*   <u>**source**</u><br>
     The json source. It can be one of the below
     *   JsonElement<br>
         Gson's JsonElement (JsonObject, JsonArray, JsonPrimitive or JsonNull)
     *   Object<br>
         Can be any Java POJO, that can be jsonified, or a String representing a valid json
-*   jpath<br>
+*   <u>**jpath**</u><br>
     Defines the fully qualified json path to the field required. It can be one of the below:
-    *   String<br>
+    *   <u>String</u><br>
         '.' separated string defining the fully qualified json path.<br>
         ```java
         json = { "a": [{ "b": { "c": 3 } }] };
@@ -81,7 +81,7 @@ This is a functionally overloaded method, with abilities to provide the json sou
         jsonLever.get(json, path);
         // => 3
         ```
-    *   JsonArray<br>
+    *   <u>JsonArray</u><br>
         JsonArray representing the fully qualified json path. Array indexes are represented as numerals.<br>
         Only strings and numerals are allowed in the json array. String represent a json object"s fieldname and numerals represent array indexes.<br>
         ```java
@@ -90,7 +90,7 @@ This is a functionally overloaded method, with abilities to provide the json sou
         jsonLever.get(json, path);
         // => 3
         ```
-    *   Object[] - Object Array<br>
+    *   <u>Object[] - Object Array</u><br>
         Object Array representing the fully qualified json path<br>
         Only strings and numerals are allowed in the json array. String represents a json object"s fieldname and numerals represent array indexes.<br>
         The object can also be JsonPrimitives representing strings and numerals.<br>
@@ -99,14 +99,14 @@ This is a functionally overloaded method, with abilities to provide the json sou
         path = ["a", 0, "b", "c"]
         jsonLever.get(json, path);
         // => 3
-*   defaultValue<br>
+*   <u>defaultValue</u><br>
     Represents the value defined for undefined resolved values. It can be one of the below:
     *   JsonElement<br>
         Gson's JsonElement (JsonObject, JsonArray, JsonPrimitive or JsonNull)
 
 **Returns**<br>
 Returns the resolved value as:
-    *   JsonElement<br>
+    *   <u>**JsonElement**</u><br>
         Gson's JsonElement (JsonObject, JsonArray, JsonPrimitive or JsonNull)
 
 ### JsonLever.set(json, path, value)
@@ -133,13 +133,13 @@ This is a functionally overloaded method, with abilities to provide the json sou
 >Since - 2.0.8
 
 **Arguments**<br>
-*   <span style="color: green"><b>source</b></span><br>
+*   <u>**source**</u><br>
     The json source. It can be one of the below
     *   JsonElement<br>
         Gson's JsonElement (JsonObject, JsonArray, JsonPrimitive or JsonNull)
-*   jpath<br>
+*   <u>**jpath**</u><br>
     Defines the fully qualified json path to the field required. It can be one of the below:
-    *   String<br>
+    *   <u>String</u><br>
         '.' separated string defining the fully qualified json path.<br>
         ```java
         json = { "a": [{ "b": { "c": 3 } }] };
@@ -148,7 +148,7 @@ This is a functionally overloaded method, with abilities to provide the json sou
         System.out.println(json)
         // => { "a": [{ "b": { "c": "4" } }] }
         ```
-    *   JsonArray<br>
+    *   <u>JsonArray</u><br>
         JsonArray representing the fully qualified json path. Array indexes are represented as numerals.<br>
         Only strings and numerals are allowed in the json array. String represent a json object's fieldname and numerals represent array indexes.<br>
         ```java
@@ -157,14 +157,14 @@ This is a functionally overloaded method, with abilities to provide the json sou
         jsonLever.set(json, path, new JsonPrimitive("5"));
         // => { "a": [{ "b": { "c": 3 } }], "x": [null, {"y": "z"}] }
         ```
-*   value<br>
+*   <u>**value**</u><br>
     The value to set. It can be one of the below:
     *   JsonElement<br>
         Gson's JsonElement (JsonObject, JsonArray, JsonPrimitive or JsonNull)
 
 **Returns**<br>
 Returns the source json with value set:
-    *   JsonElement<br>
+    *   <u>**JsonElement**</u><br>
         Gson's JsonElement (JsonObject, JsonArray, JsonPrimitive or JsonNull)
 
 Hop over here for the [documentation index](_Sidebar.md)
