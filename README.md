@@ -12,7 +12,7 @@ Json mystique ships a set of libraries written in and for Java, useful for json 
     jsonLever.get(json, 'a.0.b.c');
     // => 3
     ``` 
-    Refer [JsonLever](JsonLever.md), GsonConvertor, JacksonConvertor, JsonQuery and JsonComparator for more details.
+    Refer [JsonLever](documentation/JsonLever.md), GsonConvertor, JacksonConvertor, JsonQuery and JsonComparator for more details.
 *   **Json Transformation**<br>
     The library takes an input json as a string or [JsonElement](https://google.github.io/gson/apidocs/com/google/gson/JsonElement.html) and transforms the same to a json string or [JsonElement](https://google.github.io/gson/apidocs/com/google/gson/JsonElement.html).<br>
     The transformation is performed via a ruleSet file that specifies the mappings in a json format.<br>
@@ -29,7 +29,7 @@ Json mystique ships a set of libraries written in and for Java, useful for json 
     jsonLever.get(object, "a.b.c", "default");
     // => "default"
     ```
-    Refer [JsonLever](JsonLever.md) for more details
+    Refer [JsonLever](documentation/JsonLever.md) for more details
 *   The library is useful for transforming from one json to another, even when the input and output jsons are non identical
     *   Multiple fields from the input can be operated on to map to a single field in the output
     *   Custom converters can be easily plugged to handle custom domain logic
@@ -38,7 +38,7 @@ Json mystique ships a set of libraries written in and for Java, useful for json 
     *   The standard interface is implemented in [Gson](https://github.com/google/gson) via GsonConvertor and
     *   [Jackson](https://github.com/FasterXML/jackson) via JacksonConvertor
 *   The library is useful for getting subset or projections of a json object.<br>
-    Refer [JsonLever](JsonLever.md) for more details
+    Refer [JsonLever](documentation/JsonLever.md) for more details
 *   The library is useful for comparing two jsons
     *   Compare if two jsons are identical
     *   Compare if one json is a subset of another
