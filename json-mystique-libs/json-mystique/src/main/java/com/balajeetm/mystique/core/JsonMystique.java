@@ -316,7 +316,7 @@ public class JsonMystique {
                       Spell spell =
                           getSpell(
                               source,
-                              jsonLever.getJPath(tarot.getFrom()),
+                              jsonLever.getJpath(tarot.getFrom()),
                               dependencies,
                               aces,
                               turn,
@@ -342,7 +342,7 @@ public class JsonMystique {
                     (aces, transform) ->
                         jsonLever.set(
                             resultWrapper,
-                            jsonLever.getJPath(tarot.getTo()),
+                            jsonLever.getJpath(tarot.getTo()),
                             transform,
                             aces,
                             tarot.getOptional()))

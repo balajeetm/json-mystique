@@ -18,7 +18,10 @@ import java.util.Map.Entry;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.core.convert.ConversionException;
 
+import com.balajeetm.mystique.util.gson.GsonFactory;
+import com.balajeetm.mystique.util.gson.convertor.GsonConvertor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -69,7 +72,7 @@ public class JsonLever {
 
   /** Instantiates a new json lever. */
   protected JsonLever() {
-    jsonParser = new JsonParser();
+    jsonParser = GsonFactory.getInstance().getJsonParser();
     GsonBuilder gsonBuilder = new GsonBuilder();
     gsonBuilder.setDateFormat(DateFormat.LONG, DateFormat.LONG);
     gson = gsonBuilder.create();
@@ -78,7 +81,7 @@ public class JsonLever {
   /**
    * Gets the json element in the specified jpath.
    *
-   * @param source the source
+   * @param source the json source
    * @param jpath '.' separated string defining the fully qualified json path to the field required.
    *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
    * @return the json element at the specified path
@@ -91,32 +94,15 @@ public class JsonLever {
   }
 
   /**
-   * Gets the json element in the specified jpath oe returns a default value.
-   *
-   * @param source the source
-   * @param jpath '.' separated string defining the fully qualified json path to the field required.
-   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
-   * @param defaultValue the default value
-   * @return the json element returns defaultValue for any invalid path or if the item at specified
-   *     location is Null return the source if the input jpath is '.'
-   */
-  public JsonElement get(JsonElement source, String jpath, JsonElement defaultValue) {
-    JsonElement result = get(source, jpath);
-    return isNull(result) ? defaultValue : result;
-  }
-
-  /**
    * Gets the json element in the specified jpath.
    *
-   * @param source the source
-   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
-   *     2, 3, 4]}}}, "a", "b" "c", "1"]) is '2'. Strings that can be casted to numerals are
-   *     presumed to be array indexes
-   * @return the json element returns 'Null' for any invalid path return the source if the input
-   *     jpath is '.'
+   * @param source the source, can be a POJO, json string, or a JsonElement
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @return the json element at the specified path
    */
-  public JsonElement get(JsonElement source, String... jpath) {
-    return get(source, newJsonArray(jpath));
+  public JsonElement get(Object source, String jpath) {
+    return get(jsonify(source), jpath);
   }
 
   /**
@@ -150,6 +136,75 @@ public class JsonLever {
   }
 
   /**
+   * Gets the json element in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1]) is '2'. Array indexes need to be specified as numerals.
+   *     Strings are always presumed to be field names.
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public JsonElement get(Object source, JsonArray jpath) {
+    return get(jsonify(source), jpath);
+  }
+
+  /**
+   * Gets the json element in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public JsonElement get(JsonElement source, Object... jpath) {
+    return get(source, newJsonArray(jpath));
+  }
+
+  /**
+   * Gets the json element in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public JsonElement get(Object source, Object... jpath) {
+    return get(jsonify(source), newJsonArray(jpath));
+  }
+
+  /**
+   * Gets the json element in the specified jpath or returns a default value.
+   *
+   * @param source the source
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @param defaultValue the default value
+   * @return the json element returns defaultValue for any invalid path or if the item at specified
+   *     location is Null return the source if the input jpath is '.'
+   */
+  public JsonElement get(JsonElement source, String jpath, JsonElement defaultValue) {
+    JsonElement result = get(source, jpath);
+    return isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Gets the json element in the specified jpath oe returns a default value.
+   *
+   * @param source the source, can be a POJO, json string, or a JsonElement
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @param defaultValue the default value
+   * @return the json element returns defaultValue for any invalid path or if the item at specified
+   *     location is Null return the source if the input jpath is '.'
+   */
+  public JsonElement get(Object source, String jpath, JsonElement defaultValue) {
+    return get(jsonify(source), jpath, defaultValue);
+  }
+
+  /**
    * Gets the.
    *
    * <p>Gets the json element in the specified jpath or returns a default value
@@ -170,12 +225,32 @@ public class JsonLever {
   /**
    * Gets the.
    *
+   * <p>Gets the json element in the specified jpath or returns a default value
+   *
    * @param source the source
-   * @param jpath the jpath
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1]) is '2'. Array indexes need to be specified as numerals.
+   *     Strings are always presumed to be field names.
+   * @param defaultValue the default value
+   * @return the json element returns defaultValue for any invalid path or if the item at specified
+   *     location is Null return the source if the input jpath is '.'
+   */
+  public JsonElement get(Object source, JsonArray jpath, JsonElement defaultValue) {
+    return get(jsonify(source), jpath, defaultValue);
+  }
+
+  /**
+   * Sets the json element at the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a.b.c.1", 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Strings that can be
+   *     casted to numerals are presumed to be array indexes
+   * @param value the value
    * @return the json element
    */
-  public JsonElement get(JsonElement source, Object... jpath) {
-    return get(source, newJsonArray(jpath));
+  public JsonElement set(JsonElement source, String jpath, JsonElement value) {
+    return set(source, getJpath(jpath), value);
   }
 
   /**
@@ -217,57 +292,6 @@ public class JsonLever {
       }
     }
     return result;
-  }
-
-  /**
-   * Update result.
-   *
-   * @param result the result
-   * @param field the field
-   * @return the json element
-   */
-  protected JsonElement updateResult(JsonElement result, JsonElement field) {
-    if (isNull(result)) {
-      result = field;
-    }
-    return result;
-  }
-
-  /**
-   * Sets the field.
-   *
-   * @param field the field
-   * @param path the path
-   * @param value the value
-   * @return the json element
-   */
-  protected JsonElement setField(JsonElement field, JsonElement path, JsonElement value) {
-    if (isNumber(path)) {
-      JsonArray jArray = asJsonArray(field.getAsJsonArray(), new JsonArray());
-      int index = path.getAsInt();
-      repleteArray(jArray, index, JsonNull.class);
-      jArray.set(index, value);
-      field = jArray;
-    } else {
-      JsonObject jObject = asJsonObject(field, new JsonObject());
-      jObject.add(path.getAsString(), value);
-      field = jObject;
-    }
-    return field;
-  }
-
-  /**
-   * Sets the json element at the specified jpath.
-   *
-   * @param source the source
-   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
-   *     2, 3, 4]}}}, "a.b.c.1", 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Strings that can be
-   *     casted to numerals are presumed to be array indexes
-   * @param value the value
-   * @return the json element
-   */
-  public JsonElement set(JsonElement source, String jpath, JsonElement value) {
-    return set(source, getJpath(jpath), value);
   }
 
   /**
@@ -353,27 +377,13 @@ public class JsonLever {
   /**
    * New json array.
    *
-   * @param str the str
-   * @return the json array
-   */
-  public JsonArray newJsonArray(String... str) {
-    JsonArray output = new JsonArray();
-    for (String string : str) {
-      output.add(new JsonPrimitive(StringUtils.trim(string)));
-    }
-    return output;
-  }
-
-  /**
-   * New json array.
-   *
    * @param path the path
    * @return the json array
    */
   public JsonArray newJsonArray(Object... path) {
     JsonArray output = new JsonArray();
     for (Object p : path) {
-      output.add(getTypedPath(p));
+      output.add(getTypedPath(p, Boolean.FALSE));
     }
     return output;
   }
@@ -823,20 +833,63 @@ public class JsonLever {
   }
 
   /**
+   * Update result.
+   *
+   * @param result the result
+   * @param field the field
+   * @return the json element
+   */
+  protected JsonElement updateResult(JsonElement result, JsonElement field) {
+    if (isNull(result)) {
+      result = field;
+    }
+    return result;
+  }
+
+  /**
+   * Sets the field.
+   *
+   * @param field the field
+   * @param path the path
+   * @param value the value
+   * @return the json element
+   */
+  protected JsonElement setField(JsonElement field, JsonElement path, JsonElement value) {
+    if (isNumber(path)) {
+      JsonArray jArray = asJsonArray(field.getAsJsonArray(), new JsonArray());
+      int index = path.getAsInt();
+      repleteArray(jArray, index, JsonNull.class);
+      jArray.set(index, value);
+      field = jArray;
+    } else {
+      JsonObject jObject = asJsonObject(field, new JsonObject());
+      jObject.add(path.getAsString(), value);
+      field = jObject;
+    }
+    return field;
+  }
+
+  /**
    * Gets the typed path.
    *
    * @param p the p
    * @return the typed path
    */
   private JsonElement getTypedPath(Object p) {
+    return getTypedPath(p, Boolean.TRUE);
+  }
+
+  private JsonElement getTypedPath(Object p, Boolean strToNum) {
     JsonElement result = JsonNull.INSTANCE;
     if (p instanceof Number) {
       result = new JsonPrimitive((Number) p);
     } else if (p instanceof String) {
-      String sp = (String) p;
+      String sp = StringUtils.trimToEmpty((String) p);
       result =
-          NumberUtils.isCreatable(sp)
-              ? new JsonPrimitive(NumberUtils.toInt(sp))
+          strToNum
+              ? (NumberUtils.isCreatable(sp)
+                  ? new JsonPrimitive(NumberUtils.toInt(sp))
+                  : new JsonPrimitive(sp))
               : new JsonPrimitive(sp);
     } else if (p instanceof Boolean) {
       result = new JsonPrimitive((Boolean) p);
@@ -933,6 +986,23 @@ public class JsonLever {
     return source;
   }
 
+  public JsonElement jsonify(Object source) {
+    JsonElement result = JsonNull.INSTANCE;
+    if (source instanceof JsonElement) {
+      result = (JsonElement) source;
+    } else {
+      try {
+        result = GsonConvertor.getInstance().deserialize(source, JsonElement.class);
+
+      } catch (ConversionException e) {
+        String msg = String.format("Could not deserialise object %s to json.", source);
+        log.error(msg);
+        log.debug(msg, e);
+      }
+    }
+    return result;
+  }
+
   /**
    * Gets the new element.
    *
@@ -981,7 +1051,7 @@ public class JsonLever {
    * @param jpath the jpath
    * @return the j path
    */
-  public JsonArray getJPath(JsonElement jpath) {
+  public JsonArray getJpath(JsonElement jpath) {
     JsonArray path = null;
     if (isJsonArray(jpath)) {
       path = asJsonArray(jpath);

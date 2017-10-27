@@ -22,12 +22,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The Class JacksonConvertor.
  *
  * @author balajeetm
  */
+@Slf4j
 public class JacksonConvertor implements JsonConvertor {
 
   /** The object mapper. */
@@ -74,6 +76,9 @@ public class JacksonConvertor implements JsonConvertor {
     try {
       value = null != jsonString ? objectMapper.readValue(jsonString, pojoType) : value;
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of json string %s to class %s.", jsonString, pojoType));
       throw getConvertorException(e);
     }
     return value;
@@ -91,6 +96,9 @@ public class JacksonConvertor implements JsonConvertor {
     try {
       value = null != object ? objectMapper.convertValue(object, pojoType) : value;
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of object %s to class %s.", object, pojoType));
       throw getConvertorException(e);
     }
     return value;
@@ -108,6 +116,10 @@ public class JacksonConvertor implements JsonConvertor {
     try {
       value = null != inputStream ? objectMapper.readValue(inputStream, pojoType) : value;
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of json input stream %s to class %s.",
+              inputStream, pojoType));
       throw getConvertorException(e);
     }
     return value;
@@ -120,6 +132,7 @@ public class JacksonConvertor implements JsonConvertor {
    * @return the convertor exception
    */
   private ConvertorException getConvertorException(Exception e) {
+    log.debug("Error occured during conversion", e);
     return new ConvertorException(e);
   }
 
@@ -134,6 +147,7 @@ public class JacksonConvertor implements JsonConvertor {
     try {
       return objectMapper.writeValueAsString(pojo);
     } catch (Exception e) {
+      log.error(String.format("Error during serialisation of object %s.", pojo));
       throw getConvertorException(e);
     }
   }
@@ -152,6 +166,10 @@ public class JacksonConvertor implements JsonConvertor {
     try {
       return (T) objectMapper.readValue(inputStream, javaType);
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of json input stream %s to %s<%s>.",
+              inputStream, groupClass.getSimpleName(), pojoType.getSimpleName()));
       throw getConvertorException(e);
     }
   }
@@ -170,6 +188,10 @@ public class JacksonConvertor implements JsonConvertor {
     try {
       return (List<T>) objectMapper.readValue(inputStream, javaType);
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of json inputstream %s to List<%s>.",
+              inputStream, pojoType.getSimpleName()));
       throw getConvertorException(e);
     }
   }
@@ -187,6 +209,10 @@ public class JacksonConvertor implements JsonConvertor {
     try {
       return (List<T>) objectMapper.convertValue(object, javaType);
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of object %s to List<%s>.",
+              object, pojoType.getSimpleName()));
       throw getConvertorException(e);
     }
   }
@@ -219,6 +245,10 @@ public class JacksonConvertor implements JsonConvertor {
     try {
       return objectMapper.readValue(jsonString, javaType);
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of json string %s to %s<%s>.",
+              jsonString, groupClass.getSimpleName(), pojoType.getSimpleName()));
       throw getConvertorException(e);
     }
   }
@@ -256,6 +286,10 @@ public class JacksonConvertor implements JsonConvertor {
     try {
       return (List<T>) objectMapper.readValue(jsonString, javaType);
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of json string %s to List<%s>.",
+              jsonString, pojoType.getSimpleName()));
       throw getConvertorException(e);
     }
   }

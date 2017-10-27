@@ -39,12 +39,12 @@ public class GetFromDepsMystTurn extends AbstractMystTurn {
 
       turn = mystiqueLever.asJsonObject(turn, new JsonObject());
       JsonElement granularSource = getGranularSource(elementSource, turn, deps, aces);
-      JsonArray reference = mystiqueLever.getJPath(granularSource);
+      JsonArray reference = mystiqueLever.getJpath(granularSource);
 
       /* Default is needed since the key can turn out to be null */
       JsonArray keyPath =
           mystiqueLever.asJsonArray(
-              mystiqueLever.getJPath(turn.get(MystiqueConstants.KEY)), new JsonArray());
+              mystiqueLever.getJpath(turn.get(MystiqueConstants.KEY)), new JsonArray());
       JsonElement value = turn.get(MystiqueConstants.VALUE);
       value = mystiqueLever.isNull(value) ? new JsonArray() : value;
 

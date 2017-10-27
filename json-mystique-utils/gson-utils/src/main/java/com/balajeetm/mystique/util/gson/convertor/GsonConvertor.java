@@ -28,8 +28,10 @@ import com.google.gson.JsonElement;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /** The Class GsonConvertor. */
+@Slf4j
 public class GsonConvertor implements JsonConvertor {
 
   /**
@@ -110,6 +112,9 @@ public class GsonConvertor implements JsonConvertor {
     try {
       return gson.fromJson(jsonString, pojoType);
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of json string %s to class %s.", jsonString, pojoType));
       throw getConvertorException(e);
     }
   }
@@ -127,6 +132,9 @@ public class GsonConvertor implements JsonConvertor {
       JsonElement jsonElement = getJsonElement(object);
       return gson.fromJson(jsonElement, pojoType);
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of object %s to class %s.", object, pojoType));
       throw getConvertorException(e);
     }
   }
@@ -143,6 +151,10 @@ public class GsonConvertor implements JsonConvertor {
     try {
       return gson.fromJson(new InputStreamReader(inputStream), pojoType);
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of json input stream %s to class %s.",
+              inputStream, pojoType));
       throw getConvertorException(e);
     }
   }
@@ -159,6 +171,7 @@ public class GsonConvertor implements JsonConvertor {
     try {
       return gson.toJson(pojo);
     } catch (Exception e) {
+      log.error(String.format("Error during serialisation of object %s.", pojo));
       throw getConvertorException(e);
     }
   }
@@ -180,6 +193,10 @@ public class GsonConvertor implements JsonConvertor {
 
       return gson.fromJson(jsonString, parametrizedType);
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of json string %s to %s<%s>.",
+              jsonString, groupClass.getSimpleName(), pojoType.getSimpleName()));
       throw getConvertorException(e);
     }
   }
@@ -201,6 +218,10 @@ public class GsonConvertor implements JsonConvertor {
 
       return gson.fromJson(new InputStreamReader(inputStream), parametrizedType);
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of json inputstream %s to %s<%s>.",
+              inputStream, groupClass.getSimpleName(), pojoType.getSimpleName()));
       throw getConvertorException(e);
     }
   }
@@ -222,6 +243,10 @@ public class GsonConvertor implements JsonConvertor {
 
       return gson.fromJson(new InputStreamReader(inputStream), parametrizedType);
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of json inputstream %s to List<%s>.",
+              inputStream, pojoType.getSimpleName()));
       throw getConvertorException(e);
     }
   }
@@ -243,6 +268,10 @@ public class GsonConvertor implements JsonConvertor {
 
       return gson.fromJson(jsonString, parametrizedType);
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of json string %s to List<%s>.",
+              jsonString, pojoType.getSimpleName()));
       throw getConvertorException(e);
     }
   }
@@ -264,6 +293,10 @@ public class GsonConvertor implements JsonConvertor {
 
       return gson.fromJson(jsonElement, parametrizedType);
     } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of object %s to List<%s>.",
+              object, pojoType.getSimpleName()));
       throw getConvertorException(e);
     }
   }
@@ -275,6 +308,7 @@ public class GsonConvertor implements JsonConvertor {
    * @return the convertor exception
    */
   private ConvertorException getConvertorException(Exception e) {
+    log.debug("Error occured during conversion", e);
     return new ConvertorException(e);
   }
 

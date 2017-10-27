@@ -2,21 +2,11 @@ Welcome to the json-mystique wiki!
 
 ## Maven Download
 
-[Json Mystique](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.balajeetm.mystique%22) and all its libraries downloads at Maven Central.<br>
-The different library utils and their capabilities are detailed below:
+[Json Mystique](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.balajeetm.mystique%22) and all its libraries download at Maven Central.<br>
+The different library utils, their capabilities & their maven dependency snippets are detailed below:
 
-### Maven Dependency Snippet
-The maven dependency snippet for various libs is as below
-
-#### Json Mystique - Native Library
+### Json Mystique - Native Library
 ---
-
-> **NOTE**<br>
-There are three variants of JsonMystique.<br>
-The `1.x.x` and `0.x.x` versions have reached EOL. `2.x.x` is the only active version as of now<br><br>
-[2.x.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique%7C2.0.7%7Cjar) - Standalone json transformation utility<br>
-[1.x.x](http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C1.0.8%7Cjar) - Parallel processing json transformation utility<br>
-[0.x.x](http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C0.0.1%7Cjar) - Sequential processing json transformation utility
 
 ```xml
 <dependency>
@@ -26,12 +16,19 @@ The `1.x.x` and `0.x.x` versions have reached EOL. `2.x.x` is the only active ve
 </dependency>
 ```
 
+> **NOTE**<br>
+There are three variants of JsonMystique.<br>
+The `1.x.x` and `0.x.x` versions have reached EOL. `2.x.x` is the only active version as of now<br><br>
+[2.x.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique%7C2.0.7%7Cjar) - Standalone json transformation utility<br>
+[1.x.x](http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C1.0.8%7Cjar) - Parallel processing json transformation utility<br>
+[0.x.x](http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C0.0.1%7Cjar) - Sequential processing json transformation utility
+
 > NOTE<br>
 2.x.x is the only supported version currently since the parallel processing logic is mainstream. The other versions (0.x.x and 1.x.x) have been deprecated.<br>
 It is highly recommended and suggested, to only use the 2.x.x versions of Mystique.<br>
 Please raise issues, for support if any, on earlier versions.<br>
 
-#### Json Mystique - Spring Boot Starter
+### Json Mystique - Spring Boot Starter
 ---
 
 ```xml
@@ -52,9 +49,9 @@ The json mystique's spring boot starter autoconfigures the json mystique environ
 *   If Spring-web is in the classpath, it connfigures a RestTemplate with the ability to serialise and deserialise Gson Objects (JsonElement)
 *   Automatically registers custom Json Mystique `MystTurns` with JsonMystique
 
-For more details refer the [usage guide](Usage-Guide.md) or the [sample projects](json-mystique-samples/mystique-web-sample) for usage
+For more details refer the [usage guide](JsonMystique-Usage-Guide.md) or the [sample projects](json-mystique-samples/mystique-web-sample) for usage
 
-#### Json Mystique - Gson Utilities
+### Json Mystique - Gson Utilities
 ---
 
 ```xml
@@ -65,12 +62,12 @@ For more details refer the [usage guide](Usage-Guide.md) or the [sample projects
 </dependency>
 ```
 
-The json mystique gson utility library provides a set of utility classes to operate on raw json objects and serialise deserialise POJOs.
+The json mystique gson utility library provides a set of utility classes to operate on manipulate, access and operate on json objects. All the utilities are standalone instances that can be accessed via `getInstance()` and use right away.<br>
 The utility classes are
-*   [Gson Convertor](json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/convertor/GsonConvertor.java) - Utility for POJO Object Model Mapping
-*   [Json Lever](json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/lever/JsonLever.java) - Utility to operate on raw json objects. Simplified and type safe use of the Gson library. Allows deep and shallow merge of jsons
-*   [Json Query](json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/lever/JsonQuery.java) - Utility to perform queries on a json element (can be an object or an array)
+*   [Json Lever](json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/lever/JsonLever.java) - Utility to operate on raw json objects. Exposes simplified [lodash](https://lodash.com/) like object manipulation interfaces and a type safe use of the Gson library. Allows deep and shallow merge & clone of jsons
+*   [Gson Convertor](json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/convertor/GsonConvertor.java) - Utility for POJO Object Model Mapping. Provides a simplified interface to convert to and from a json
 *   [Json Comparator](json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/lever/JsonComparator.java) - Utility to compare two jsons
+*   [Json Query](json-mystique-utils/gson-utils/src/main/java/com/balajeetm/mystique/util/gson/lever/JsonQuery.java) - Utility to perform sql-like queries on a json element to select appropriate fields from a json (can be an object or an array)
 
 #### Json Mystique - Jackson Utilities
 ---
@@ -83,11 +80,10 @@ The utility classes are
 </dependency>
 ```
 
-The json mystique jackson utility library provides a set of utility classes to operate on raw json objects and serialise deserialise POJOs.
+The json mystique jackson utility library provides a set of utility classes, implemented using jackson, to operate on raw json objects and serialise deserialise POJOs.
 The utility classes are
 * [Jackson Convertor](json-mystique-utils/jackson-utils/src/main/java/com/balajeetm/mystique/util/jackson/convertor/JacksonConvertor.java) - Utility for POJO Object Model Mapping
 
 ## Usage Guide
 
-For more information on usage, refer [Usage Guide](Usage-Guide.md)<br>
 Hop over here for the [documentation index](_Sidebar.md)

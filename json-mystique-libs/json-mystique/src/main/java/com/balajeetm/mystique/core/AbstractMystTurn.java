@@ -96,7 +96,7 @@ public abstract class AbstractMystTurn implements MystTurn {
       }
 
       // set the result
-      JsonArray to = mystiqueLever.getJPath(turn.get(MystiqueConstants.TO));
+      JsonArray to = mystiqueLever.getJpath(turn.get(MystiqueConstants.TO));
       Boolean optional =
           mystiqueLever.asBoolean(turn.get(MystiqueConstants.OPTIONAL), Boolean.FALSE);
 
@@ -180,7 +180,7 @@ public abstract class AbstractMystTurn implements MystTurn {
       JsonElement source, JsonObject turn, JsonObject deps, JsonObject aces) {
     JsonArray from =
         mystiqueLever.isNotNull(turn)
-            ? mystiqueLever.getJPath(turn.get(MystiqueConstants.FROM))
+            ? mystiqueLever.getJpath(turn.get(MystiqueConstants.FROM))
             : null;
     JsonElement conditionSource =
         mystiqueLever.isNull(from) ? source : mystiqueLever.getField(source, from, deps, aces);
