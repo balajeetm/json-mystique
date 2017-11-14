@@ -12,10 +12,9 @@ package com.balajeetm.mystique.util.gson.lever;
 
 import java.text.DateFormat;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map.Entry;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.core.convert.ConversionException;
@@ -35,6 +34,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /** The Constant log. */
+
+/** The Constant log. */
 @Slf4j
 public class JsonLever {
 
@@ -43,7 +44,19 @@ public class JsonLever {
    *
    * @return the json parser
    */
+
+  /**
+   * Gets the json parser.
+   *
+   * @return the json parser
+   */
   @Getter private JsonParser jsonParser;
+
+  /**
+   * Gets the gson.
+   *
+   * @return the gson
+   */
 
   /**
    * Gets the gson.
@@ -295,6 +308,498 @@ public class JsonLever {
   }
 
   /**
+   * Returns the JsonObject identified by the fully qualified json path as a json object if
+   * possible. Else returns null
+   *
+   * @param source the json source element
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @return the field of interest as json object
+   */
+  public JsonObject getJsonObject(JsonElement source, String jpath) {
+    return asJsonObject(get(source, jpath));
+  }
+
+  /**
+   * Returns the JsonObject identified by the fully qualified json path as a json object if
+   * possible. Else returns null
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @return the field of interest as json object
+   */
+  public JsonObject getJsonObject(Object source, String jpath) {
+    return asJsonObject(get(source, jpath));
+  }
+
+  /**
+   * Returns the JsonObject identified by the fully qualified json path as a json object if
+   * possible. Else returns null
+   *
+   * @param source the json source element
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @return the field of interest as json object
+   */
+  public JsonObject getJsonObject(JsonElement source, JsonArray jpath) {
+    return asJsonObject(get(source, jpath));
+  }
+
+  /**
+   * Returns the JsonObject identified by the fully qualified json path as a json object if
+   * possible. Else returns null
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @return the field of interest as json object
+   */
+  public JsonObject getJsonObject(Object source, JsonArray jpath) {
+    return asJsonObject(get(source, jpath));
+  }
+
+  /**
+   * Gets the json object in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public JsonObject getJsonObject(JsonElement source, Object... jpath) {
+    return asJsonObject(get(source, newJsonArray(jpath)));
+  }
+
+  /**
+   * Gets the json object in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public JsonObject getJsonObject(Object source, Object... jpath) {
+    return asJsonObject(get(jsonify(source), newJsonArray(jpath)));
+  }
+
+  /**
+   * Returns the JsonArray identified by the fully qualified json path as a json object if possible.
+   * Else returns null
+   *
+   * @param source the json source element
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @return the field of interest as json object
+   */
+  public JsonArray getJsonArray(JsonElement source, String jpath) {
+    return asJsonArray(get(source, jpath));
+  }
+
+  /**
+   * Returns the JsonArray identified by the fully qualified json path as a json object if possible.
+   * Else returns null
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @return the field of interest as json object
+   */
+  public JsonArray getJsonArray(Object source, String jpath) {
+    return asJsonArray(get(source, jpath));
+  }
+
+  /**
+   * Returns the JsonArray identified by the fully qualified json path as a json object if possible.
+   * Else returns null
+   *
+   * @param source the json source element
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @return the field of interest as json object
+   */
+  public JsonArray getJsonArray(JsonElement source, JsonArray jpath) {
+    return asJsonArray(get(source, jpath));
+  }
+
+  /**
+   * Returns the JsonArray identified by the fully qualified json path as a json object if possible.
+   * Else returns null
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @return the field of interest as json object
+   */
+  public JsonArray getJsonArray(Object source, JsonArray jpath) {
+    return asJsonArray(get(source, jpath));
+  }
+
+  /**
+   * Gets the JsonArray in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public JsonArray getJsonArray(JsonElement source, Object... jpath) {
+    return asJsonArray(get(source, newJsonArray(jpath)));
+  }
+
+  /**
+   * Gets the JsonArray in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public JsonArray getJsonArray(Object source, Object... jpath) {
+    return asJsonArray(get(jsonify(source), newJsonArray(jpath)));
+  }
+
+  /**
+   * Returns the String identified by the fully qualified json path as a json object if possible.
+   * Else returns null
+   *
+   * @param source the json source element
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @return the field of interest as json object
+   */
+  public String getString(JsonElement source, String jpath) {
+    return asString(get(source, jpath));
+  }
+
+  /**
+   * Returns the String identified by the fully qualified json path as a json object if possible.
+   * Else returns null
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @return the field of interest as json object
+   */
+  public String getString(Object source, String jpath) {
+    return asString(get(source, jpath));
+  }
+
+  /**
+   * Returns the String identified by the fully qualified json path as a json object if possible.
+   * Else returns null
+   *
+   * @param source the json source element
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @return the field of interest as json object
+   */
+  public String getString(JsonElement source, JsonArray jpath) {
+    return asString(get(source, jpath));
+  }
+
+  /**
+   * Returns the String identified by the fully qualified json path as a json object if possible.
+   * Else returns null
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @return the field of interest as json object
+   */
+  public String getString(Object source, JsonArray jpath) {
+    return asString(get(source, jpath));
+  }
+
+  /**
+   * Gets the String in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public String getString(JsonElement source, Object... jpath) {
+    return asString(get(source, newJsonArray(jpath)));
+  }
+
+  /**
+   * Gets the String in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public String getString(Object source, Object... jpath) {
+    return asString(get(jsonify(source), newJsonArray(jpath)));
+  }
+
+  /**
+   * Returns the Long identified by the fully qualified json path as a json object if possible. Else
+   * returns null
+   *
+   * @param source the json source element
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @return the field of interest as json object
+   */
+  public Long getLong(JsonElement source, String jpath) {
+    return asLong(get(source, jpath));
+  }
+
+  /**
+   * Returns the Long identified by the fully qualified json path as a json object if possible. Else
+   * returns null
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @return the field of interest as json object
+   */
+  public Long getLong(Object source, String jpath) {
+    return asLong(get(source, jpath));
+  }
+
+  /**
+   * Returns the Long identified by the fully qualified json path as a json object if possible. Else
+   * returns null
+   *
+   * @param source the json source element
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @return the field of interest as json object
+   */
+  public Long getLong(JsonElement source, JsonArray jpath) {
+    return asLong(get(source, jpath));
+  }
+
+  /**
+   * Returns the Long identified by the fully qualified json path as a json object if possible. Else
+   * returns null
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @return the field of interest as json object
+   */
+  public Long getLong(Object source, JsonArray jpath) {
+    return asLong(get(source, jpath));
+  }
+
+  /**
+   * Gets the Long in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public Long getLong(JsonElement source, Object... jpath) {
+    return asLong(get(source, newJsonArray(jpath)));
+  }
+
+  /**
+   * Gets the Long in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public Long getLong(Object source, Object... jpath) {
+    return asLong(get(jsonify(source), newJsonArray(jpath)));
+  }
+
+  /**
+   * Returns the Boolean identified by the fully qualified json path as a json object if possible.
+   * Else returns null
+   *
+   * @param source the json source element
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @return the field of interest as json object
+   */
+  public Boolean getBoolean(JsonElement source, String jpath) {
+    return asBoolean(get(source, jpath));
+  }
+
+  /**
+   * Returns the Boolean identified by the fully qualified json path as a json object if possible.
+   * Else returns null
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @return the field of interest as json object
+   */
+  public Boolean getBoolean(Object source, String jpath) {
+    return asBoolean(get(source, jpath));
+  }
+
+  /**
+   * Returns the Boolean identified by the fully qualified json path as a json object if possible.
+   * Else returns null
+   *
+   * @param source the json source element
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @return the field of interest as json object
+   */
+  public Boolean getBoolean(JsonElement source, JsonArray jpath) {
+    return asBoolean(get(source, jpath));
+  }
+
+  /**
+   * Returns the Boolean identified by the fully qualified json path as a json object if possible.
+   * Else returns null
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @return the field of interest as json object
+   */
+  public Boolean getBoolean(Object source, JsonArray jpath) {
+    return asBoolean(get(source, jpath));
+  }
+
+  /**
+   * Gets the Boolean in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public Boolean getBoolean(JsonElement source, Object... jpath) {
+    return asBoolean(get(source, newJsonArray(jpath)));
+  }
+
+  /**
+   * Gets the Boolean in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public Boolean getBoolean(Object source, Object... jpath) {
+    return asBoolean(get(jsonify(source), newJsonArray(jpath)));
+  }
+
+  /**
+   * Returns the JsonPrimitive identified by the fully qualified json path as a json object if
+   * possible. Else returns null
+   *
+   * @param source the json source element
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @return the field of interest as json object
+   */
+  public JsonPrimitive getJsonPrimitive(JsonElement source, String jpath) {
+    return asJsonPrimitive(get(source, jpath));
+  }
+
+  /**
+   * Returns the JsonPrimitive identified by the fully qualified json path as a json object if
+   * possible. Else returns null
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @return the field of interest as json object
+   */
+  public JsonPrimitive getJsonPrimitive(Object source, String jpath) {
+    return asJsonPrimitive(get(source, jpath));
+  }
+
+  /**
+   * Returns the JsonPrimitive identified by the fully qualified json path as a json object if
+   * possible. Else returns null
+   *
+   * @param source the json source element
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @return the field of interest as json object
+   */
+  public JsonPrimitive getJsonPrimitive(JsonElement source, JsonArray jpath) {
+    return asJsonPrimitive(get(source, jpath));
+  }
+
+  /**
+   * Returns the JsonPrimitive identified by the fully qualified json path as a json object if
+   * possible. Else returns null
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @return the field of interest as json object
+   */
+  public JsonPrimitive getJsonPrimitive(Object source, JsonArray jpath) {
+    return asJsonPrimitive(get(source, jpath));
+  }
+
+  /**
+   * Gets the JsonPrimitive in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public JsonPrimitive getJsonPrimitive(JsonElement source, Object... jpath) {
+    return asJsonPrimitive(get(source, newJsonArray(jpath)));
+  }
+
+  /**
+   * Gets the JsonPrimitive in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public JsonPrimitive getJsonPrimitive(Object source, Object... jpath) {
+    return asJsonPrimitive(get(jsonify(source), newJsonArray(jpath)));
+  }
+
+  /**
    * Checks if is null.
    *
    * @param source the source
@@ -320,8 +825,28 @@ public class JsonLever {
    * @param source the source
    * @return the boolean
    */
-  public Boolean isJsonArray(JsonElement source) {
+  public Boolean isArray(JsonElement source) {
     return isNotNull(source) && source.isJsonArray();
+  }
+
+  /**
+   * Checks if is json object.
+   *
+   * @param source the source
+   * @return the boolean
+   */
+  public Boolean isObject(JsonElement source) {
+    return isNotNull(source) && source.isJsonObject();
+  }
+
+  /**
+   * Checks if is json primitive.
+   *
+   * @param source the source
+   * @return the boolean
+   */
+  public Boolean isPrimitive(JsonElement source) {
+    return isNotNull(source) && source.isJsonPrimitive();
   }
 
   /**
@@ -332,16 +857,6 @@ public class JsonLever {
    */
   public Boolean isNumber(JsonElement source) {
     return isNotNull(source) && source.isJsonPrimitive() && source.getAsJsonPrimitive().isNumber();
-  }
-
-  /**
-   * Checks if is json primitive.
-   *
-   * @param source the source
-   * @return the boolean
-   */
-  public Boolean isJsonPrimitive(JsonElement source) {
-    return isNotNull(source) && source.isJsonPrimitive();
   }
 
   /**
@@ -365,37 +880,24 @@ public class JsonLever {
   }
 
   /**
-   * Checks if is json object.
-   *
-   * @param source the source
-   * @return the boolean
-   */
-  public Boolean isJsonObject(JsonElement source) {
-    return isNotNull(source) && source.isJsonObject();
-  }
-
-  /**
-   * New json array.
-   *
-   * @param path the path
-   * @return the json array
-   */
-  public JsonArray newJsonArray(Object... path) {
-    JsonArray output = new JsonArray();
-    for (Object p : path) {
-      output.add(getTypedPath(p, Boolean.FALSE));
-    }
-    return output;
-  }
-
-  /**
    * Returns the source json as a json primitive if possible. Else returns null
    *
    * @param source the source json element
    * @return the source json as a json primitive
    */
   public JsonPrimitive asJsonPrimitive(JsonElement source) {
-    return isJsonPrimitive(source) ? source.getAsJsonPrimitive() : null;
+    return asJsonPrimitive(source, null);
+  }
+
+  /**
+   * Returns the source json as a json primitive if possible. Else returns the default value
+   *
+   * @param source the source
+   * @param defaultValue the default value
+   * @return the json primitive
+   */
+  public JsonPrimitive asJsonPrimitive(JsonElement source, JsonPrimitive defaultValue) {
+    return isPrimitive(source) ? source.getAsJsonPrimitive() : defaultValue;
   }
 
   /**
@@ -409,17 +911,6 @@ public class JsonLever {
   }
 
   /**
-   * Returns the source json as a json element if not null. Else returns the default json
-   *
-   * @param source the source json element
-   * @param defaultJson the default json
-   * @return the source json as a non null json element
-   */
-  public JsonElement asJsonElement(JsonElement source, JsonElement defaultJson) {
-    return isNotNull(source) ? source : defaultJson;
-  }
-
-  /**
    * Returns the source json as a json object if possible. Else returns the default json
    *
    * @param source the source json element
@@ -427,86 +918,7 @@ public class JsonLever {
    * @return the source json as a json object
    */
   public JsonObject asJsonObject(JsonElement source, JsonObject defaultJson) {
-    return isJsonObject(source) ? source.getAsJsonObject() : defaultJson;
-  }
-
-  /**
-   * Returns the field identified by the fully qualified json path as a json object if possible.
-   * Else returns null
-   *
-   * @param source the json source element
-   * @param jPath '.' separated string defining the fully qualified json path to the field required.
-   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
-   * @return the field of interest as json object
-   */
-  public JsonObject getJsonObject(JsonElement source, String jPath) {
-    JsonElement field = get(source, getJpath(jPath));
-    return asJsonObject(field);
-  }
-
-  /**
-   * Returns the field identified by the fully qualified json path as a json array if possible. Else
-   * returns null
-   *
-   * @param source the json source element
-   * @param jPath the string array defining the full qualified json path to the field required
-   * @return the field of interest as json array
-   */
-  public JsonArray getJsonArray(JsonElement source, String jPath) {
-    JsonElement field = get(source, getJpath(jPath));
-    return asJsonArray(field);
-  }
-
-  /**
-   * Returns the field identified by the fully qualified json path as a json string if possible.
-   * Else returns null
-   *
-   * @param source the json source element
-   * @param jPath the string array defining the full qualified json path to the field required
-   * @return the field of interest as string
-   */
-  public String getString(JsonElement source, String jPath) {
-    JsonElement field = get(source, getJpath(jPath));
-    return asString(field);
-  }
-
-  /**
-   * Returns the field identified by the fully qualified json path as a json object if possible.
-   * Else returns null
-   *
-   * @param source the json source element
-   * @param jPath the string array defining the full qualified json path to the field required
-   * @return the field of interest as long
-   */
-  public Long getLong(JsonElement source, String jPath) {
-    JsonElement field = get(source, getJpath(jPath));
-    return asLong(field);
-  }
-
-  /**
-   * Returns the field identified by the fully qualified json path as a boolean if possible. Else
-   * returns null
-   *
-   * @param source the json source element
-   * @param jPath the string array defining the full qualified json path to the field required
-   * @return the field of interest as boolean
-   */
-  public Boolean getBoolean(JsonElement source, String jPath) {
-    JsonElement field = get(source, getJpath(jPath));
-    return asBoolean(field);
-  }
-
-  /**
-   * Returns the field identified by the fully qualified json path as a json primitive if possible.
-   * Else returns null
-   *
-   * @param source the json source element
-   * @param jPath the string array defining the full qualified json path to the field required
-   * @return the field of interest as json primitive
-   */
-  public JsonPrimitive getJsonPrimitive(JsonElement source, String jPath) {
-    JsonElement field = get(source, getJpath(jPath));
-    return asJsonPrimitive(field);
+    return isObject(source) ? source.getAsJsonObject() : defaultJson;
   }
 
   /**
@@ -527,7 +939,28 @@ public class JsonLever {
    * @return the source json as a json array
    */
   public JsonArray asJsonArray(JsonElement source, JsonArray defaultArray) {
-    return isJsonArray(source) ? source.getAsJsonArray() : defaultArray;
+    return isArray(source) ? source.getAsJsonArray() : defaultArray;
+  }
+
+  /**
+   * Returns the source json as a json element if not null. Else returns the default json
+   *
+   * @param source the source json element
+   * @param defaultJson the default json
+   * @return the source json as a non null json element
+   */
+  public JsonElement asJsonElement(JsonElement source, JsonElement defaultJson) {
+    return isNotNull(source) ? source : defaultJson;
+  }
+
+  /**
+   * Returns the source json as a string if possible. Else returns null
+   *
+   * @param source the source json element
+   * @return the source json as a string
+   */
+  public String asString(JsonElement source) {
+    return asString(source, (String) null);
   }
 
   /**
@@ -542,13 +975,13 @@ public class JsonLever {
   }
 
   /**
-   * Returns the source json as a string if possible. Else returns null
+   * Returns the source json as a boolean if possible. Else returns null
    *
    * @param source the source json element
-   * @return the source json as a string
+   * @return the source json as a boolean
    */
-  public String asString(JsonElement source) {
-    return asString(source, (String) null);
+  public Boolean asBoolean(JsonElement source) {
+    return asBoolean(source, (Boolean) null);
   }
 
   /**
@@ -563,13 +996,13 @@ public class JsonLever {
   }
 
   /**
-   * Returns the source json as a boolean if possible. Else returns null
+   * Returns the source json as a long if possible. Else returns null
    *
    * @param source the source json element
-   * @return the source json as a boolean
+   * @return the source json as a long
    */
-  public Boolean asBoolean(JsonElement source) {
-    return asBoolean(source, (Boolean) null);
+  public Long asLong(JsonElement source) {
+    return asLong(source, (Long) null);
   }
 
   /**
@@ -584,13 +1017,13 @@ public class JsonLever {
   }
 
   /**
-   * Returns the source json as a long if possible. Else returns null
+   * Returns the source json as an integer if possible. Else returns null
    *
    * @param source the source json element
-   * @return the source json as a long
+   * @return the source json as an integer
    */
-  public Long asLong(JsonElement source) {
-    return asLong(source, (Long) null);
+  public Integer asInt(JsonElement source) {
+    return asInt(source, (Integer) null);
   }
 
   /**
@@ -605,13 +1038,69 @@ public class JsonLever {
   }
 
   /**
-   * Returns the source json as an integer if possible. Else returns null
+   * Gets the first json element, if any, in the list. Else returns null
    *
-   * @param source the source json element
-   * @return the source json as an integer
+   * @param elements the json elements
+   * @return the first json element in the list
    */
-  public Integer asInt(JsonElement source) {
-    return asInt(source, (Integer) null);
+  public JsonElement getFirst(Iterable<JsonElement> elements) {
+    JsonElement first = null;
+    if (!IterableUtils.isEmpty(elements)) {
+      first = IterableUtils.get(elements, 0);
+    }
+    return first;
+  }
+
+  /**
+   * Gets the jpath for a '.' separated string defining the fully qualified path of a field in Json.
+   * Array Indexes are referred via numbers.
+   *
+   * @param jpath the jpath
+   * @return the fully qualified path as a JsonArray. Array Indexes are represented as numbers
+   */
+  public JsonArray getJpath(String jpath) {
+    JsonArray jlist = new JsonArray();
+    if (!StringUtils.contains(jpath, ".")) {
+      jlist.add(getTypedPath(jpath));
+    } else {
+      String[] split = StringUtils.split(jpath, ".");
+      for (String sp : split) {
+        jlist.add(getTypedPath(sp));
+      }
+    }
+    return jlist;
+  }
+
+  /**
+   * Gets the jpath for a '.' separated string defining the fully qualified path of a field in Json.
+   * Array Indexes are referred via numbers. If the input is anything apart from String,
+   * JsonPrimitive String or JsonArray, it returns null
+   *
+   * @param jpath the jpath
+   * @return the fully qualified path as a JsonArray. Array Indexes are represented as numbers
+   */
+  public JsonArray getJpath(JsonElement jpath) {
+    JsonArray path = null;
+    if (isArray(jpath)) {
+      path = asJsonArray(jpath);
+    } else if (isString(jpath)) {
+      path = getJpath(asString(jpath));
+    }
+    return path;
+  }
+
+  /**
+   * New json array.
+   *
+   * @param path the path
+   * @return the json array
+   */
+  public JsonArray newJsonArray(Object... path) {
+    JsonArray output = new JsonArray();
+    for (Object p : path) {
+      output.add(getTypedPath(p, Boolean.FALSE));
+    }
+    return output;
   }
 
   /**
@@ -622,65 +1111,6 @@ public class JsonLever {
    */
   public String toString(JsonElement source) {
     return null != source ? source.toString() : null;
-  }
-
-  /**
-   * Gets the first json element, if any, in the list. Else returns null
-   *
-   * @param elements the json elements
-   * @return the first json element in the list
-   */
-  public JsonElement getFirst(List<JsonElement> elements) {
-    JsonElement first = null;
-    if (CollectionUtils.isNotEmpty(elements)) {
-      first = elements.get(0);
-    }
-    return first;
-  }
-
-  /**
-   * Gets the first json element, if any, in the json array. Else returns null
-   *
-   * @param jsonArray the json array
-   * @return the first json element in the json array
-   */
-  public JsonElement getFirst(JsonArray jsonArray) {
-    JsonElement first = null;
-    first = isNotNull(jsonArray) && jsonArray.size() > 0 ? jsonArray.get(0) : first;
-    return first;
-  }
-
-  /**
-   * Gets the subset json from a source json.
-   *
-   * @param source the json source which can be Object, Array or a Primitive
-   * @param jPathArray the array of jPaths defining the full qualified json paths to the required
-   *     fields
-   * @return the json subset
-   */
-  public JsonElement subset(JsonElement source, JsonArray jPathArray) {
-    JsonElement finalValue = JsonNull.INSTANCE;
-    if (jPathArray.size() == 0) {
-      finalValue = source;
-    } else {
-      finalValue = new JsonObject();
-      for (JsonElement jsonElement : jPathArray) {
-        JsonElement subset = JsonNull.INSTANCE;
-        if (isJsonArray(jsonElement)) {
-          JsonArray pathArray = asJsonArray(jsonElement);
-          subset = get(source, pathArray);
-          finalValue = set(finalValue, pathArray, subset);
-        } else if (isString(jsonElement)) {
-          String jpath = asString(jsonElement);
-          subset = get(source, jpath);
-          finalValue = set(finalValue, jpath, subset);
-        } else {
-          finalValue = JsonNull.INSTANCE;
-          break;
-        }
-      }
-    }
-    return finalValue;
   }
 
   /**
@@ -721,6 +1151,39 @@ public class JsonLever {
    */
   public JsonPrimitive deepClone(JsonPrimitive source) {
     return isNotNull(source) ? source.deepCopy() : source;
+  }
+
+  /**
+   * Gets the subset json from a source json.
+   *
+   * @param source the json source which can be Object, Array or a Primitive
+   * @param jPathArray the array of jPaths defining the full qualified json paths to the required
+   *     fields
+   * @return the json subset
+   */
+  public JsonElement subset(JsonElement source, JsonArray jPathArray) {
+    JsonElement finalValue = JsonNull.INSTANCE;
+    if (jPathArray.size() == 0) {
+      finalValue = source;
+    } else {
+      finalValue = new JsonObject();
+      for (JsonElement jsonElement : jPathArray) {
+        JsonElement subset = JsonNull.INSTANCE;
+        if (isArray(jsonElement)) {
+          JsonArray pathArray = asJsonArray(jsonElement);
+          subset = get(source, pathArray);
+          finalValue = set(finalValue, pathArray, subset);
+        } else if (isString(jsonElement)) {
+          String jpath = asString(jsonElement);
+          subset = get(source, jpath);
+          finalValue = set(finalValue, jpath, subset);
+        } else {
+          finalValue = JsonNull.INSTANCE;
+          break;
+        }
+      }
+    }
+    return finalValue;
   }
 
   /**
@@ -879,6 +1342,13 @@ public class JsonLever {
     return getTypedPath(p, Boolean.TRUE);
   }
 
+  /**
+   * Gets the typed path.
+   *
+   * @param p the p
+   * @param strToNum the str to num
+   * @return the typed path
+   */
   private JsonElement getTypedPath(Object p, Boolean strToNum) {
     JsonElement result = JsonNull.INSTANCE;
     if (p instanceof Number) {
@@ -912,7 +1382,7 @@ public class JsonLever {
   protected JsonElement getRepleteField(JsonElement field, JsonElement path, JsonElement nextPath) {
     if (isNumber(path)) {
       Integer index = path.getAsInt();
-      if (!isJsonArray(field)) {
+      if (!isArray(field)) {
         field = new JsonArray();
       }
       JsonArray fArray =
@@ -923,7 +1393,7 @@ public class JsonLever {
       field = fArray;
     } else {
       String fieldName = path.getAsString();
-      if (!isJsonObject(field)) {
+      if (!isObject(field)) {
         field = new JsonObject();
       }
       JsonObject fJson =
@@ -986,6 +1456,12 @@ public class JsonLever {
     return source;
   }
 
+  /**
+   * Jsonify.
+   *
+   * @param source the source
+   * @return the json element
+   */
   public JsonElement jsonify(Object source) {
     JsonElement result = JsonNull.INSTANCE;
     if (source instanceof JsonElement) {
@@ -1024,40 +1500,5 @@ public class JsonLever {
       }
     }
     return element;
-  }
-
-  /**
-   * Gets the jpath.
-   *
-   * @param jpath the jpath
-   * @return the jpath
-   */
-  public JsonArray getJpath(String jpath) {
-    JsonArray jlist = new JsonArray();
-    if (!StringUtils.contains(jpath, ".")) {
-      jlist.add(getTypedPath(jpath));
-    } else {
-      String[] split = StringUtils.split(jpath, ".");
-      for (String sp : split) {
-        jlist.add(getTypedPath(sp));
-      }
-    }
-    return jlist;
-  }
-
-  /**
-   * Gets the jpath.
-   *
-   * @param jpath the jpath
-   * @return the j path
-   */
-  public JsonArray getJpath(JsonElement jpath) {
-    JsonArray path = null;
-    if (isJsonArray(jpath)) {
-      path = asJsonArray(jpath);
-    } else if (isString(jpath)) {
-      path = getJpath(asString(jpath));
-    }
-    return path;
   }
 }

@@ -196,7 +196,7 @@ public class MystiqueLever extends JsonLever {
       finalValue = subset(source, deps, aces, valueObject.getAsJsonArray());
     } else if (isString(valueObject)) {
       finalValue = subset(source, deps, aces, getJpath(valueObject));
-    } else if (isJsonObject(valueObject)) {
+    } else if (isObject(valueObject)) {
       // This is a turn
       JsonObject valueJson = valueObject.getAsJsonObject();
       MystTurn mystique = factory().getMystTurn(valueJson);
@@ -316,7 +316,7 @@ public class MystiqueLever extends JsonLever {
       finalValue = getField(source, jPathArray, deps, aces);
     } else {
       JsonElement first = getFirst(jPathArray);
-      if (isJsonArray(first)) {
+      if (isArray(first)) {
         finalValue = new JsonObject();
         for (JsonElement jsonElement : jPathArray) {
           JsonArray pathArray = asJsonArray(jsonElement);

@@ -61,7 +61,7 @@ public class GsonSerialiser extends StdSerializer<JsonElement> {
       throws IOException {
     if (jsonLever.isNull(value)) {
       gen.writeNull();
-    } else if (jsonLever.isJsonObject(value)) {
+    } else if (jsonLever.isObject(value)) {
       gen.writeStartObject();
       JsonObject jsonObject = value.getAsJsonObject();
       for (Entry<String, JsonElement> entry : jsonObject.entrySet()) {
@@ -69,14 +69,14 @@ public class GsonSerialiser extends StdSerializer<JsonElement> {
         serialize(entry.getValue(), gen, provider);
       }
       gen.writeEndObject();
-    } else if (jsonLever.isJsonArray(value)) {
+    } else if (jsonLever.isArray(value)) {
       gen.writeStartArray();
       JsonArray jsonArray = value.getAsJsonArray();
       for (JsonElement jsonElement : jsonArray) {
         serialize(jsonElement, gen, provider);
       }
       gen.writeEndArray();
-    } else if (jsonLever.isJsonPrimitive(value)) {
+    } else if (jsonLever.isPrimitive(value)) {
       JsonPrimitive jsonPrimitive = value.getAsJsonPrimitive();
       if (jsonPrimitive.isBoolean()) {
         gen.writeBoolean(jsonPrimitive.getAsBoolean());

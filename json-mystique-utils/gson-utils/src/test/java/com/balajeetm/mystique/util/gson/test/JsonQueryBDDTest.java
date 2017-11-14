@@ -58,7 +58,7 @@ public class JsonQueryBDDTest {
 
       JsonElement result = jq.query(query.getAsJsonObject());
 
-      Assert.assertTrue(jsonLever.isJsonArray(result));
+      Assert.assertTrue(jsonLever.isArray(result));
       Assert.assertEquals(1, result.getAsJsonArray().size());
 
       Assert.assertEquals("prajwal", jsonLever.asString(result.getAsJsonArray().get(0)));
@@ -86,7 +86,7 @@ public class JsonQueryBDDTest {
 
       JsonElement result = jq.query(query.getAsJsonObject());
 
-      Assert.assertTrue(jsonLever.isJsonArray(result));
+      Assert.assertTrue(jsonLever.isArray(result));
       Assert.assertEquals(2, result.getAsJsonArray().size());
 
       Assert.assertEquals("prajwal", jsonLever.asString(result.getAsJsonArray().get(0)));
@@ -115,7 +115,7 @@ public class JsonQueryBDDTest {
 
       JsonElement result = jq.query(query.getAsJsonObject());
 
-      Assert.assertTrue(jsonLever.isJsonArray(result));
+      Assert.assertTrue(jsonLever.isArray(result));
       Assert.assertEquals(1, result.getAsJsonArray().size());
 
       Assert.assertEquals("prajwal", jsonLever.asString(result.getAsJsonArray().get(0)));
@@ -143,7 +143,7 @@ public class JsonQueryBDDTest {
 
       JsonElement result = jq.query(query.getAsJsonObject());
 
-      Assert.assertTrue(jsonLever.isJsonArray(result));
+      Assert.assertTrue(jsonLever.isArray(result));
       Assert.assertEquals(0, result.getAsJsonArray().size());
 
     } catch (Exception e) {
@@ -170,7 +170,7 @@ public class JsonQueryBDDTest {
 
       JsonElement result = jq.query(query.getAsJsonObject());
 
-      Assert.assertTrue(jsonLever.isJsonArray(result));
+      Assert.assertTrue(jsonLever.isArray(result));
       Assert.assertEquals(2, result.getAsJsonArray().size());
 
     } catch (Exception e) {
@@ -226,7 +226,7 @@ public class JsonQueryBDDTest {
 
       JsonElement result = jq.query(query.getAsJsonObject());
 
-      Assert.assertTrue(jsonLever.isJsonArray(result));
+      Assert.assertTrue(jsonLever.isArray(result));
       Assert.assertEquals(2, result.getAsJsonArray().size());
 
     } catch (Exception e) {
@@ -253,7 +253,7 @@ public class JsonQueryBDDTest {
 
       JsonElement result = jq.query(query.getAsJsonObject());
 
-      Assert.assertTrue(jsonLever.isJsonArray(result));
+      Assert.assertTrue(jsonLever.isArray(result));
       Assert.assertEquals(3, result.getAsJsonArray().size());
 
     } catch (Exception e) {
@@ -281,7 +281,7 @@ public class JsonQueryBDDTest {
 
       JsonElement result = jq.query(query.getAsJsonObject());
 
-      Assert.assertTrue(jsonLever.isJsonArray(result));
+      Assert.assertTrue(jsonLever.isArray(result));
       Assert.assertEquals(2, result.getAsJsonArray().size());
 
     } catch (Exception e) {

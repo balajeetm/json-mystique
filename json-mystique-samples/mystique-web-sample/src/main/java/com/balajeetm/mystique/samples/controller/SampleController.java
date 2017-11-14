@@ -11,8 +11,15 @@
 package com.balajeetm.mystique.samples.controller;
 
 import java.net.URI;
+import java.util.Arrays;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.function.IntSupplier;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -30,8 +37,12 @@ import org.springframework.web.client.RestTemplate;
 import com.balajeetm.mystique.core.JsonMystique;
 import com.balajeetm.mystique.samples.util.MystiqueSampleConfig;
 import com.balajeetm.mystique.samples.util.TestModel;
+import com.balajeetm.mystique.util.gson.lever.JsonLever;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * The Class SampleController.
@@ -51,12 +62,17 @@ public class SampleController {
   /** The config. */
   @Autowired MystiqueSampleConfig config;
 
+  @Qualifier("jsonLever")
+  @Autowired
+  JsonLever lever;
+
   /**
    * Ping.
    *
    * @return the string
    */
   @GetMapping(value = {"/ping"})
+  @ApiIgnore
   public String ping() {
     return "Ping Working";
   }
@@ -68,6 +84,7 @@ public class SampleController {
    * @return the test model
    */
   @PostMapping(value = {"/testmodel"})
+  @ApiIgnore
   public TestModel testmodel(@RequestBody TestModel body) {
     return body;
   }
@@ -79,6 +96,7 @@ public class SampleController {
    * @return the json object
    */
   @GetMapping(value = {"/gson/serialise"})
+  @ApiIgnore
   public JsonObject serialise(@RequestParam(value = "msg") String msg) {
     JsonObject jsonObject = new JsonObject();
     jsonObject.addProperty("report", "Gson Serialisation working good!");
@@ -93,6 +111,7 @@ public class SampleController {
    * @return the json element
    */
   @GetMapping(value = {"/resttemplate"})
+  @ApiIgnore
   public ResponseEntity<JsonElement> restTemplate() {
     HttpHeaders headers = new HttpHeaders();
     headers.set("JsonStub-User-Key", config.getUserKey());
@@ -111,6 +130,7 @@ public class SampleController {
    * @return the json element
    */
   @PostMapping(value = {"/gson/deserialise"})
+  @ApiIgnore
   public JsonElement deserialise(@RequestBody JsonElement payload) {
     JsonObject jsonObject = new JsonObject();
     jsonObject.addProperty("report", "Gson Deserialisation working good!");
@@ -127,11 +147,46 @@ public class SampleController {
    * @return the json element
    */
   @PostMapping(value = {"/convert"})
+  @ApiIgnore
   public JsonElement convert(
       @RequestParam(value = "specName", required = false) String specName,
       @RequestBody JsonElement payload) {
     specName = null == specName ? "copy" : specName;
     return jsonMystique.transform(payload, specName);
+  }
+
+  @PostMapping(value = {"/height/{root}"})
+  public Integer height(@RequestBody JsonObject payload, String root) {
+    JsonElement rootele = lever.get(payload, lever.newJsonArray(root));
+    transverse(payload, lever.asJsonObject(rootele));
+    Integer dia = 0;
+    Set<Entry<String, JsonElement>> entrySet = payload.entrySet();
+    for (Entry<String, JsonElement> entry : entrySet) {
+      JsonElement value = entry.getValue();
+      Integer through = lever.asInt(lever.get(value, "through"));
+      if (through > dia) {
+        dia = through;
+      }
+    }
+    return dia;
+  }
+
+  private Integer transverse(JsonObject payload, JsonObject node) {
+    Integer leftDia = 0;
+    Integer rightDia = 0;
+    if (lever.isNotNull(lever.get(node, "left"))) {
+      leftDia = transverse(payload, lever.asJsonObject(payload.get(lever.getString(node, "left"))));
+    }
+    if (lever.isNotNull(lever.get(node, "right"))) {
+      rightDia =
+          transverse(payload, lever.asJsonObject(payload.get(lever.getString(node, "right"))));
+    }
+    leftDia = leftDia > 0 ? 1 + leftDia : leftDia;
+    rightDia = rightDia > 0 ? 1 + rightDia : rightDia;
+    lever.set(node, "leftDia", new JsonPrimitive(leftDia));
+    lever.set(node, "rightDia", new JsonPrimitive(rightDia));
+    lever.set(node, "through", new JsonPrimitive(leftDia + rightDia));
+    return leftDia < rightDia ? rightDia : leftDia;
   }
 
   /**
@@ -146,5 +201,63 @@ public class SampleController {
     jsonObject.addProperty("report", "Oops! Something went wrong!");
     jsonObject.addProperty("msg", e.getLocalizedMessage());
     return jsonObject;
+  }
+
+  public static void main(String[] args) {
+    try {
+      System.out.println(ways(4));
+      System.out.println("A");
+    } catch (Exception e) {
+      System.err.println("E");
+    }
+  }
+
+  public static int ways(int input1) {
+    // Read only region end
+    IntSupplier generator =
+        new IntSupplier() {
+          int base = 2;
+
+          public int getAsInt() {
+            return base++;
+          }
+        };
+    int howManyPrimes = input1;
+    Integer[] listOfPrimes =
+        IntStream.generate(generator)
+            .filter(i -> isPrime(i))
+            .limit(howManyPrimes)
+            .boxed()
+            .collect(Collectors.toList())
+            .toArray(new Integer[0]);
+
+    System.out.println("List of primes: " + Arrays.asList(listOfPrimes));
+    int ways = 1;
+    int whereToReach = listOfPrimes[listOfPrimes.length - 1];
+
+    /**
+     * This logic doesn't yet take into account of using a particular capsule multiple times, and
+     * hence the secont test fails... Pending work.
+     */
+    for (int r = 0; r < listOfPrimes.length - 1; r++) {
+      int from = listOfPrimes[r];
+      System.out.println("To reach floor: " + whereToReach);
+      for (int w = r + 1; w < listOfPrimes.length - 1; w++) {
+        System.out.println("Testing from floor: " + from + ", and " + listOfPrimes[w]);
+        if (from + listOfPrimes[w] == whereToReach) {
+          ways++;
+          System.out.println("Reachability found");
+        }
+      }
+    }
+    System.out.println("Ways to reach: " + ways);
+    return ways;
+  }
+
+  private static boolean isPrime(int number) {
+    for (int i = 2; i <= number / 2; i++) {
+      if (number % i == 0) return false;
+    }
+    return true;
   }
 }
