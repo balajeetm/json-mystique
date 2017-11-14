@@ -61,7 +61,7 @@ public class ChainMystTurn implements MystTurn {
     JsonArray turnArray = jsonLever.asJsonArray(turn.get(MystiqueConstants.TURNS), new JsonArray());
 
     for (JsonElement turnObject : turnArray) {
-      if (jsonLever.isJsonObject(turnObject)) {
+      if (jsonLever.isObject(turnObject)) {
         JsonObject asJsonObject = turnObject.getAsJsonObject();
         MystTurn mystique = factory.getMystTurn(asJsonObject);
         if (null != mystique) {

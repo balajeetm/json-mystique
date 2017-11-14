@@ -16,6 +16,8 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.balajeetm.mystique.core.MystTurn;
 import com.balajeetm.mystique.core.MystiqueFactory;
 import com.balajeetm.mystique.core.util.MystiqueConstants;
@@ -193,8 +195,8 @@ public class MystiqueLever extends JsonLever {
     if (valueObject.isJsonArray()) {
       finalValue = subset(source, deps, aces, valueObject.getAsJsonArray());
     } else if (isString(valueObject)) {
-      finalValue = subset(source, deps, aces, getJPath(valueObject));
-    } else if (isJsonObject(valueObject)) {
+      finalValue = subset(source, deps, aces, getJpath(valueObject));
+    } else if (isObject(valueObject)) {
       // This is a turn
       JsonObject valueJson = valueObject.getAsJsonObject();
       MystTurn mystique = factory().getMystTurn(valueJson);
@@ -291,7 +293,7 @@ public class MystiqueLever extends JsonLever {
       String ace = getAceValue(asString(field));
       JsonElement output = field;
       if (null != ace) {
-        JsonArray newJsonArray = newJsonArray(ace.split(","));
+        JsonArray newJsonArray = getJpath(StringUtils.replaceChars(ace, ',', '.'));
         output = get(aces, newJsonArray);
       }
       return output;
@@ -314,7 +316,7 @@ public class MystiqueLever extends JsonLever {
       finalValue = getField(source, jPathArray, deps, aces);
     } else {
       JsonElement first = getFirst(jPathArray);
-      if (isJsonArray(first)) {
+      if (isArray(first)) {
         finalValue = new JsonObject();
         for (JsonElement jsonElement : jPathArray) {
           JsonArray pathArray = asJsonArray(jsonElement);

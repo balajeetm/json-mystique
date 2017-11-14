@@ -37,7 +37,7 @@ public class ArrayToMapMystTurn extends AbstractMystTurn {
       turn = mystiqueLever.asJsonObject(turn, new JsonObject());
       JsonElement granularSource = getGranularSource(elementSource, turn, deps, aces);
       JsonArray inputArray = mystiqueLever.asJsonArray(granularSource, new JsonArray());
-      JsonArray keyArray = mystiqueLever.getJPath(turn.get(MystiqueConstants.KEY));
+      JsonArray keyArray = mystiqueLever.getJpath(turn.get(MystiqueConstants.KEY));
       if (mystiqueLever.isNotNull(keyArray)) {
         JsonElement valueElement = turn.get(MystiqueConstants.VALUE);
         valueElement = mystiqueLever.isNull(valueElement) ? new JsonArray() : valueElement;

@@ -103,7 +103,7 @@ public class JsonQuery {
               if ("valid".equals(s)) {
                 JsonElement from = query.get("from");
                 obs =
-                    jsonLever.isJsonArray(from)
+                    jsonLever.isArray(from)
                         ? queryAsync(from.getAsJsonArray(), query)
                         : queryAsync(from.getAsJsonObject(), query);
               } else {
@@ -174,7 +174,7 @@ public class JsonQuery {
     if (null != selectStr) {
       if (equalsAny(selectStr, "*")) result = json;
     } else {
-      if (jsonLever.isJsonArray(selectElement)) {
+      if (jsonLever.isArray(selectElement)) {
         result = new JsonArray();
         for (JsonElement ele : jsonLever.asJsonArray(selectElement)) {
           jsonLever.asJsonArray(result).add(jsonLever.get(json, ele));
@@ -214,7 +214,7 @@ public class JsonQuery {
             return filter;
           }
         }
-      } else if (jsonLever.isJsonObject(condition)) {
+      } else if (jsonLever.isObject(condition)) {
         String type = jsonLever.getString(condition, "type");
         type = null != type && queryTypes.containsKey(type) ? type : "=";
         filter = queryTypes.get(type).apply(json, condition.getAsJsonObject());
@@ -306,11 +306,11 @@ public class JsonQuery {
       return "select field of the query cannot be null";
     }
     JsonElement from = query.get("from");
-    if (!(jsonLever.isJsonObject(from) || jsonLever.isJsonArray(from))) {
+    if (!(jsonLever.isObject(from) || jsonLever.isArray(from))) {
       return "from field must be a valid json object or array";
     }
     JsonElement where = jsonLever.get(query, "where");
-    if (jsonLever.isNotNull(where) && !jsonLever.isJsonArray(where)) {
+    if (jsonLever.isNotNull(where) && !jsonLever.isArray(where)) {
       return "where field must be a valid json array";
     }
     JsonElement limit = jsonLever.get(query, "limit");
