@@ -109,7 +109,7 @@ This is a functionally overloaded method, with abilities to provide the json sou
 9.  `public JsonElement get(JsonElement source, JsonArray jpath, JsonElement defaultValue)`
 10. `public JsonElement get(Object source, JsonArray jpath, JsonElement defaultValue)`
 
->Since - 2.0.8
+>Since - 2.1.0
 
 **Arguments**<br>
 *   **source**<br>
@@ -177,7 +177,7 @@ This is a functionally overloaded method, with abilities to provide the json sou
 1.  `public JsonElement set(JsonElement source, String jpath, JsonElement value)`
 2.  `public JsonElement set(JsonElement source, JsonArray jpath, JsonElement value)`
 
->Since - 2.0.8
+>Since - 2.1.0
 
 **Arguments**<br>
 *   **source**<br>
@@ -218,7 +218,7 @@ Returns the source json with value set:<br>
 
 Gets the value at path of json as the `'*'` typed JsonElement. If the resolved value cannot be typed to the required type, `null` is returned.
 
->Since - 2.0.8
+>Since - 2.1.0
 
 **Arguments**<br>
 *   **source**<br>
@@ -500,7 +500,7 @@ There are multiple `get*` utilities are below<br>
 
 Checks if value is classified as the `'*'` category
 
->Since - 2.0.8
+>Since - 2.1.0
 
 **Arguments**<br>
 *   **json**<br>
@@ -694,7 +694,7 @@ There are multiple is* utilities are below<br>
 
 Returns the json as the required json type if the type matches, else return the defaultValue if configured, else return null
 
->Since - 2.0.8
+>Since - 2.1.0
 
 **Arguments**<br>
 *   **json**<br>
@@ -930,7 +930,7 @@ There are multiple as* utilities are below<br>
 
 There many other utility functions exposed by JsonLever. Let's look at them one by one.
 
->Since - 2.0.8
+>Since - 2.1.0
 
 1.  `public static JsonLever getInstance()`<br>
     We have seen this before; this is the way to grab the Singleton Instance of JsonLever<br>
@@ -998,7 +998,7 @@ There many other utility functions exposed by JsonLever. Let's look at them one 
 
 There many other utility functions exposed by JsonLever. Let's look at them one by one.
 
->Since - 2.0.8
+>Since - 2.1.0
 
 1.  `public JsonArray newJsonArray(Object... path)`<br>
     Returns a new Json Array for the series of inputs. Only primitive inputs and jsons are allowed.
