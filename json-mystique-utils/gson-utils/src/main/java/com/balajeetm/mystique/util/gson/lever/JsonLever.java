@@ -17,10 +17,10 @@ import java.util.Map.Entry;
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.springframework.core.convert.ConversionException;
 
 import com.balajeetm.mystique.util.gson.GsonFactory;
 import com.balajeetm.mystique.util.gson.convertor.GsonConvertor;
+import com.balajeetm.mystique.util.json.error.ConvertorException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -1470,7 +1470,7 @@ public class JsonLever {
       try {
         result = GsonConvertor.getInstance().deserialize(source, JsonElement.class);
 
-      } catch (ConversionException e) {
+      } catch (ConvertorException e) {
         String msg = String.format("Could not deserialise object %s to json.", source);
         log.error(msg);
         log.debug(msg, e);
