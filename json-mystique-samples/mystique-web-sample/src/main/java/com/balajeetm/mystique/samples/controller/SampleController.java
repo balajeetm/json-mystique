@@ -11,8 +11,6 @@
 package com.balajeetm.mystique.samples.controller;
 
 import java.net.URI;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,9 +34,6 @@ import com.balajeetm.mystique.samples.util.TestModel;
 import com.balajeetm.mystique.util.gson.lever.JsonLever;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * The Class SampleController.
@@ -68,7 +63,6 @@ public class SampleController {
    * @return the string
    */
   @GetMapping(value = {"/ping"})
-  @ApiIgnore
   public String ping() {
     return "Ping Working";
   }
@@ -80,7 +74,6 @@ public class SampleController {
    * @return the test model
    */
   @PostMapping(value = {"/testmodel"})
-  @ApiIgnore
   public TestModel testmodel(@RequestBody TestModel body) {
     return body;
   }
@@ -92,7 +85,6 @@ public class SampleController {
    * @return the json object
    */
   @GetMapping(value = {"/gson/serialise"})
-  @ApiIgnore
   public JsonObject serialise(@RequestParam(value = "msg") String msg) {
     JsonObject jsonObject = new JsonObject();
     jsonObject.addProperty("report", "Gson Serialisation working good!");
@@ -107,7 +99,6 @@ public class SampleController {
    * @return the json element
    */
   @GetMapping(value = {"/resttemplate"})
-  @ApiIgnore
   public ResponseEntity<JsonElement> restTemplate() {
     HttpHeaders headers = new HttpHeaders();
     headers.set("JsonStub-User-Key", config.getUserKey());
@@ -126,7 +117,6 @@ public class SampleController {
    * @return the json element
    */
   @PostMapping(value = {"/gson/deserialise"})
-  @ApiIgnore
   public JsonElement deserialise(@RequestBody JsonElement payload) {
     JsonObject jsonObject = new JsonObject();
     jsonObject.addProperty("report", "Gson Deserialisation working good!");
@@ -143,7 +133,6 @@ public class SampleController {
    * @return the json element
    */
   @PostMapping(value = {"/convert"})
-  @ApiIgnore
   public JsonElement convert(
       @RequestParam(value = "specName", required = false) String specName,
       @RequestBody JsonElement payload) {
@@ -151,7 +140,7 @@ public class SampleController {
     return jsonMystique.transform(payload, specName);
   }
 
-  @PostMapping(value = {"/height/{root}"})
+  /*  @PostMapping(value = {"/height/{root}"})
   public Integer height(@RequestBody JsonObject payload, String root) {
     JsonElement rootele = lever.get(payload, lever.newJsonArray(root));
     transverse(payload, lever.asJsonObject(rootele));
@@ -183,7 +172,7 @@ public class SampleController {
     lever.set(node, "rightDia", new JsonPrimitive(rightDia));
     lever.set(node, "through", new JsonPrimitive(leftDia + rightDia));
     return leftDia < rightDia ? rightDia : leftDia;
-  }
+  }*/
 
   /**
    * Error.
