@@ -53,8 +53,8 @@ Json mystique ships a set of libraries written in and for Java, useful for json 
     *   [Gson - 2.8.2](https://mvnrepository.com/artifact/com.google.code.gson/gson) for json String to Java pojo transformations
     *   [Jackson - 2.8.10](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind) for json String to Java pojo transformations
 *   For the [Spring](https://spring.io/) fan-boys, Json Mystique also ships a Spring-Starter, which depends on
-    *   [Spring Boot - 1.5.8.RELEASE](http://docs.spring.io/spring-boot/docs/1.5.8.RELEASE/reference/htmlsingle/)
-    *   [Spring-Framework - 4.3.12.RELEASE](http://docs.spring.io/spring/docs/4.3.12.RELEASE/spring-framework-reference/htmlsingle/) for IOC
+    *   [Spring Boot - 1.5.9.RELEASE](http://docs.spring.io/spring-boot/docs/1.5.9.RELEASE/reference/htmlsingle/)
+    *   [Spring-Framework - 4.3.13.RELEASE](http://docs.spring.io/spring/docs/4.3.13.RELEASE/spring-framework-reference/htmlsingle/) for IOC
 
 The actual versions can be found in the [pom file](/pom.xml)
 
