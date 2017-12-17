@@ -11,12 +11,8 @@
 package com.balajeetm.mystique.samples.controller;
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.function.IntSupplier;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -201,63 +197,5 @@ public class SampleController {
     jsonObject.addProperty("report", "Oops! Something went wrong!");
     jsonObject.addProperty("msg", e.getLocalizedMessage());
     return jsonObject;
-  }
-
-  public static void main(String[] args) {
-    try {
-      System.out.println(ways(4));
-      System.out.println("A");
-    } catch (Exception e) {
-      System.err.println("E");
-    }
-  }
-
-  public static int ways(int input1) {
-    // Read only region end
-    IntSupplier generator =
-        new IntSupplier() {
-          int base = 2;
-
-          public int getAsInt() {
-            return base++;
-          }
-        };
-    int howManyPrimes = input1;
-    Integer[] listOfPrimes =
-        IntStream.generate(generator)
-            .filter(i -> isPrime(i))
-            .limit(howManyPrimes)
-            .boxed()
-            .collect(Collectors.toList())
-            .toArray(new Integer[0]);
-
-    System.out.println("List of primes: " + Arrays.asList(listOfPrimes));
-    int ways = 1;
-    int whereToReach = listOfPrimes[listOfPrimes.length - 1];
-
-    /**
-     * This logic doesn't yet take into account of using a particular capsule multiple times, and
-     * hence the secont test fails... Pending work.
-     */
-    for (int r = 0; r < listOfPrimes.length - 1; r++) {
-      int from = listOfPrimes[r];
-      System.out.println("To reach floor: " + whereToReach);
-      for (int w = r + 1; w < listOfPrimes.length - 1; w++) {
-        System.out.println("Testing from floor: " + from + ", and " + listOfPrimes[w]);
-        if (from + listOfPrimes[w] == whereToReach) {
-          ways++;
-          System.out.println("Reachability found");
-        }
-      }
-    }
-    System.out.println("Ways to reach: " + ways);
-    return ways;
-  }
-
-  private static boolean isPrime(int number) {
-    for (int i = 2; i <= number / 2; i++) {
-      if (number % i == 0) return false;
-    }
-    return true;
   }
 }

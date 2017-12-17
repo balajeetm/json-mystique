@@ -27,6 +27,6 @@
     * [JsonConvertor](JsonConvertor.md)
         * [GsonConvertor](GsonConvertor.md)
         * [JacksonConvertor](JacksonConvertor.md)
-    * [JsonQuery](JsonQuery.md)
+    * JsonQuery
     * [MergeJsons](MergeJsons.md)
     * [JsonComparator](JsonComparator.md)
