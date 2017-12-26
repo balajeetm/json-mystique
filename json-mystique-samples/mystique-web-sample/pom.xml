@@ -41,7 +41,7 @@
 		<java.version>1.8</java.version>
 		<swagger.version>2.7.0</swagger.version>
 		<reactor.version>3.1.2.RELEASE</reactor.version>
-		<jsonmystique.version>2.1.2-SNAPSHOT</jsonmystique.version>
+		<jsonmystique.version>2.1.2.M1</jsonmystique.version>
 	</properties>
 
 	<dependencies>
