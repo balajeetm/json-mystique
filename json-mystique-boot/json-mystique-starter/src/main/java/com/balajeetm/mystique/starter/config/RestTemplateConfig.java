@@ -13,6 +13,7 @@ package com.balajeetm.mystique.starter.config;
 import java.util.List;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,73 +31,77 @@ import com.balajeetm.mystique.core.module.MystiqueModule;
 @Configuration
 public class RestTemplateConfig {
 
-	/**
-	 * Rest template configurer.
-	 *
-	 * @param mystiqueModule the mystique module
-	 * @return the rest template configurer
-	 */
-	@Bean
-	public RestTemplateConfigurer restTemplateConfigurer(MystiqueModule mystiqueModule) {
-		return new RestTemplateConfigurer(mystiqueModule);
-	}
+  /**
+   * Rest template configurer.
+   *
+   * @param mystiqueModule the mystique module
+   * @return the rest template configurer
+   */
+  @Bean
+  public RestTemplateConfigurer restTemplateConfigurer(
+      @Autowired(required = false) MystiqueModule mystiqueModule) {
+    return new RestTemplateConfigurer(mystiqueModule);
+  }
 
-	/**
-	 * The Class RestTemplateConfigurer.
-	 */
-	private static class RestTemplateConfigurer implements BeanPostProcessor {
+  /** The Class RestTemplateConfigurer. */
+  private static class RestTemplateConfigurer implements BeanPostProcessor {
 
-		/** The mystique module. */
-		private MystiqueModule mystiqueModule;
+    /** The mystique module. */
+    private MystiqueModule mystiqueModule;
 
-		/**
-		 * Instantiates a new rest template configurer.
-		 *
-		 * @param mystiqueModule the mystique module
-		 */
-		public RestTemplateConfigurer(MystiqueModule mystiqueModule) {
-			this.mystiqueModule = mystiqueModule;
-		}
+    /**
+     * Instantiates a new rest template configurer.
+     *
+     * @param mystiqueModule the mystique module
+     */
+    public RestTemplateConfigurer(MystiqueModule mystiqueModule) {
+      this.mystiqueModule = mystiqueModule;
+    }
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see org.springframework.beans.factory.config.BeanPostProcessor#
-		 * postProcessBeforeInitialization(java.lang.Object, java.lang.String)
-		 */
-		@Override
-		public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-			if (bean instanceof RestTemplate) {
-				postProcessRestTemplate((RestTemplate) bean);
-			}
-			return bean;
-		}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.springframework.beans.factory.config.BeanPostProcessor#
+     * postProcessBeforeInitialization(java.lang.Object, java.lang.String)
+     */
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName)
+        throws BeansException {
+      if (bean instanceof RestTemplate) {
+        postProcessRestTemplate((RestTemplate) bean);
+      }
+      return bean;
+    }
 
-		/**
-		 * Post process rest template.
-		 *
-		 * @param restTemplate the rest template
-		 */
-		private void postProcessRestTemplate(RestTemplate restTemplate) {
-			List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
-			messageConverters
-					.parallelStream()
-					.filter(c -> (c instanceof MappingJackson2HttpMessageConverter))
-					.forEach(c -> ((MappingJackson2HttpMessageConverter) c)
-							.getObjectMapper()
-							.registerModule(mystiqueModule));
-		}
+    /**
+     * Post process rest template.
+     *
+     * @param restTemplate the rest template
+     */
+    private void postProcessRestTemplate(RestTemplate restTemplate) {
+      if (null != mystiqueModule) {
+        List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+        messageConverters
+            .parallelStream()
+            .filter(c -> (c instanceof MappingJackson2HttpMessageConverter))
+            .forEach(
+                c ->
+                    ((MappingJackson2HttpMessageConverter) c)
+                        .getObjectMapper()
+                        .registerModule(mystiqueModule));
+      }
+    }
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see org.springframework.beans.factory.config.BeanPostProcessor#
-		 * postProcessAfterInitialization(java.lang.Object, java.lang.String)
-		 */
-		@Override
-		public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-			return bean;
-		}
-	}
-
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.springframework.beans.factory.config.BeanPostProcessor#
+     * postProcessAfterInitialization(java.lang.Object, java.lang.String)
+     */
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName)
+        throws BeansException {
+      return bean;
+    }
+  }
 }

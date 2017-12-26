@@ -12,7 +12,6 @@ package com.balajeetm.mystique.starter;
 
 import java.io.IOException;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +23,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.balajeetm.mystique.core.JsonMystique;
 import com.balajeetm.mystique.core.lever.MystiqueLever;
-import com.balajeetm.mystique.core.module.MystiqueModule;
 import com.balajeetm.mystique.starter.config.JacksonGsonConfig;
 import com.balajeetm.mystique.starter.config.MystiqueConfigurer;
 import com.balajeetm.mystique.starter.config.RestTemplateConfig;
@@ -78,7 +76,6 @@ public class MystiqueAutoConfiguration {
 
   /** The Class RestTemplateConfiguration. */
   @Configuration
-  @ConditionalOnBean(value = {MystiqueModule.class})
   @ConditionalOnClass(value = {RestTemplate.class})
   @Import(value = {RestTemplateConfig.class})
   protected static class RestTemplateConfiguration {}

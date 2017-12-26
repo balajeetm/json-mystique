@@ -142,6 +142,52 @@ The json mystique jackson utility library provides a set of utility classes, imp
 The utility classes are
 * [Jackson Convertor](json-mystique-utils/jackson-utils/src/main/java/com/balajeetm/mystique/util/jackson/convertor/JacksonConvertor.java) - Utility for POJO Object Model Mapping
 
+## Spring Boot 2 Support
+
+JsonMystique completely supports [Spring Boot 2](https://docs.spring.io/spring-boot/docs/2.0.0.M7/api/).<br>
+Since Spring Boot 2 is not yet available for GA, JsonMystique supports the most stable milestone version of [SpringBoot2](https://docs.spring.io/spring-boot/docs/2.0.0.M7/api/) which is [2.0.0.M7](https://docs.spring.io/spring-boot/docs/2.0.0.M7/reference/htmlsingle/)
+
+The support for [Spring 5](https://docs.spring.io/spring/docs/5.0.2.RELEASE/spring-framework-reference/) and Spring Boot 2 are part of Mystique's milestone release [2.1.2.M1](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.balajeetm.mystique%22%20v%3A%222.1.2.M1%22):
+
+[json-mystique](http://repo1.maven.org/maven2/com/balajeetm/mystique/json-mystique/2.1.2.M1/)
+___
+```xml
+<dependency>
+  <groupId>com.balajeetm.mystique</groupId>
+  <artifactId>json-mystique</artifactId>
+  <version>2.1.2.M1</version>
+</dependency>
+```
+
+[json-mystique-starter](http://repo1.maven.org/maven2/com/balajeetm/mystique/json-mystique-starter/2.1.2.M1/)
+___
+```xml
+<dependency>
+  <groupId>com.balajeetm.mystique</groupId>
+  <artifactId>json-mystique-starter</artifactId>
+  <version>2.1.2.M1</version>
+</dependency>
+```
+
+[gson-utils](http://repo1.maven.org/maven2/com/balajeetm/mystique/gson-utils/2.1.2.M1/)
+___
+```xml
+<dependency>
+  <groupId>com.balajeetm.mystique</groupId>
+  <artifactId>gson-utils</artifactId>
+  <version>2.1.2.M1</version>
+</dependency>
+```
+
+[jackson-utils](http://repo1.maven.org/maven2/com/balajeetm/mystique/jackson-utils/2.1.2.M1/)
+___
+```xml
+<dependency>
+  <groupId>com.balajeetm.mystique</groupId>
+  <artifactId>jackson-utils</artifactId>
+  <version>2.1.2.M1</version>
+</dependency>
+```
 ## Documentation
 
 For detailed documentation, refer the [documentation index](documentation/_Sidebar.md)<br>

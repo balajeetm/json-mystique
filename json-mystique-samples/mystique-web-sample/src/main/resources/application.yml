@@ -1,7 +1,8 @@
 management:
-  context-path: /manage
-  security:
-    enabled: false
+  endpoints:
+    web:
+      base-path: /manage
+      expose: "*"
   
 mystique:
   rest:
