@@ -267,6 +267,48 @@ public class JsonLever {
   }
 
   /**
+   * Sets the string at the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a.b.c.1", "5"]) is {'a': {'b': {'c': [1, "5", 3, 4]}}}. Strings that can be
+   *     casted to numerals are presumed to be array indexes
+   * @param value the value
+   * @return the json element
+   */
+  public JsonElement set(JsonElement source, String jpath, String value) {
+    return set(source, jpath, new JsonPrimitive(value));
+  }
+
+  /**
+   * Sets the string at the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a.b.c.1", true]) is {'a': {'b': {'c': [1, true, 3, 4]}}}. Strings that can be
+   *     casted to numerals are presumed to be array indexes
+   * @param value the value
+   * @return the json element
+   */
+  public JsonElement set(JsonElement source, String jpath, Boolean value) {
+    return set(source, jpath, new JsonPrimitive(value));
+  }
+
+  /**
+   * Sets the string at the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a.b.c.1", 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Strings that can be
+   *     casted to numerals are presumed to be array indexes
+   * @param value the value
+   * @return the json element
+   */
+  public JsonElement set(JsonElement source, String jpath, Number value) {
+    return set(source, jpath, new JsonPrimitive(value));
+  }
+
+  /**
    * Sets the json element at the specified jpath.
    *
    * @param source the source
@@ -305,6 +347,48 @@ public class JsonLever {
       }
     }
     return result;
+  }
+
+  /**
+   * Sets the string at the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a.b.c.1", "5"]) is {'a': {'b': {'c': [1, "5", 3, 4]}}}. Strings that can be
+   *     casted to numerals are presumed to be array indexes
+   * @param value the value
+   * @return the json element
+   */
+  public JsonElement set(JsonElement source, JsonArray jpath, String value) {
+    return set(source, jpath, new JsonPrimitive(value));
+  }
+
+  /**
+   * Sets the string at the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a.b.c.1", true]) is {'a': {'b': {'c': [1, true, 3, 4]}}}. Strings that can be
+   *     casted to numerals are presumed to be array indexes
+   * @param value the value
+   * @return the json element
+   */
+  public JsonElement set(JsonElement source, JsonArray jpath, Boolean value) {
+    return set(source, jpath, new JsonPrimitive(value));
+  }
+
+  /**
+   * Sets the string at the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a.b.c.1", 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Strings that can be
+   *     casted to numerals are presumed to be array indexes
+   * @param value the value
+   * @return the json element
+   */
+  public JsonElement set(JsonElement source, JsonArray jpath, Number value) {
+    return set(source, jpath, new JsonPrimitive(value));
   }
 
   /**
