@@ -163,6 +163,7 @@ public class SampleController {
   }
 
   @PostMapping(value = {"/height/{root}"})
+  @ApiOperation(hidden = true, value = "")
   public Integer height(@RequestBody JsonObject payload, @PathVariable String root) {
     JsonElement rootele = lever.get(payload, lever.newJsonArray(root));
     transverse(payload, lever.asJsonObject(rootele));
