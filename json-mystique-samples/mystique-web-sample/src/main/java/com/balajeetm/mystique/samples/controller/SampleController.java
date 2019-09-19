@@ -11,6 +11,8 @@
 package com.balajeetm.mystique.samples.controller;
 
 import java.net.URI;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,6 +23,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,11 +32,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.balajeetm.mystique.core.JsonMystique;
+import com.balajeetm.mystique.samples.constants.SampleConstants;
 import com.balajeetm.mystique.samples.util.MystiqueSampleConfig;
 import com.balajeetm.mystique.samples.util.TestModel;
 import com.balajeetm.mystique.util.gson.lever.JsonLever;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+
+import io.swagger.annotations.ApiOperation;
 
 /**
  * The Class SampleController.
@@ -74,7 +81,10 @@ public class SampleController {
    * @return the test model
    */
   @PostMapping(value = {"/testmodel"})
-  public TestModel testmodel(@RequestBody TestModel body) {
+  @ApiOperation(
+      value = "Jsonified output of a POJO",
+      tags = {SampleConstants.TAG_SAMPLE})
+  public TestModel pojotest(@RequestBody TestModel body) {
     return body;
   }
 
@@ -85,6 +95,9 @@ public class SampleController {
    * @return the json object
    */
   @GetMapping(value = {"/gson/serialise"})
+  @ApiOperation(
+      value = "Serialization of Gson Jsons",
+      tags = {SampleConstants.TAG_SAMPLE})
   public JsonObject serialise(@RequestParam(value = "msg") String msg) {
     JsonObject jsonObject = new JsonObject();
     jsonObject.addProperty("report", "Gson Serialisation working good!");
@@ -99,6 +112,9 @@ public class SampleController {
    * @return the json element
    */
   @GetMapping(value = {"/resttemplate"})
+  @ApiOperation(
+      value = "Serialization of Response Entity",
+      tags = {SampleConstants.TAG_SAMPLE})
   public ResponseEntity<JsonElement> restTemplate() {
     HttpHeaders headers = new HttpHeaders();
     headers.set("JsonStub-User-Key", config.getUserKey());
@@ -117,6 +133,9 @@ public class SampleController {
    * @return the json element
    */
   @PostMapping(value = {"/gson/deserialise"})
+  @ApiOperation(
+      value = "Deserialization of Gson Jsons",
+      tags = {SampleConstants.TAG_SAMPLE})
   public JsonElement deserialise(@RequestBody JsonElement payload) {
     JsonObject jsonObject = new JsonObject();
     jsonObject.addProperty("report", "Gson Deserialisation working good!");
@@ -133,6 +152,9 @@ public class SampleController {
    * @return the json element
    */
   @PostMapping(value = {"/convert"})
+  @ApiOperation(
+      value = "Convertion of one json to another",
+      tags = {SampleConstants.TAG_SAMPLE})
   public JsonElement convert(
       @RequestParam(value = "specName", required = false) String specName,
       @RequestBody JsonElement payload) {
@@ -140,15 +162,15 @@ public class SampleController {
     return jsonMystique.transform(payload, specName);
   }
 
-  /*  @PostMapping(value = {"/height/{root}"})
-  public Integer height(@RequestBody JsonObject payload, String root) {
+  @PostMapping(value = {"/height/{root}"})
+  public Integer height(@RequestBody JsonObject payload, @PathVariable String root) {
     JsonElement rootele = lever.get(payload, lever.newJsonArray(root));
     transverse(payload, lever.asJsonObject(rootele));
     Integer dia = 0;
     Set<Entry<String, JsonElement>> entrySet = payload.entrySet();
     for (Entry<String, JsonElement> entry : entrySet) {
       JsonElement value = entry.getValue();
-      Integer through = lever.asInt(lever.get(value, "through"));
+      Integer through = lever.asInt(lever.get(value, "through"), 0);
       if (through > dia) {
         dia = through;
       }
@@ -157,8 +179,8 @@ public class SampleController {
   }
 
   private Integer transverse(JsonObject payload, JsonObject node) {
-    Integer leftDia = 0;
-    Integer rightDia = 0;
+    Integer leftDia = -1;
+    Integer rightDia = -1;
     if (lever.isNotNull(lever.get(node, "left"))) {
       leftDia = transverse(payload, lever.asJsonObject(payload.get(lever.getString(node, "left"))));
     }
@@ -166,13 +188,13 @@ public class SampleController {
       rightDia =
           transverse(payload, lever.asJsonObject(payload.get(lever.getString(node, "right"))));
     }
-    leftDia = leftDia > 0 ? 1 + leftDia : leftDia;
-    rightDia = rightDia > 0 ? 1 + rightDia : rightDia;
+    leftDia = 1 + leftDia;
+    rightDia = 1 + rightDia;
     lever.set(node, "leftDia", new JsonPrimitive(leftDia));
     lever.set(node, "rightDia", new JsonPrimitive(rightDia));
     lever.set(node, "through", new JsonPrimitive(leftDia + rightDia));
     return leftDia < rightDia ? rightDia : leftDia;
-  }*/
+  }
 
   /**
    * Error.

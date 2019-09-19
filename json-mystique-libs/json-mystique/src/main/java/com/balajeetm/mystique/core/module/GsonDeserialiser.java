@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import com.balajeetm.mystique.util.gson.convertor.GsonConvertor;
-import com.balajeetm.mystique.util.json.convertor.JsonConvertor;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -39,16 +37,12 @@ import com.google.gson.JsonPrimitive;
  */
 public class GsonDeserialiser<T extends JsonElement> extends StdDeserializer<T> {
 
-  /** The gson convertor. */
-  JsonConvertor gsonConvertor;
-
   /** The Constant serialVersionUID. */
   private static final long serialVersionUID = 1L;
 
   /** Instantiates a new gson deserialiser. */
   public GsonDeserialiser() {
     this(JsonElement.class);
-    gsonConvertor = GsonConvertor.getInstance();
   }
 
   /**

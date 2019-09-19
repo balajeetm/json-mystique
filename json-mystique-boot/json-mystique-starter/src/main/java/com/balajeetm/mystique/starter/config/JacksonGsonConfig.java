@@ -39,7 +39,7 @@ public class JacksonGsonConfig {
    * @return the object mapper configurer
    */
   @Bean
-  public ObjectMapperConfigurer objectMapperConfigurer(MystiqueModule mystiqueModule) {
+  public ObjectMapperConfigurer mystiqueObjectMapperConfigurer(MystiqueModule mystiqueModule) {
     return new ObjectMapperConfigurer(mystiqueModule);
   }
 

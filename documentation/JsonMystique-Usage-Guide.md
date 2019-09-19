@@ -93,7 +93,7 @@ If you are using sprinng, autowire the JsonMystique class into the class where y
 `@Autowired`
 `private JsonMystique jsonMystique;`
 
-If you are usinng JsonMystqiue natively, do the below:
+If you are using JsonMystique natively, do the below:
 ```java
 private JsonMystique = JsonMystique.getInstance();
 ```

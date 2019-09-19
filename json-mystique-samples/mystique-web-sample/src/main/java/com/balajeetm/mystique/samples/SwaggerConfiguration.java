@@ -16,13 +16,13 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import com.balajeetm.mystique.samples.constants.SampleConstants;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -46,7 +46,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2
-@ComponentScan(basePackages = {"com.balajeetm.mystique.samples"})
 @SuppressWarnings("unchecked")
 public class SwaggerConfiguration {
 
@@ -65,7 +64,7 @@ public class SwaggerConfiguration {
         paths(),
         RequestHandlerSelectors.any(),
         apiInfo(),
-        new Tag("Mystique Web Sample", "Mystique Web Sample ReST Apis"));
+        new Tag(SampleConstants.TAG_SAMPLE, "Mystique Web Sample ReST Apis"));
   }
 
   /**
@@ -79,8 +78,7 @@ public class SwaggerConfiguration {
         "mystique-management",
         PathSelectors.regex("/manage.*"),
         Predicates.or(getterMethods()),
-        managementInfo(),
-        new Tag("Mystique Web Sample Management", "Mystique Web Sample Management Apis"));
+        managementInfo());
   }
 
   /**
@@ -99,6 +97,14 @@ public class SwaggerConfiguration {
       Predicate<RequestHandler> apis,
       ApiInfo apiinfo,
       Tag tag) {
+    return getDocket(groupName, pathPattern, apis, apiinfo).tags(tag);
+  }
+
+  private Docket getDocket(
+      String groupName,
+      Predicate<String> pathPattern,
+      Predicate<RequestHandler> apis,
+      ApiInfo apiinfo) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName(groupName)
         .select()
@@ -116,8 +122,7 @@ public class SwaggerConfiguration {
                     typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
                 typeResolver.resolve(WildcardType.class)))
         .useDefaultResponseMessages(false)
-        .enableUrlTemplating(false)
-        .tags(tag);
+        .enableUrlTemplating(false);
   }
 
   /**

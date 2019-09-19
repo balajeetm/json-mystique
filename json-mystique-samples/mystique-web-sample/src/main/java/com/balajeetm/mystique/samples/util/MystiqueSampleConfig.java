@@ -10,11 +10,8 @@
  */
 package com.balajeetm.mystique.samples.util;
 
-import javax.validation.constraints.NotEmpty;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
 
@@ -24,7 +21,6 @@ import lombok.Data;
  * @author balajeetm
  */
 @ConfigurationProperties(prefix = "mystique.rest")
-@Validated
 @Component
 
 /** Instantiates a new mystique sample config. */
@@ -38,5 +34,5 @@ public class MystiqueSampleConfig {
   String projectKey;
 
   /** The endpoint. */
-  @NotEmpty String endpoint;
+  String endpoint;
 }

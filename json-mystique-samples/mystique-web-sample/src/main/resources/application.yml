@@ -2,7 +2,9 @@ management:
   endpoints:
     web:
       base-path: /manage
-      expose: "*"
+      exposure:
+        include:
+        - "*"
   
 mystique:
   rest:
