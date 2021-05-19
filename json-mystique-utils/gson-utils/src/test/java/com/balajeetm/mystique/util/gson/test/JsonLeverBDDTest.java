@@ -12,8 +12,8 @@ package com.balajeetm.mystique.util.gson.test;
 
 import java.io.InputStreamReader;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -41,17 +41,17 @@ public class JsonLeverBDDTest {
       Resource resource2 = resourceResolver.getResource("classpath:jsonLever/src2.json");
       Resource resultResource = resourceResolver.getResource("classpath:jsonLever/result.json");
 
-      JsonParser jsonParser = jsonLever.getJsonParser();
-      JsonElement src1 = jsonParser.parse(new InputStreamReader(resource1.getInputStream()));
-      JsonElement src2 = jsonParser.parse(new InputStreamReader(resource2.getInputStream()));
-      JsonElement result = jsonParser.parse(new InputStreamReader(resultResource.getInputStream()));
+      JsonElement src1 = JsonParser.parseReader(new InputStreamReader(resource1.getInputStream()));
+      JsonElement src2 = JsonParser.parseReader(new InputStreamReader(resource2.getInputStream()));
+      JsonElement result =
+          JsonParser.parseReader(new InputStreamReader(resultResource.getInputStream()));
 
       JsonElement merge = jsonLever.merge(src1, src2);
-      Assert.assertTrue(merge.isJsonObject());
+      Assertions.assertTrue(merge.isJsonObject());
 
-      Assert.assertEquals(result, merge);
+      Assertions.assertEquals(result, merge);
     } catch (Exception e) {
-      Assert.assertFalse(e.getMessage(), true);
+      Assertions.assertFalse(true, e.getMessage());
     }
   }
 
@@ -65,17 +65,17 @@ public class JsonLeverBDDTest {
       Resource resultResource =
           resourceResolver.getResource("classpath:jsonLever/resultArray.json");
 
-      JsonParser jsonParser = jsonLever.getJsonParser();
-      JsonElement src1 = jsonParser.parse(new InputStreamReader(resource1.getInputStream()));
-      JsonElement src2 = jsonParser.parse(new InputStreamReader(resource2.getInputStream()));
-      JsonElement result = jsonParser.parse(new InputStreamReader(resultResource.getInputStream()));
+      JsonElement src1 = JsonParser.parseReader(new InputStreamReader(resource1.getInputStream()));
+      JsonElement src2 = JsonParser.parseReader(new InputStreamReader(resource2.getInputStream()));
+      JsonElement result =
+          JsonParser.parseReader(new InputStreamReader(resultResource.getInputStream()));
 
       JsonElement merge = jsonLever.merge(src1, src2, Boolean.TRUE);
-      Assert.assertTrue(merge.isJsonObject());
+      Assertions.assertTrue(merge.isJsonObject());
 
-      Assert.assertEquals(result, merge);
+      Assertions.assertEquals(result, merge);
     } catch (Exception e) {
-      Assert.assertFalse(e.getMessage(), true);
+      Assertions.assertFalse(true, e.getMessage());
     }
   }
 }

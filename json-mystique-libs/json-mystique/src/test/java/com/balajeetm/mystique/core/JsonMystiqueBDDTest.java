@@ -10,7 +10,7 @@
  */
 package com.balajeetm.mystique.core;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * The Class JsonMystiqueBDDTest.
@@ -23,6 +23,6 @@ public class JsonMystiqueBDDTest extends JsonMystiqueNegativeBDD {
   public JsonMystiqueBDDTest() {}
 
   /** Inits the. */
-  @Before
+  @BeforeEach
   public void init() {}
 }

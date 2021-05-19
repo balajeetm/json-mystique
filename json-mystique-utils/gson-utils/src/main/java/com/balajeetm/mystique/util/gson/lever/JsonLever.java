@@ -18,7 +18,6 @@ import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import com.balajeetm.mystique.util.gson.GsonFactory;
 import com.balajeetm.mystique.util.gson.convertor.GsonConvertor;
 import com.balajeetm.mystique.util.json.error.ConvertorException;
 import com.google.gson.Gson;
@@ -27,7 +26,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import lombok.Getter;
@@ -44,13 +42,6 @@ public class JsonLever {
    *
    * @return the json parser
    */
-
-  /**
-   * Gets the json parser.
-   *
-   * @return the json parser
-   */
-  @Getter private JsonParser jsonParser;
 
   /**
    * Gets the gson.
@@ -85,7 +76,6 @@ public class JsonLever {
 
   /** Instantiates a new json lever. */
   protected JsonLever() {
-    jsonParser = GsonFactory.getInstance().getJsonParser();
     GsonBuilder gsonBuilder = new GsonBuilder();
     gsonBuilder.setDateFormat(DateFormat.LONG, DateFormat.LONG);
     gson = gsonBuilder.create();

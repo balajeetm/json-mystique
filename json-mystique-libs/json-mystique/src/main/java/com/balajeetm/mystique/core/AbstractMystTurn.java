@@ -34,11 +34,6 @@ public abstract class AbstractMystTurn implements MystTurn {
   /** The mystique lever. */
   protected MystiqueLever mystiqueLever;
 
-  /**
-   * Sets the factory.
-   *
-   * @param factory the new factory
-   */
   @Setter protected MystiqueFactory factory;
 
   /** Instantiates a new abstract myst turn. */

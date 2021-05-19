@@ -59,10 +59,9 @@ public class JsonComparator {
    */
   public Comparison isSubset(String subsetStr, String actualStr) {
     Comparison result = new Comparison();
-    JsonParser jsonParser = jsonLever.getJsonParser();
     try {
-      JsonElement actual = jsonParser.parse(actualStr);
-      JsonElement subset = jsonParser.parse(subsetStr);
+      JsonElement actual = JsonParser.parseString(actualStr);
+      JsonElement subset = JsonParser.parseString(subsetStr);
       isSubset("root", subset, actual, result);
     } catch (RuntimeException e) {
       result.setResult(Boolean.FALSE);

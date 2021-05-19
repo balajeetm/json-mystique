@@ -32,6 +32,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -145,7 +146,7 @@ public class JsonMystique {
    * @return the json element
    */
   public JsonElement transform(String inputJson, String specName) {
-    JsonElement source = jsonLever.getJsonParser().parse(inputJson);
+    JsonElement source = JsonParser.parseString(inputJson);
     return transform(source, specName);
   }
 
@@ -169,7 +170,7 @@ public class JsonMystique {
    * @return the json element
    */
   public JsonElement transform(String inputJson, String specName, JsonObject deps) {
-    JsonElement source = jsonLever.getJsonParser().parse(inputJson);
+    JsonElement source = JsonParser.parseString(inputJson);
     return transform(source, specName, deps);
   }
 

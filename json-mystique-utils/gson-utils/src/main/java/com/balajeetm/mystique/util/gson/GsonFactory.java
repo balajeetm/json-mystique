@@ -23,7 +23,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
@@ -34,9 +33,6 @@ import com.google.gson.JsonSerializer;
  * @author balajeemohan
  */
 public class GsonFactory {
-
-  /** The json parser. */
-  private JsonParser jsonParser;
 
   /** The gson. */
   private Gson gson;
@@ -64,18 +60,6 @@ public class GsonFactory {
 
   /** Instantiates a new gson factory. */
   private GsonFactory() {}
-
-  /**
-   * Gets the json parser.
-   *
-   * @return the json parser
-   */
-  public JsonParser getJsonParser() {
-    if (null == jsonParser) {
-      jsonParser = new JsonParser();
-    }
-    return jsonParser;
-  }
 
   /**
    * Gets the gson.

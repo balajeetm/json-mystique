@@ -21,7 +21,6 @@ import com.balajeetm.mystique.util.gson.lever.JsonComparator;
 import com.balajeetm.mystique.util.gson.lever.JsonLever;
 import com.balajeetm.mystique.util.gson.lever.JsonQuery;
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 
 /**
  * The Class JacksonUtilAutoConfig. This config class is responsible for automatically creating
@@ -97,18 +96,6 @@ public class GsonUtilAutoConfig {
     @ConditionalOnMissingBean(value = {Gson.class})
     public Gson mystiqueGson(GsonFactory factory) {
       return factory.getGson();
-    }
-
-    /**
-     * Json parser.
-     *
-     * @param factory the factory
-     * @return the json parser
-     */
-    @Bean
-    @ConditionalOnMissingBean(value = {JsonParser.class})
-    public JsonParser jsonParser(GsonFactory factory) {
-      return factory.getJsonParser();
     }
   }
 }

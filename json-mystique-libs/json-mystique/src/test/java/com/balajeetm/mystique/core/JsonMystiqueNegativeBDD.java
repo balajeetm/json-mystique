@@ -10,23 +10,21 @@
  */
 package com.balajeetm.mystique.core;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * The Class JsonMystiqueNegativeBDD.
  *
  * @author balajeetm
  */
-@Ignore
 public class JsonMystiqueNegativeBDD extends JsonMystiquePositiveBDD {
 
   /** Instantiates a new json mystique negative bdd test. */
   public JsonMystiqueNegativeBDD() {}
 
   /** Inits the. */
-  @Before
+  @BeforeEach
   public void init() {}
 
   /** Null date transform17. */

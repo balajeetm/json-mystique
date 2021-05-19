@@ -14,10 +14,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -29,13 +28,13 @@ import com.balajeetm.mystique.util.gson.lever.Comparison;
 import com.balajeetm.mystique.util.gson.lever.JsonComparator;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
+import com.google.gson.JsonParser;
 
 /**
  * The Class JsonMystiquePositiveBDD.
  *
  * @author balajeetm
  */
-@Ignore
 public class JsonMystiquePositiveBDD {
 
   /** The json mystique. */
@@ -61,7 +60,7 @@ public class JsonMystiquePositiveBDD {
   }
 
   /** Inits the. */
-  @Before
+  @BeforeEach
   public void init() {}
 
   /** Test. */
@@ -77,18 +76,18 @@ public class JsonMystiquePositiveBDD {
       String string = IOUtils.toString(resource.getInputStream(), Charset.defaultCharset());
       Resource outputRes = resourceResolver.getResource(outputPattern);
       JsonElement output =
-          jsonLever.getJsonParser().parse(new InputStreamReader(outputRes.getInputStream()));
+          JsonParser.parseReader(new InputStreamReader(outputRes.getInputStream()));
       JsonElement transform = jsonMystique.transform(string, "ptest1");
       Boolean transformSuccess =
           transform != null && !transform.isJsonNull() && transform.isJsonObject();
-      Assert.assertTrue(transformSuccess);
+      Assertions.assertTrue(transformSuccess);
       JsonElement jsonElement = transform.getAsJsonObject().get("ba14");
       transform.getAsJsonObject().remove("ba14");
-      Assert.assertTrue(null != jsonElement && !jsonElement.isJsonNull());
-      Assert.assertEquals(output, transform);
+      Assertions.assertTrue(null != jsonElement && !jsonElement.isJsonNull());
+      Assertions.assertEquals(output, transform);
     } catch (Exception e) {
       e.printStackTrace();
-      Assert.fail(e.getMessage());
+      Assertions.fail(e.getMessage());
     }
   }
 
@@ -312,11 +311,11 @@ public class JsonMystiquePositiveBDD {
       ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
       Resource outputRes = resourceResolver.getResource(outputPattern);
       JsonElement output =
-          jsonLever.getJsonParser().parse(new InputStreamReader(outputRes.getInputStream()));
-      Assert.assertEquals(output, transform);
+          JsonParser.parseReader(new InputStreamReader(outputRes.getInputStream()));
+      Assertions.assertEquals(output, transform);
     } catch (Exception e) {
       e.printStackTrace();
-      Assert.fail(e.getMessage());
+      Assertions.fail(e.getMessage());
     }
   }
 
@@ -347,12 +346,12 @@ public class JsonMystiquePositiveBDD {
       ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
       Resource outputRes = resourceResolver.getResource(outputPattern);
       JsonElement output =
-          jsonLever.getJsonParser().parse(new InputStreamReader(outputRes.getInputStream()));
+          JsonParser.parseReader(new InputStreamReader(outputRes.getInputStream()));
       Comparison subset = jsonComparator.isSubset(output, transform);
-      Assert.assertTrue(subset.getResult());
+      Assertions.assertTrue(subset.getResult());
     } catch (Exception e) {
       e.printStackTrace();
-      Assert.fail(e.getMessage());
+      Assertions.fail(e.getMessage());
     }
   }
 

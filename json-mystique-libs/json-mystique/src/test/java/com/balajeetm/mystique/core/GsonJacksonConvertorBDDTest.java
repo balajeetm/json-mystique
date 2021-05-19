@@ -9,9 +9,9 @@
  */
 package com.balajeetm.mystique.core;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -39,7 +39,7 @@ public class GsonJacksonConvertorBDDTest {
   }
 
   /** Inits the. */
-  @Before
+  @BeforeEach
   public void init() {}
 
   /** Jackson gson test. */
@@ -55,10 +55,10 @@ public class GsonJacksonConvertorBDDTest {
       JsonElement transGsonObject = instance.deserialize(jacksonObject, JsonElement.class);
       JsonNode transJacksonObject = instance.deserialize(gsonObject, JsonNode.class);
 
-      Assert.assertEquals(gsonObject, transGsonObject);
-      Assert.assertEquals(jacksonObject, transJacksonObject);
+      Assertions.assertEquals(gsonObject, transGsonObject);
+      Assertions.assertEquals(jacksonObject, transJacksonObject);
     } catch (Exception e) {
-      Assert.fail(e.getMessage());
+      Assertions.fail(e.getMessage());
     }
   }
 
@@ -67,9 +67,9 @@ public class GsonJacksonConvertorBDDTest {
   public void jacksonNegativeTest7() {
     try {
       JsonElement deserialize = instance.deserialize((String) null, JsonElement.class);
-      Assert.assertNull(deserialize);
+      Assertions.assertNull(deserialize);
     } catch (ConvertorException e) {
-      Assert.assertTrue(e.getMessage(), false);
+      Assertions.assertTrue(false, e.getMessage());
     }
   }
 }

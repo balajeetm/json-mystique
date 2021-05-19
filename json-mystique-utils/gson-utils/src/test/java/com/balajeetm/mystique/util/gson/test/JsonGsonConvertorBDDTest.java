@@ -15,9 +15,9 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -39,7 +39,7 @@ public class JsonGsonConvertorBDDTest {
   private JsonConvertor instance = GsonConvertor.getInstance();
 
   /** Inits the. */
-  @Before
+  @BeforeEach
   public void init() {}
 
   /** Gson positive test. */
@@ -58,25 +58,25 @@ public class JsonGsonConvertorBDDTest {
           instance.deserializeGroup(resource.getInputStream(), List.class, Sample.class);
       Collection<Sample> deserializeGroup2 =
           instance.deserializeGroup(resource.getInputStream(), Collection.class, Sample.class);
-      Assert.assertNotNull(deserializeList);
-      Assert.assertNotNull(deserializeGroup);
-      Assert.assertNotNull(deserializeGroup2);
+      Assertions.assertNotNull(deserializeList);
+      Assertions.assertNotNull(deserializeGroup);
+      Assertions.assertNotNull(deserializeGroup2);
       deserializeList = instance.deserializeList(string, Sample.class);
       deserializeGroup = instance.deserializeGroup(string, List.class, Sample.class);
       deserializeGroup2 = instance.deserializeGroup(string, Collection.class, Sample.class);
-      Assert.assertNotNull(deserializeList);
-      Assert.assertNotNull(deserializeGroup);
-      Assert.assertNotNull(deserializeGroup2);
+      Assertions.assertNotNull(deserializeList);
+      Assertions.assertNotNull(deserializeGroup);
+      Assertions.assertNotNull(deserializeGroup2);
 
       for (Sample tarot : deserializeList) {
         String serialize = instance.serialize(tarot);
         Sample deserialize = instance.deserialize(serialize, Sample.class);
-        Assert.assertNotNull(deserialize);
+        Assertions.assertNotNull(deserialize);
         deserialize = instance.deserialize(tarot, Sample.class);
-        Assert.assertNotNull(deserialize);
+        Assertions.assertNotNull(deserialize);
       }
     } catch (Exception e) {
-      Assert.fail(e.getMessage());
+      Assertions.fail(e.getMessage());
     }
   }
 
@@ -86,7 +86,7 @@ public class JsonGsonConvertorBDDTest {
     try {
       instance.deserializeList((InputStream) null, Sample.class);
     } catch (ConvertorException e) {
-      Assert.assertTrue(true);
+      Assertions.assertTrue(true);
     }
   }
 
@@ -96,7 +96,7 @@ public class JsonGsonConvertorBDDTest {
     try {
       instance.deserializeGroup((InputStream) null, List.class, Sample.class);
     } catch (ConvertorException e) {
-      Assert.assertTrue(true);
+      Assertions.assertTrue(true);
     }
   }
 
@@ -106,7 +106,7 @@ public class JsonGsonConvertorBDDTest {
     try {
       instance.deserializeGroup((InputStream) null, Collection.class, Sample.class);
     } catch (ConvertorException e) {
-      Assert.assertTrue(true);
+      Assertions.assertTrue(true);
     }
   }
 
@@ -116,7 +116,7 @@ public class JsonGsonConvertorBDDTest {
     try {
       instance.deserializeList((String) null, Sample.class);
     } catch (ConvertorException e) {
-      Assert.assertTrue(true);
+      Assertions.assertTrue(true);
     }
   }
 
@@ -126,7 +126,7 @@ public class JsonGsonConvertorBDDTest {
     try {
       instance.deserializeGroup((String) null, List.class, Sample.class);
     } catch (ConvertorException e) {
-      Assert.assertTrue(true);
+      Assertions.assertTrue(true);
     }
   }
 
@@ -136,7 +136,7 @@ public class JsonGsonConvertorBDDTest {
     try {
       instance.deserializeGroup((String) null, Collection.class, Sample.class);
     } catch (ConvertorException e) {
-      Assert.assertTrue(true);
+      Assertions.assertTrue(true);
     }
   }
 
@@ -145,9 +145,9 @@ public class JsonGsonConvertorBDDTest {
   public void gsonNegativeTest7() {
     try {
       JsonElement deserialize = instance.deserialize((String) null, JsonElement.class);
-      Assert.assertNull(deserialize);
+      Assertions.assertNull(deserialize);
     } catch (ConvertorException e) {
-      Assert.assertTrue(e.getMessage(), false);
+      Assertions.assertTrue(false, e.getMessage());
     }
   }
 
@@ -156,9 +156,9 @@ public class JsonGsonConvertorBDDTest {
   public void gsonNegativeTest8() {
     try {
       JsonElement deserialize = instance.deserialize((Object) null, JsonObject.class);
-      Assert.assertNull(deserialize);
+      Assertions.assertNull(deserialize);
     } catch (ConvertorException e) {
-      Assert.assertTrue(e.getMessage(), false);
+      Assertions.assertTrue(false, e.getMessage());
     }
   }
 }

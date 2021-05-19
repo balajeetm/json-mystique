@@ -122,15 +122,15 @@ public class JsonQuery {
    */
   private Flux<JsonElement> queryAsync(JsonArray array, JsonObject query) {
     return Flux.fromIterable(array)
-        .publishOn(Schedulers.elastic())
+        .publishOn(Schedulers.boundedElastic())
         .filter(json -> filter(json, query.get("where")))
-        .compose(
+        .transform(
             obs -> {
               Long limit = jsonLever.asLong(query.get("limit"), 0L);
               return limit > 0 ? obs.take(limit.intValue()) : obs;
             })
-        .publishOn(Schedulers.elastic())
-        .compose(
+        .publishOn(Schedulers.boundedElastic())
+        .transform(
             obs ->
                 StringUtils.equals(jsonLever.getString(query, "select"), "count")
                     ? obs.count().map(count -> new JsonPrimitive(count))
@@ -146,15 +146,15 @@ public class JsonQuery {
    */
   private Flux<JsonElement> queryAsync(JsonElement obj, JsonObject query) {
     return Flux.just(obj)
-        .publishOn(Schedulers.elastic())
+        .publishOn(Schedulers.boundedElastic())
         .filter(json -> filter(json, query.get("where")))
-        .compose(
+        .transform(
             obs -> {
               Long limit = jsonLever.asLong(query.get("limit"), 0L);
               return limit > 0 ? obs.take(limit.intValue()) : obs;
             })
-        .publishOn(Schedulers.elastic())
-        .compose(
+        .publishOn(Schedulers.boundedElastic())
+        .transform(
             obs ->
                 StringUtils.equals(jsonLever.getString(query, "select"), "count")
                     ? obs.count().map(count -> new JsonPrimitive(count))

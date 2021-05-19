@@ -14,10 +14,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
-import org.assertj.core.api.Assertions;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -25,7 +23,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.balajeetm.mystique.util.gson.lever.Comparison;
 import com.balajeetm.mystique.util.gson.lever.JsonComparator;
@@ -33,6 +30,7 @@ import com.balajeetm.mystique.util.gson.lever.JsonLever;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 /**
@@ -40,7 +38,6 @@ import com.google.gson.JsonSyntaxException;
  *
  * @author balajeetm
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class MystiqueWebSampleApplicationTests {
 
@@ -64,7 +61,7 @@ public class MystiqueWebSampleApplicationTests {
   @Test
   public void pingTest() {
     String body = this.restTemplate.getForObject("/mystique/ping", String.class);
-    Assertions.assertThat(body).isEqualTo("Ping Working");
+    Assertions.assertEquals("Ping Working", body);
   }
 
   /** Gson serialise test. */
@@ -75,10 +72,10 @@ public class MystiqueWebSampleApplicationTests {
           this.restTemplate.getForObject(
               String.format("/mystique/gson/serialise?msg=%s", "balajeetm"), JsonElement.class);
       JsonElement resource = getResource("gsonSerialise");
-      Assert.assertEquals(resource, body);
+      Assertions.assertEquals(resource, body);
     } catch (Exception e) {
       e.printStackTrace();
-      Assert.fail(e.getMessage());
+      Assertions.fail(e.getMessage());
     }
   }
 
@@ -92,11 +89,11 @@ public class MystiqueWebSampleApplicationTests {
           this.restTemplate.postForObject("/mystique/gson/deserialise", payload, JsonElement.class);
       JsonElement resource = getResource("gsonDeserialise");
       Comparison subset = comparator.isSubset(resource, response);
-      Assert.assertTrue(Arrays.toString(subset.getMsgs().toArray()), subset.getResult());
-      Assert.assertEquals(payload, jsonLever.asJsonObject(response).get("payload"));
+      Assertions.assertTrue(subset.getResult(), Arrays.toString(subset.getMsgs().toArray()));
+      Assertions.assertEquals(payload, jsonLever.asJsonObject(response).get("payload"));
     } catch (Exception e) {
       e.printStackTrace();
-      Assert.fail(e.getMessage());
+      Assertions.fail(e.getMessage());
     }
   }
 
@@ -108,10 +105,10 @@ public class MystiqueWebSampleApplicationTests {
       payload.addProperty("name", "balajeetm");
       JsonElement response =
           this.restTemplate.postForObject("/mystique/convert", payload, JsonElement.class);
-      Assert.assertEquals(payload, jsonLever.getJsonObject(response, "employee"));
+      Assertions.assertEquals(payload, jsonLever.getJsonObject(response, "employee"));
     } catch (Exception e) {
       e.printStackTrace();
-      Assert.fail(e.getMessage());
+      Assertions.fail(e.getMessage());
     }
   }
 
@@ -128,6 +125,6 @@ public class MystiqueWebSampleApplicationTests {
       throws JsonIOException, JsonSyntaxException, IOException {
     ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
     Resource outputRes = resourceResolver.getResource(String.format(fileFormat, fileName));
-    return jsonLever.getJsonParser().parse(new InputStreamReader(outputRes.getInputStream()));
+    return JsonParser.parseReader(new InputStreamReader(outputRes.getInputStream()));
   }
 }
