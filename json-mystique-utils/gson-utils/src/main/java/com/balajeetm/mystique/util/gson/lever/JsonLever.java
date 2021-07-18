@@ -10,9 +10,11 @@
  */
 package com.balajeetm.mystique.util.gson.lever;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -31,23 +33,9 @@ import com.google.gson.JsonPrimitive;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-/** The Constant log. */
-
-/** The Constant log. */
+/** @author Balajee Mohan */
 @Slf4j
 public class JsonLever {
-
-  /**
-   * Gets the json parser.
-   *
-   * @return the json parser
-   */
-
-  /**
-   * Gets the gson.
-   *
-   * @return the gson
-   */
 
   /**
    * Gets the gson.
@@ -464,6 +452,73 @@ public class JsonLever {
   }
 
   /**
+   * Returns the JsonObject identified by the fully qualified json path as a json object if
+   * possible. Else returns the default value
+   *
+   * @param source the json source element
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public JsonObject getDefaultedJsonObject(
+      JsonElement source, String jpath, JsonObject defaultValue) {
+    JsonObject result = getJsonObject(source, jpath);
+    return isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the JsonObject identified by the fully qualified json path as a json object if
+   * possible. Else returns the default value
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public JsonObject getDefaultedJsonObject(Object source, String jpath, JsonObject defaultValue) {
+    JsonObject result = getJsonObject(source, jpath);
+    return isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the JsonObject identified by the fully qualified json path as a json object if
+   * possible. Else returns the default value
+   *
+   * @param source the json source element
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public JsonObject getDefaultedJsonObject(
+      JsonElement source, JsonArray jpath, JsonObject defaultValue) {
+    JsonObject result = getJsonObject(source, jpath);
+    return isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the JsonObject identified by the fully qualified json path as a json object if
+   * possible. Else returns the default value
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public JsonObject getDefaultedJsonObject(
+      Object source, JsonArray jpath, JsonObject defaultValue) {
+    JsonObject result = getJsonObject(source, jpath);
+    return isNull(result) ? defaultValue : result;
+  }
+
+  /**
    * Returns the JsonArray identified by the fully qualified json path as a json object if possible.
    * Else returns null
    *
@@ -543,6 +598,71 @@ public class JsonLever {
    */
   public JsonArray getJsonArray(Object source, Object... jpath) {
     return asJsonArray(get(jsonify(source), newJsonArray(jpath)));
+  }
+
+  /**
+   * Returns the JsonArray identified by the fully qualified json path as a json object if possible.
+   * Else returns default value
+   *
+   * @param source the json source element
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public JsonArray getDefaultedJsonArray(JsonElement source, String jpath, JsonArray defaultValue) {
+    JsonArray result = getJsonArray(source, jpath);
+    return isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the JsonArray identified by the fully qualified json path as a json object if possible.
+   * Else returns default value
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public JsonArray getDefaultedJsonArray(Object source, String jpath, JsonArray defaultValue) {
+    JsonArray result = getJsonArray(source, jpath);
+    return isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the JsonArray identified by the fully qualified json path as a json object if possible.
+   * Else returns default value
+   *
+   * @param source the json source element
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public JsonArray getDefaultedJsonArray(
+      JsonElement source, JsonArray jpath, JsonArray defaultValue) {
+    JsonArray result = getJsonArray(source, jpath);
+    return isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the JsonArray identified by the fully qualified json path as a json object if possible.
+   * Else returns default value
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public JsonArray getDefaultedJsonArray(Object source, JsonArray jpath, JsonArray defaultValue) {
+    JsonArray result = getJsonArray(source, jpath);
+    return isNull(result) ? defaultValue : result;
   }
 
   /**
@@ -628,6 +748,70 @@ public class JsonLever {
   }
 
   /**
+   * Returns the String identified by the fully qualified json path as a json object if possible.
+   * Else returns default value
+   *
+   * @param source the json source element
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public String getDefaultedString(JsonElement source, String jpath, String defaultValue) {
+    String result = getString(source, jpath);
+    return Objects.isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the String identified by the fully qualified json path as a json object if possible.
+   * Else returns default value
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public String getDefaultedString(Object source, String jpath, String defaultValue) {
+    String result = getString(source, jpath);
+    return Objects.isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the String identified by the fully qualified json path as a json object if possible.
+   * Else returns default value
+   *
+   * @param source the json source element
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public String getDefaultedString(JsonElement source, JsonArray jpath, String defaultValue) {
+    String result = getString(source, jpath);
+    return Objects.isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the String identified by the fully qualified json path as a json object if possible.
+   * Else returns default value
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public String getDefaultedString(Object source, JsonArray jpath, String defaultValue) {
+    String result = getString(source, jpath);
+    return Objects.isNull(result) ? defaultValue : result;
+  }
+
+  /**
    * Returns the Long identified by the fully qualified json path as a json object if possible. Else
    * returns null
    *
@@ -710,6 +894,70 @@ public class JsonLever {
   }
 
   /**
+   * Returns the Long identified by the fully qualified json path as a json object if possible. Else
+   * returns the default value
+   *
+   * @param source the json source element
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public Long getDefaultedLong(JsonElement source, String jpath, Long defaultValue) {
+    Long result = getLong(source, jpath);
+    return Objects.isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the Long identified by the fully qualified json path as a json object if possible. Else
+   * returns the default value
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public Long getDefaultedLong(Object source, String jpath, Long defaultValue) {
+    Long result = getLong(source, jpath);
+    return Objects.isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the Long identified by the fully qualified json path as a json object if possible. Else
+   * returns the default value
+   *
+   * @param source the json source element
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public Long getDefaultedLong(JsonElement source, JsonArray jpath, Long defaultValue) {
+    Long result = getLong(source, jpath);
+    return Objects.isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the Long identified by the fully qualified json path as a json object if possible. Else
+   * returns the default value
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public Long getDefaultedLong(Object source, JsonArray jpath, Long defaultValue) {
+    Long result = getLong(source, jpath);
+    return Objects.isNull(result) ? defaultValue : result;
+  }
+
+  /**
    * Returns the Boolean identified by the fully qualified json path as a json object if possible.
    * Else returns null
    *
@@ -789,6 +1037,70 @@ public class JsonLever {
    */
   public Boolean getBoolean(Object source, Object... jpath) {
     return asBoolean(get(jsonify(source), newJsonArray(jpath)));
+  }
+
+  /**
+   * Returns the Boolean identified by the fully qualified json path as a json object if possible.
+   * Else returns the default value
+   *
+   * @param source the json source element
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public Boolean getDefaultedBoolean(JsonElement source, String jpath, Boolean defaultValue) {
+    Boolean result = getBoolean(source, jpath);
+    return Objects.isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the Boolean identified by the fully qualified json path as a json object if possible.
+   * Else returns the default value
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public Boolean getDefaultedBoolean(Object source, String jpath, Boolean defaultValue) {
+    Boolean result = getBoolean(source, jpath);
+    return Objects.isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the Boolean identified by the fully qualified json path as a json object if possible.
+   * Else returns the default value
+   *
+   * @param source the json source element
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public Boolean getDefaultedBoolean(JsonElement source, JsonArray jpath, Boolean defaultValue) {
+    Boolean result = getBoolean(source, jpath);
+    return Objects.isNull(result) ? defaultValue : result;
+  }
+
+  /**
+   * Returns the Boolean identified by the fully qualified json path as a json object if possible.
+   * Else returns the default value
+   *
+   * @param source the json source element. Can be any Java POJO, that can be jsonified, or a String
+   *     representing a valid json
+   * @param jpath the fully qualified json path to the field required. eg set({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1, 5]) is {'a': {'b': {'c': [1, 5, 3, 4]}}}. Array indexes need
+   *     to be specified as numerals. Strings are always presumed to be field names.
+   * @param defaultValue the default value
+   * @return the field of interest as json object
+   */
+  public Boolean getDefaultedBoolean(Object source, JsonArray jpath, Boolean defaultValue) {
+    Boolean result = getBoolean(source, jpath);
+    return Objects.isNull(result) ? defaultValue : result;
   }
 
   /**
@@ -1567,8 +1879,11 @@ public class JsonLever {
       element = new JsonArray();
     } else {
       try {
-        element = type.newInstance();
-      } catch (InstantiationException | IllegalAccessException e) {
+        element = type.getDeclaredConstructor().newInstance();
+      } catch (InstantiationException
+          | IllegalAccessException
+          | NoSuchMethodException
+          | InvocationTargetException e) {
         log.error(String.format("Could not instantiate json element of type %s", type));
         log.debug(String.format("Could not instantiate json element of type %s.", type), e);
       }
