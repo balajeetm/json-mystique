@@ -30,3 +30,4 @@
     * JsonQuery
     * [MergeJsons](MergeJsons.md)
     * [JsonComparator](JsonComparator.md)
+    * JsonBuilder
