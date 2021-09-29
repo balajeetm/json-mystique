@@ -60,6 +60,16 @@ public class JsonLever {
    */
   @Getter private Gson gson;
 
+  /** Instantiates a new json lever. */
+  protected JsonLever() {
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    gsonBuilder.setDateFormat(DateFormat.LONG, DateFormat.LONG);
+    gson = gsonBuilder.create();
+  }
+
+  // Efficient Thread safe Lazy Initialization
+  // works only if the singleton constructor is non parameterized
+
   /**
    * Gets the single instance of JsonLever.
    *
@@ -67,22 +77,6 @@ public class JsonLever {
    */
   public static JsonLever getInstance() {
     return Creator.INSTANCE;
-  }
-
-  // Efficient Thread safe Lazy Initialization
-  // works only if the singleton constructor is non parameterized
-  /** The Class Creator. */
-  private static class Creator {
-
-    /** The instance. */
-    private static JsonLever INSTANCE = new JsonLever();
-  }
-
-  /** Instantiates a new json lever. */
-  protected JsonLever() {
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    gsonBuilder.setDateFormat(DateFormat.LONG, DateFormat.LONG);
-    gson = gsonBuilder.create();
   }
 
   /**
@@ -326,7 +320,8 @@ public class JsonLever {
    * @return the json element
    */
   public JsonElement set(JsonElement source, String jpath, String value) {
-    return set(source, jpath, new JsonPrimitive(value));
+    JsonElement jsonValue = Objects.isNull(value) ? JsonNull.INSTANCE : new JsonPrimitive(value);
+    return set(source, jpath, jsonValue);
   }
 
   /**
@@ -340,7 +335,8 @@ public class JsonLever {
    * @return the json element
    */
   public JsonElement set(JsonElement source, String jpath, Boolean value) {
-    return set(source, jpath, new JsonPrimitive(value));
+    JsonElement jsonValue = Objects.isNull(value) ? JsonNull.INSTANCE : new JsonPrimitive(value);
+    return set(source, jpath, jsonValue);
   }
 
   /**
@@ -354,7 +350,8 @@ public class JsonLever {
    * @return the json element
    */
   public JsonElement set(JsonElement source, String jpath, Number value) {
-    return set(source, jpath, new JsonPrimitive(value));
+    JsonElement jsonValue = Objects.isNull(value) ? JsonNull.INSTANCE : new JsonPrimitive(value);
+    return set(source, jpath, jsonValue);
   }
 
   /**
@@ -369,6 +366,7 @@ public class JsonLever {
    */
   public JsonElement set(JsonElement source, JsonArray jpath, JsonElement value) {
     JsonElement result = JsonNull.INSTANCE;
+    value = Objects.isNull(value) ? JsonNull.INSTANCE : value;
     if (isNotNull(jpath)) {
       result = source;
       JsonElement field = result;
@@ -409,7 +407,8 @@ public class JsonLever {
    * @return the json element
    */
   public JsonElement set(JsonElement source, JsonArray jpath, String value) {
-    return set(source, jpath, new JsonPrimitive(value));
+    JsonElement jsonValue = Objects.isNull(value) ? JsonNull.INSTANCE : new JsonPrimitive(value);
+    return set(source, jpath, jsonValue);
   }
 
   /**
@@ -423,7 +422,8 @@ public class JsonLever {
    * @return the json element
    */
   public JsonElement set(JsonElement source, JsonArray jpath, Boolean value) {
-    return set(source, jpath, new JsonPrimitive(value));
+    JsonElement jsonValue = Objects.isNull(value) ? JsonNull.INSTANCE : new JsonPrimitive(value);
+    return set(source, jpath, jsonValue);
   }
 
   /**
@@ -437,7 +437,8 @@ public class JsonLever {
    * @return the json element
    */
   public JsonElement set(JsonElement source, JsonArray jpath, Number value) {
-    return set(source, jpath, new JsonPrimitive(value));
+    JsonElement jsonValue = Objects.isNull(value) ? JsonNull.INSTANCE : new JsonPrimitive(value);
+    return set(source, jpath, jsonValue);
   }
 
   /**
@@ -2103,5 +2104,12 @@ public class JsonLever {
       source.add(fieldName, getNewElement(type));
     }
     return source;
+  }
+
+  /** The Class Creator. */
+  private static class Creator {
+
+    /** The instance. */
+    private static JsonLever INSTANCE = new JsonLever();
   }
 }
