@@ -1,0 +1,8 @@
+{
+	"content": {
+		"id1": "contentId",
+		"audioType1": "Dolby"
+	},
+	"offerKeys": ["key1"],
+	"categories2": ["action", "comedy"]
+}

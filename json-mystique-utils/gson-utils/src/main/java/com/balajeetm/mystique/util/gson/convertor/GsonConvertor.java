@@ -124,26 +124,6 @@ public class GsonConvertor implements JsonConvertor {
    *
    * @see
    * com.futuresight.util.mystique.lever.ConvertorInterface#deserialize(java.
-   * lang.Object, java.lang.Class)
-   */
-  @Override
-  public <T> T deserialize(Object object, Class<T> pojoType) throws ConvertorException {
-    try {
-      JsonElement jsonElement = getJsonElement(object);
-      return gson.fromJson(jsonElement, pojoType);
-    } catch (Exception e) {
-      log.error(
-          String.format(
-              "Error during deserialisation of object %s to class %s.", object, pojoType));
-      throw getConvertorException(e);
-    }
-  }
-
-  /*
-   * (non-Javadoc)
-   *
-   * @see
-   * com.futuresight.util.mystique.lever.ConvertorInterface#deserialize(java.
    * io.InputStream, java.lang.Class)
    */
   @Override
@@ -157,6 +137,33 @@ public class GsonConvertor implements JsonConvertor {
               inputStream, pojoType));
       throw getConvertorException(e);
     }
+  }
+
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * com.futuresight.util.mystique.lever.ConvertorInterface#deserialize(java.
+   * lang.Object, java.lang.Class)
+   */
+  @Override
+  public <T> T deserialize(Object object, Class<T> pojoType) throws ConvertorException {
+    T result;
+    if (object instanceof String) {
+      result = deserialize((String) object, pojoType);
+    } else if (object instanceof InputStream) {
+      result = deserialize((InputStream) object, pojoType);
+    }
+    try {
+      JsonElement jsonElement = getJsonElement(object);
+      result = gson.fromJson(jsonElement, pojoType);
+    } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during deserialisation of object %s to class %s.", object, pojoType));
+      throw getConvertorException(e);
+    }
+    return result;
   }
 
   /*

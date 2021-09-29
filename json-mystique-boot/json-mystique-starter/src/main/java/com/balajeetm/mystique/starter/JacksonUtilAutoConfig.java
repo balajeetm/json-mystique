@@ -11,7 +11,6 @@
 package com.balajeetm.mystique.starter;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -49,20 +48,14 @@ public class JacksonUtilAutoConfig {
     return (JacksonConvertor) JacksonConvertor.getInstance();
   }
 
-  /** The Class ObjectMapperCreationConfiguration. */
-  @Configuration
-  @ConditionalOnMissingBean(value = {ObjectMapper.class})
-  protected static class ObjectMapperCreationConfiguration {
-
-    /**
-     * Mystique object mapper.
-     *
-     * @param factory the factory
-     * @return the object mapper
-     */
-    @Bean
-    public ObjectMapper mystiqueObjectMapper(JacksonFactory factory) {
-      return factory.getObjectMapper();
-    }
+  /**
+   * Mystique object mapper.
+   *
+   * @param factory the factory
+   * @return the object mapper
+   */
+  @Bean
+  public ObjectMapper mystiqueObjectMapper(JacksonFactory factory) {
+    return factory.getObjectMapper();
   }
 }

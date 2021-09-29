@@ -12,10 +12,14 @@ package com.balajeetm.mystique.util.gson.lever;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -33,9 +37,21 @@ import com.google.gson.JsonPrimitive;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-/** @author Balajee Mohan */
+/**
+ * The Class JsonLever.
+ *
+ * @author Balajee Mohan
+ */
+
+/** The Constant log. */
 @Slf4j
 public class JsonLever {
+
+  /**
+   * Gets the gson.
+   *
+   * @return the gson
+   */
 
   /**
    * Gets the gson.
@@ -228,6 +244,61 @@ public class JsonLever {
    */
   public JsonElement get(Object source, JsonArray jpath, JsonElement defaultValue) {
     return get(jsonify(source), jpath, defaultValue);
+  }
+
+  /**
+   * Deletes the json element in the specified jpath.
+   *
+   * @param source the json source
+   * @param jpath '.' separated string defining the fully qualified json path to the field required.
+   *     eg get({'a': {'b': {'c': [1, 2, 3, 4]}}}, 'a.b.c.1') is '2'
+   * @return the deleted json element at the specified path. Returns 'Null' for invalid path
+   */
+  public JsonElement remove(JsonElement source, String jpath) {
+    if (StringUtils.equals(".", jpath)) {
+      return source;
+    }
+    return delete(source, getJpath(jpath));
+  }
+
+  /**
+   * Deletes the json element in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, ["a", "b" "c", 1]) is '2'. Array indexes need to be specified as numerals.
+   *     Strings are always presumed to be field names.
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public JsonElement delete(JsonElement source, JsonArray jpath) {
+    JsonElement result = null;
+    jpath = replete(jpath);
+
+    try {
+      for (int i = 0; i < jpath.size() - 1; i++) {
+        source = getElement(source, jpath.get(i));
+      }
+      result = deleteElement(source, getLast(jpath));
+
+    } catch (Exception e) {
+      result = null;
+    }
+
+    return result;
+  }
+
+  /**
+   * Gets the json element in the specified jpath.
+   *
+   * @param source the source
+   * @param jpath the fully qualified json path to the field required. eg get({'a': {'b': {'c': [1,
+   *     2, 3, 4]}}}, "a", "b" "c", 1]) is '2'. Numerals are presumed to be array indexes
+   * @return the json element returns 'Null' for any invalid path return the source if the input
+   *     jpath is '.'
+   */
+  public JsonElement delete(JsonElement source, Object... jpath) {
+    return delete(source, newJsonArray(jpath));
   }
 
   /**
@@ -1682,6 +1753,146 @@ public class JsonLever {
   }
 
   /**
+   * Replete the json array. Returns an empty json array if null or json null
+   *
+   * @param array the source array
+   * @return the json array
+   */
+  public JsonArray replete(JsonArray array) {
+    return isNull(array) ? new JsonArray() : array;
+  }
+
+  /**
+   * Return the first item in the array if available, else return null.
+   *
+   * @param array the source array
+   * @return the json array
+   */
+  public JsonElement getFirst(JsonArray array) {
+    array = replete(array);
+    return array.size() > 0 ? array.get(0) : null;
+  }
+
+  /**
+   * Return the last item in the array if available, else return null.
+   *
+   * @param array the source array
+   * @return the json array
+   */
+  public JsonElement getLast(JsonArray array) {
+    array = replete(array);
+    int size = array.size();
+    return size > 0 ? array.get(size - 1) : null;
+  }
+
+  /**
+   * Jsonify.
+   *
+   * @param source the source
+   * @return the json element
+   */
+  public JsonElement jsonify(Object source) {
+    JsonElement result = JsonNull.INSTANCE;
+    if (source instanceof JsonElement) {
+      result = (JsonElement) source;
+    } else {
+      try {
+        result = GsonConvertor.getInstance().deserialize(source, JsonElement.class);
+
+      } catch (ConvertorException e) {
+        String msg = String.format("Could not deserialise object %s to json.", source);
+        log.error(msg);
+        log.debug(msg, e);
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Gets the json object for an input map.
+   *
+   * @param stringMap the input key value pair as map
+   * @return the json object
+   */
+  public JsonObject getJsonObject(Map<String, String> stringMap) {
+    JsonObject result = null;
+    if (Objects.nonNull(stringMap)) {
+      result = new JsonObject();
+      for (Entry<String, String> entry : stringMap.entrySet()) {
+        result.addProperty(entry.getKey(), entry.getValue());
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Gets the map of String key value pairs for a json object.
+   *
+   * @param stringMap the string map
+   * @return the map
+   */
+  public Map<String, String> getStringMap(JsonObject stringMap) {
+    Map<String, String> result = null;
+    if (Objects.nonNull(stringMap)) {
+      result = new HashMap<>();
+      for (Entry<String, JsonElement> entry : stringMap.entrySet()) {
+        String stringValue = asString(entry.getValue());
+        if (Objects.nonNull(stringValue)) {
+          result.put(entry.getKey(), stringValue);
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Gets the json array.
+   *
+   * @param strings the strings
+   * @return the json array
+   */
+  public JsonArray getJsonArray(Collection<String> strings) {
+    JsonArray result = null;
+    if (CollectionUtils.isNotEmpty(strings)) {
+      result = new JsonArray();
+      for (String string : strings) {
+        result.add(string);
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Gets the json array.
+   *
+   * @param strings the strings
+   * @return the json array
+   */
+  public JsonArray getJsonArray(String... strings) {
+    JsonArray result = new JsonArray();
+    for (String string : strings) {
+      result.add(string);
+    }
+    return result;
+  }
+
+  /**
+   * Gets the string array.
+   *
+   * @param jsonArray the json array
+   * @return the string array
+   */
+  public String[] getStringArray(JsonArray jsonArray) {
+    String[] messages = new String[jsonArray.size()];
+    if (isNotNull(jsonArray)) {
+      for (int i = 0; i < jsonArray.size(); i++) {
+        messages[i] = getString(jsonArray, i);
+      }
+    }
+    return messages;
+  }
+
+  /**
    * Update result.
    *
    * @param result the result
@@ -1716,6 +1927,93 @@ public class JsonLever {
       field = jObject;
     }
     return field;
+  }
+
+  /**
+   * Gets the replete field.
+   *
+   * @param field the field
+   * @param path the path
+   * @param nextPath the next path
+   * @return the replete field
+   */
+  protected JsonElement getRepleteField(JsonElement field, JsonElement path, JsonElement nextPath) {
+    if (isNumber(path)) {
+      Integer index = path.getAsInt();
+      if (!isArray(field)) {
+        field = new JsonArray();
+      }
+      JsonArray fArray =
+          repleteArray(
+              field.getAsJsonArray(),
+              index,
+              isNumber(nextPath) ? JsonArray.class : JsonObject.class);
+      field = fArray;
+    } else {
+      String fieldName = path.getAsString();
+      if (!isObject(field)) {
+        field = new JsonObject();
+      }
+      JsonObject fJson =
+          repleteJson(
+              field.getAsJsonObject(),
+              fieldName,
+              isNumber(nextPath) ? JsonArray.class : JsonObject.class);
+      field = fJson;
+    }
+    return field;
+  }
+
+  /**
+   * Gets the new element.
+   *
+   * @param type the type
+   * @return the new element
+   */
+  private JsonElement getNewElement(Class<? extends JsonElement> type) {
+    JsonElement element = JsonNull.INSTANCE;
+    if (JsonObject.class.equals(type)) {
+      element = new JsonObject();
+    } else if (JsonArray.class.equals(type)) {
+      element = new JsonArray();
+    } else {
+      try {
+        element = type.getDeclaredConstructor().newInstance();
+      } catch (InstantiationException
+          | IllegalAccessException
+          | NoSuchMethodException
+          | InvocationTargetException e) {
+        log.error(String.format("Could not instantiate json element of type %s", type));
+        log.debug(String.format("Could not instantiate json element of type %s.", type), e);
+      }
+    }
+    return element;
+  }
+
+  /**
+   * Gets the element.
+   *
+   * @param source the source
+   * @param index the index
+   * @return the element
+   */
+  private JsonElement getElement(JsonElement source, JsonElement index) {
+    return (isNumber(index))
+        ? source.getAsJsonArray().get(index.getAsInt())
+        : source.getAsJsonObject().get(index.getAsString());
+  }
+
+  /**
+   * Delete element.
+   *
+   * @param source the source
+   * @param index the index
+   * @return the json element
+   */
+  private JsonElement deleteElement(JsonElement source, JsonElement index) {
+    return (isNumber(index))
+        ? source.getAsJsonArray().remove(index.getAsInt())
+        : source.getAsJsonObject().remove(index.getAsString());
   }
 
   /**
@@ -1755,41 +2053,6 @@ public class JsonLever {
       result = (JsonElement) p;
     }
     return result;
-  }
-
-  /**
-   * Gets the replete field.
-   *
-   * @param field the field
-   * @param path the path
-   * @param nextPath the next path
-   * @return the replete field
-   */
-  protected JsonElement getRepleteField(JsonElement field, JsonElement path, JsonElement nextPath) {
-    if (isNumber(path)) {
-      Integer index = path.getAsInt();
-      if (!isArray(field)) {
-        field = new JsonArray();
-      }
-      JsonArray fArray =
-          repleteArray(
-              field.getAsJsonArray(),
-              index,
-              isNumber(nextPath) ? JsonArray.class : JsonObject.class);
-      field = fArray;
-    } else {
-      String fieldName = path.getAsString();
-      if (!isObject(field)) {
-        field = new JsonObject();
-      }
-      JsonObject fJson =
-          repleteJson(
-              field.getAsJsonObject(),
-              fieldName,
-              isNumber(nextPath) ? JsonArray.class : JsonObject.class);
-      field = fJson;
-    }
-    return field;
   }
 
   /**
@@ -1840,54 +2103,5 @@ public class JsonLever {
       source.add(fieldName, getNewElement(type));
     }
     return source;
-  }
-
-  /**
-   * Jsonify.
-   *
-   * @param source the source
-   * @return the json element
-   */
-  public JsonElement jsonify(Object source) {
-    JsonElement result = JsonNull.INSTANCE;
-    if (source instanceof JsonElement) {
-      result = (JsonElement) source;
-    } else {
-      try {
-        result = GsonConvertor.getInstance().deserialize(source, JsonElement.class);
-
-      } catch (ConvertorException e) {
-        String msg = String.format("Could not deserialise object %s to json.", source);
-        log.error(msg);
-        log.debug(msg, e);
-      }
-    }
-    return result;
-  }
-
-  /**
-   * Gets the new element.
-   *
-   * @param type the type
-   * @return the new element
-   */
-  private JsonElement getNewElement(Class<? extends JsonElement> type) {
-    JsonElement element = JsonNull.INSTANCE;
-    if (JsonObject.class.equals(type)) {
-      element = new JsonObject();
-    } else if (JsonArray.class.equals(type)) {
-      element = new JsonArray();
-    } else {
-      try {
-        element = type.getDeclaredConstructor().newInstance();
-      } catch (InstantiationException
-          | IllegalAccessException
-          | NoSuchMethodException
-          | InvocationTargetException e) {
-        log.error(String.format("Could not instantiate json element of type %s", type));
-        log.debug(String.format("Could not instantiate json element of type %s.", type), e);
-      }
-    }
-    return element;
   }
 }

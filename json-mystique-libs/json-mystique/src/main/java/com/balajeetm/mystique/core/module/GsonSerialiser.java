@@ -10,11 +10,6 @@
  */
 package com.balajeetm.mystique.core.module;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Map.Entry;
-
 import com.balajeetm.mystique.util.gson.lever.JsonLever;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -24,6 +19,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.internal.LazilyParsedNumber;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Map.Entry;
 
 /**
  * The Class GsonSerialiser.
@@ -80,8 +80,7 @@ public class GsonSerialiser extends StdSerializer<JsonElement> {
       JsonPrimitive jsonPrimitive = value.getAsJsonPrimitive();
       if (jsonPrimitive.isBoolean()) {
         gen.writeBoolean(jsonPrimitive.getAsBoolean());
-      }
-      if (jsonPrimitive.isNumber()) {
+      } else if (jsonPrimitive.isNumber()) {
         Number nnode = jsonPrimitive.getAsNumber();
         if (nnode instanceof LazilyParsedNumber) {
           gen.writeNumber(nnode.toString());
@@ -96,8 +95,7 @@ public class GsonSerialiser extends StdSerializer<JsonElement> {
         } else if (nnode instanceof Double || nnode instanceof BigDecimal) {
           gen.writeNumber(nnode.doubleValue());
         }
-      }
-      if (jsonPrimitive.isString()) {
+      } else if (jsonPrimitive.isString()) {
         gen.writeString(jsonPrimitive.getAsString());
       }
     }

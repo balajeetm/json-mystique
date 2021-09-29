@@ -19,6 +19,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 import com.balajeetm.mystique.util.gson.lever.JsonLever;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -50,6 +51,109 @@ public class JsonLeverBDDTest {
       Assertions.assertTrue(merge.isJsonObject());
 
       Assertions.assertEquals(result, merge);
+    } catch (Exception e) {
+      Assertions.assertFalse(true, e.getMessage());
+    }
+  }
+
+  /** Delete. */
+  @Test
+  public void delete() {
+    try {
+      ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+      Resource resource1 = resourceResolver.getResource("classpath:jsonLever/src1.json");
+      Resource resultResource =
+          resourceResolver.getResource("classpath:jsonLever/deleteResult.json");
+      Resource deletedResource =
+          resourceResolver.getResource("classpath:jsonLever/deletedPath.json");
+
+      JsonElement src1 = JsonParser.parseReader(new InputStreamReader(resource1.getInputStream()));
+      JsonElement result =
+          JsonParser.parseReader(new InputStreamReader(resultResource.getInputStream()));
+      JsonElement deleted =
+          JsonParser.parseReader(new InputStreamReader(deletedResource.getInputStream()));
+
+      JsonArray test = new JsonArray();
+      test.add("content");
+      test.add("lang");
+
+      JsonElement delete = jsonLever.delete(src1, test);
+
+      Assertions.assertEquals(result, src1);
+      Assertions.assertEquals(deleted, delete);
+    } catch (Exception e) {
+      Assertions.assertFalse(true, e.getMessage());
+    }
+  }
+
+  /** Delete. */
+  @Test
+  public void deleteString() {
+    try {
+      ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+      Resource resource1 = resourceResolver.getResource("classpath:jsonLever/src1.json");
+      Resource resultResource =
+          resourceResolver.getResource("classpath:jsonLever/deleteResult.json");
+      Resource deletedResource =
+          resourceResolver.getResource("classpath:jsonLever/deletedPath.json");
+
+      JsonElement src1 = JsonParser.parseReader(new InputStreamReader(resource1.getInputStream()));
+      JsonElement result =
+          JsonParser.parseReader(new InputStreamReader(resultResource.getInputStream()));
+      JsonElement deleted =
+          JsonParser.parseReader(new InputStreamReader(deletedResource.getInputStream()));
+
+      JsonElement delete = jsonLever.remove(src1, "content.lang");
+
+      Assertions.assertEquals(result, src1);
+      Assertions.assertEquals(deleted, delete);
+    } catch (Exception e) {
+      Assertions.assertFalse(true, e.getMessage());
+    }
+  }
+
+  /** Delete. */
+  @Test
+  public void deletePath() {
+    try {
+      ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+      Resource resource1 = resourceResolver.getResource("classpath:jsonLever/src1.json");
+      Resource resultResource =
+          resourceResolver.getResource("classpath:jsonLever/deleteResult.json");
+      Resource deletedResource =
+          resourceResolver.getResource("classpath:jsonLever/deletedPath.json");
+
+      JsonElement src1 = JsonParser.parseReader(new InputStreamReader(resource1.getInputStream()));
+      JsonElement result =
+          JsonParser.parseReader(new InputStreamReader(resultResource.getInputStream()));
+      JsonElement deleted =
+          JsonParser.parseReader(new InputStreamReader(deletedResource.getInputStream()));
+
+      JsonElement delete = jsonLever.delete(src1, "content", "lang");
+
+      Assertions.assertEquals(result, src1);
+      Assertions.assertEquals(deleted, delete);
+    } catch (Exception e) {
+      Assertions.assertFalse(true, e.getMessage());
+    }
+  }
+
+  /** Delete. */
+  @Test
+  public void deleteNegative() {
+    try {
+      ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+      Resource resource1 = resourceResolver.getResource("classpath:jsonLever/src1.json");
+      Resource resultResource = resourceResolver.getResource("classpath:jsonLever/src1.json");
+
+      JsonElement src1 = JsonParser.parseReader(new InputStreamReader(resource1.getInputStream()));
+      JsonElement result =
+          JsonParser.parseReader(new InputStreamReader(resultResource.getInputStream()));
+
+      JsonElement delete = jsonLever.remove(src1, "category");
+
+      Assertions.assertEquals(result, src1);
+      Assertions.assertEquals(null, delete);
     } catch (Exception e) {
       Assertions.assertFalse(true, e.getMessage());
     }
