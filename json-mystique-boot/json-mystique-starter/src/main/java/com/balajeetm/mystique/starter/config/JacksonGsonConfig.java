@@ -12,10 +12,12 @@ package com.balajeetm.mystique.starter.config;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.balajeetm.mystique.core.module.MystiqueModule;
+import com.balajeetm.mystique.util.jackson.JacksonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /** The Class JacksonGsonConfig. */
@@ -38,9 +40,25 @@ public class JacksonGsonConfig {
    * @param mystiqueModule the mystique module
    * @return the object mapper configurer
    */
-  @Bean
-  public ObjectMapperConfigurer mystiqueObjectMapperConfigurer(MystiqueModule mystiqueModule) {
-    return new ObjectMapperConfigurer(mystiqueModule);
+  /** The Class ObjectMapperCreationConfiguration. */
+  @Configuration
+  @ConditionalOnMissingBean(value = {ObjectMapper.class})
+  protected static class ObjectMapperCreationConfiguration {
+    /**
+     * Mystique object mapper.
+     *
+     * @param factory the factory
+     * @return the object mapper
+     */
+    @Bean
+    public ObjectMapper mystiqueObjectMapper(JacksonFactory factory) {
+      return factory.getObjectMapper();
+    }
+
+    @Bean
+    public ObjectMapperConfigurer objectMapperConfigurer(MystiqueModule mystiqueModule) {
+      return new ObjectMapperConfigurer(mystiqueModule);
+    }
   }
 
   /** The Class ObjectMapperConfigurer. */

@@ -5,7 +5,6 @@ import com.balajeetm.mystique.util.json.convertor.JsonConvertor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -32,15 +31,6 @@ public class JsonBuilder<T extends JsonElement> {
   T source;
 
   /**
-   * Json object.
-   *
-   * @return the json builder
-   */
-  public static JsonBuilder<JsonObject> jsonObject() {
-    return new JsonBuilder<>(new JsonObject());
-  }
-
-  /**
    * Instantiates a new json builder.
    *
    * @param source the source
@@ -48,6 +38,15 @@ public class JsonBuilder<T extends JsonElement> {
   public JsonBuilder(T source) {
     this.source = source;
     this.lever = JsonLever.getInstance();
+  }
+
+  /**
+   * Json object.
+   *
+   * @return the json builder
+   */
+  public static JsonBuilder<JsonObject> jsonObject() {
+    return new JsonBuilder<>(new JsonObject());
   }
 
   /**
@@ -86,7 +85,7 @@ public class JsonBuilder<T extends JsonElement> {
    * @return the json builder
    */
   public JsonBuilder<T> set(String jpath, String value) {
-    source = (T) lever.set(source, jpath, new JsonPrimitive(value));
+    source = (T) lever.set(source, jpath, value);
     return this;
   }
 
@@ -100,7 +99,7 @@ public class JsonBuilder<T extends JsonElement> {
    * @return the json builder
    */
   public JsonBuilder<T> set(String jpath, Boolean value) {
-    source = (T) lever.set(source, jpath, new JsonPrimitive(value));
+    source = (T) lever.set(source, jpath, value);
     return this;
   }
 
@@ -114,7 +113,7 @@ public class JsonBuilder<T extends JsonElement> {
    * @return the json builder
    */
   public JsonBuilder<T> set(String jpath, Number value) {
-    source = (T) lever.set(source, jpath, new JsonPrimitive(value));
+    source = (T) lever.set(source, jpath, value);
     return this;
   }
 
@@ -156,7 +155,7 @@ public class JsonBuilder<T extends JsonElement> {
    * @return the json builder
    */
   public JsonBuilder<T> set(JsonArray jpath, String value) {
-    source = (T) lever.set(source, jpath, new JsonPrimitive(value));
+    source = (T) lever.set(source, jpath, value);
     return this;
   }
 
@@ -170,7 +169,7 @@ public class JsonBuilder<T extends JsonElement> {
    * @return the json builder
    */
   public JsonBuilder<T> set(JsonArray jpath, Boolean value) {
-    source = (T) lever.set(source, jpath, new JsonPrimitive(value));
+    source = (T) lever.set(source, jpath, value);
     return this;
   }
 
@@ -184,7 +183,7 @@ public class JsonBuilder<T extends JsonElement> {
    * @return the json builder
    */
   public JsonBuilder<T> set(JsonArray jpath, Number value) {
-    source = (T) lever.set(source, jpath, new JsonPrimitive(value));
+    source = (T) lever.set(source, jpath, value);
     return this;
   }
 

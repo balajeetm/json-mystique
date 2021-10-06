@@ -10,16 +10,16 @@
  */
 package com.balajeetm.mystique.util.jackson.convertor;
 
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.List;
-
-import com.balajeetm.mystique.util.jackson.JacksonFactory;
 import com.balajeetm.mystique.util.json.convertor.JsonConvertor;
 import com.balajeetm.mystique.util.json.error.ConvertorException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +41,14 @@ public class JacksonConvertor implements JsonConvertor {
    */
   @Getter private ObjectMapper objectMapper;
 
+  /** Instantiates a new json jackson convertor. */
+  private JacksonConvertor() {
+    objectMapper = new ObjectMapper();
+  }
+
+  // Efficient Thread safe Lazy Initialization
+  // works only if the singleton constructor is non parameterized
+
   /**
    * Gets the single instance of JsonJacksonConvertor.
    *
@@ -48,20 +56,6 @@ public class JacksonConvertor implements JsonConvertor {
    */
   public static JsonConvertor getInstance() {
     return Creator.INSTANCE;
-  }
-
-  // Efficient Thread safe Lazy Initialization
-  // works only if the singleton constructor is non parameterized
-  /** The Class Creator. */
-  private static class Creator {
-
-    /** The instance. */
-    private static JsonConvertor INSTANCE = new JacksonConvertor();
-  }
-
-  /** Instantiates a new json jackson convertor. */
-  private JacksonConvertor() {
-    objectMapper = JacksonFactory.getInstance().getObjectMapper();
   }
 
   /*
@@ -145,7 +139,7 @@ public class JacksonConvertor implements JsonConvertor {
    */
   public String serialize(Object pojo) throws ConvertorException {
     try {
-      return objectMapper.writeValueAsString(pojo);
+      return Objects.isNull(pojo) ? null : objectMapper.writeValueAsString(pojo);
     } catch (Exception e) {
       log.error(String.format("Error during serialisation of object %s.", pojo));
       throw getConvertorException(e);
@@ -162,16 +156,21 @@ public class JacksonConvertor implements JsonConvertor {
   @SuppressWarnings("unchecked")
   public <T> T deserializeGroup(InputStream inputStream, Class<T> groupClass, Class<?> pojoType)
       throws ConvertorException {
-    JavaType javaType = getJavaType(groupClass, pojoType);
-    try {
-      return (T) objectMapper.readValue(inputStream, javaType);
-    } catch (Exception e) {
-      log.error(
-          String.format(
-              "Error during deserialisation of json input stream %s to %s<%s>.",
-              inputStream, groupClass.getSimpleName(), pojoType.getSimpleName()));
-      throw getConvertorException(e);
+    T result = null;
+    if (Objects.nonNull(inputStream)) {
+      try {
+        JavaType javaType = getJavaType(groupClass, pojoType);
+        result = (T) objectMapper.readValue(inputStream, javaType);
+      } catch (Exception e) {
+        log.error(
+            String.format(
+                "Error during deserialisation of json input stream %s to %s<%s>.",
+                inputStream, groupClass.getSimpleName(), pojoType.getSimpleName()));
+        throw getConvertorException(e);
+      }
     }
+
+    return result;
   }
 
   /*
@@ -184,16 +183,20 @@ public class JacksonConvertor implements JsonConvertor {
   @SuppressWarnings("unchecked")
   public <T> List<T> deserializeList(InputStream inputStream, Class<T> pojoType)
       throws ConvertorException {
-    JavaType javaType = getJavaType(List.class, pojoType);
-    try {
-      return (List<T>) objectMapper.readValue(inputStream, javaType);
-    } catch (Exception e) {
-      log.error(
-          String.format(
-              "Error during deserialisation of json inputstream %s to List<%s>.",
-              inputStream, pojoType.getSimpleName()));
-      throw getConvertorException(e);
+    List<T> result = null;
+    if (Objects.nonNull(inputStream)) {
+      JavaType javaType = getJavaType(List.class, pojoType);
+      try {
+        result = (List<T>) objectMapper.readValue(inputStream, javaType);
+      } catch (Exception e) {
+        log.error(
+            String.format(
+                "Error during deserialisation of json inputstream %s to List<%s>.",
+                inputStream, pojoType.getSimpleName()));
+        throw getConvertorException(e);
+      }
     }
+    return result;
   }
 
   /*
@@ -205,16 +208,20 @@ public class JacksonConvertor implements JsonConvertor {
    */
   @SuppressWarnings("unchecked")
   public <T> List<T> deserializeList(Object object, Class<T> pojoType) throws ConvertorException {
-    JavaType javaType = getJavaType(List.class, pojoType);
-    try {
-      return (List<T>) objectMapper.convertValue(object, javaType);
-    } catch (Exception e) {
-      log.error(
-          String.format(
-              "Error during deserialisation of object %s to List<%s>.",
-              object, pojoType.getSimpleName()));
-      throw getConvertorException(e);
+    List<T> result = null;
+    if (Objects.nonNull(object)) {
+      JavaType javaType = getJavaType(List.class, pojoType);
+      try {
+        result = (List<T>) objectMapper.convertValue(object, javaType);
+      } catch (Exception e) {
+        log.error(
+            String.format(
+                "Error during deserialisation of object %s to List<%s>.",
+                object, pojoType.getSimpleName()));
+        throw getConvertorException(e);
+      }
     }
+    return result;
   }
 
   /*
@@ -241,16 +248,20 @@ public class JacksonConvertor implements JsonConvertor {
    */
   private <T, U> T deserializeGroupOnJavaType(
       String jsonString, Class<T> groupClass, Class<U> pojoType) {
-    JavaType javaType = getJavaType(groupClass, pojoType);
-    try {
-      return objectMapper.readValue(jsonString, javaType);
-    } catch (Exception e) {
-      log.error(
-          String.format(
-              "Error during deserialisation of json string %s to %s<%s>.",
-              jsonString, groupClass.getSimpleName(), pojoType.getSimpleName()));
-      throw getConvertorException(e);
+    T result = null;
+    if (Objects.nonNull(jsonString)) {
+      JavaType javaType = getJavaType(groupClass, pojoType);
+      try {
+        result = objectMapper.readValue(jsonString, javaType);
+      } catch (Exception e) {
+        log.error(
+            String.format(
+                "Error during deserialisation of json string %s to %s<%s>.",
+                jsonString, groupClass.getSimpleName(), pojoType.getSimpleName()));
+        throw getConvertorException(e);
+      }
     }
+    return result;
   }
 
   /**
@@ -282,15 +293,26 @@ public class JacksonConvertor implements JsonConvertor {
   @SuppressWarnings("unchecked")
   public <T> List<T> deserializeList(String jsonString, Class<T> pojoType)
       throws ConvertorException {
-    JavaType javaType = getJavaType(List.class, pojoType);
-    try {
-      return (List<T>) objectMapper.readValue(jsonString, javaType);
-    } catch (Exception e) {
-      log.error(
-          String.format(
-              "Error during deserialisation of json string %s to List<%s>.",
-              jsonString, pojoType.getSimpleName()));
-      throw getConvertorException(e);
+    List<T> result = null;
+    if (Objects.nonNull(jsonString)) {
+      JavaType javaType = getJavaType(List.class, pojoType);
+      try {
+        return (List<T>) objectMapper.readValue(jsonString, javaType);
+      } catch (Exception e) {
+        log.error(
+            String.format(
+                "Error during deserialisation of json string %s to List<%s>.",
+                jsonString, pojoType.getSimpleName()));
+        throw getConvertorException(e);
+      }
     }
+    return result;
+  }
+
+  /** The Class Creator. */
+  private static class Creator {
+
+    /** The instance. */
+    private static JsonConvertor INSTANCE = new JacksonConvertor();
   }
 }

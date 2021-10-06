@@ -10,14 +10,6 @@
  */
 package com.balajeetm.mystique.util.gson.convertor;
 
-import static com.google.gson.internal.$Gson$Preconditions.checkArgument;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.List;
-
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.balajeetm.mystique.util.gson.GsonFactory;
 import com.balajeetm.mystique.util.gson.lever.JsonLever;
 import com.balajeetm.mystique.util.json.convertor.JsonConvertor;
@@ -26,9 +18,18 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Objects;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.ArrayUtils;
+
+import static com.google.gson.internal.$Gson$Preconditions.checkArgument;
 
 /** The Class GsonConvertor. */
 @Slf4j
@@ -55,6 +56,17 @@ public class GsonConvertor implements JsonConvertor {
   /** The json lever. */
   private JsonLever jsonLever;
 
+  /** Instantiates a new gson convertor. */
+  private GsonConvertor() {
+    GsonFactory factory = GsonFactory.getInstance();
+    gsonBuilder = factory.getGsonBuilder();
+    gson = factory.getGson();
+    jsonLever = JsonLever.getInstance();
+  }
+
+  // Efficient Thread safe Lazy Initialization
+  // works only if the singleton constructor is non parameterized
+
   /**
    * Gets the single instance of GsonConvertor.
    *
@@ -62,23 +74,6 @@ public class GsonConvertor implements JsonConvertor {
    */
   public static JsonConvertor getInstance() {
     return Creator.INSTANCE;
-  }
-
-  // Efficient Thread safe Lazy Initialization
-  // works only if the singleton constructor is non parameterized
-  /** The Class Creator. */
-  private static class Creator {
-
-    /** The instance. */
-    private static JsonConvertor INSTANCE = new GsonConvertor();
-  }
-
-  /** Instantiates a new gson convertor. */
-  private GsonConvertor() {
-    GsonFactory factory = GsonFactory.getInstance();
-    gsonBuilder = factory.getGsonBuilder();
-    gson = factory.getGson();
-    jsonLever = JsonLever.getInstance();
   }
 
   /** Update gson. */
@@ -109,14 +104,18 @@ public class GsonConvertor implements JsonConvertor {
    */
   @Override
   public <T> T deserialize(String jsonString, Class<T> pojoType) throws ConvertorException {
+    T result = null;
     try {
-      return gson.fromJson(jsonString, pojoType);
+      if (Objects.nonNull(jsonString)) {
+        result = gson.fromJson(jsonString, pojoType);
+      }
     } catch (Exception e) {
       log.error(
           String.format(
               "Error during deserialisation of json string %s to class %s.", jsonString, pojoType));
       throw getConvertorException(e);
     }
+    return result;
   }
 
   /*
@@ -128,8 +127,11 @@ public class GsonConvertor implements JsonConvertor {
    */
   @Override
   public <T> T deserialize(InputStream inputStream, Class<T> pojoType) throws ConvertorException {
+    T result = null;
     try {
-      return gson.fromJson(new InputStreamReader(inputStream), pojoType);
+      if (Objects.nonNull(inputStream)) {
+        result = gson.fromJson(new InputStreamReader(inputStream), pojoType);
+      }
     } catch (Exception e) {
       log.error(
           String.format(
@@ -137,6 +139,7 @@ public class GsonConvertor implements JsonConvertor {
               inputStream, pojoType));
       throw getConvertorException(e);
     }
+    return result;
   }
 
   /*
@@ -148,20 +151,23 @@ public class GsonConvertor implements JsonConvertor {
    */
   @Override
   public <T> T deserialize(Object object, Class<T> pojoType) throws ConvertorException {
-    T result;
-    if (object instanceof String) {
-      result = deserialize((String) object, pojoType);
-    } else if (object instanceof InputStream) {
-      result = deserialize((InputStream) object, pojoType);
-    }
-    try {
-      JsonElement jsonElement = getJsonElement(object);
-      result = gson.fromJson(jsonElement, pojoType);
-    } catch (Exception e) {
-      log.error(
-          String.format(
-              "Error during deserialisation of object %s to class %s.", object, pojoType));
-      throw getConvertorException(e);
+    T result = null;
+    if (Objects.nonNull(object)) {
+      if (object instanceof String) {
+        result = deserialize((String) object, pojoType);
+      } else if (object instanceof InputStream) {
+        result = deserialize((InputStream) object, pojoType);
+      } else {
+        try {
+          JsonElement jsonElement = getJsonElement(object);
+          result = gson.fromJson(jsonElement, pojoType);
+        } catch (Exception e) {
+          log.error(
+              String.format(
+                  "Error during deserialisation of object %s to class %s.", object, pojoType));
+          throw getConvertorException(e);
+        }
+      }
     }
     return result;
   }
@@ -175,12 +181,16 @@ public class GsonConvertor implements JsonConvertor {
    */
   @Override
   public String serialize(Object pojo) throws ConvertorException {
+    String result = null;
     try {
-      return gson.toJson(pojo);
+      if (Objects.nonNull(pojo)) {
+        result = gson.toJson(pojo);
+      }
     } catch (Exception e) {
       log.error(String.format("Error during serialisation of object %s.", pojo));
       throw getConvertorException(e);
     }
+    return result;
   }
 
   /*
@@ -193,19 +203,23 @@ public class GsonConvertor implements JsonConvertor {
   @Override
   public <T> T deserializeGroup(String jsonString, Class<T> groupClass, Class<?> pojoType)
       throws ConvertorException {
-    try {
-      checkArgument(groupClass != null && pojoType != null);
-      GsonParametrizedType parametrizedType =
-          new GsonParametrizedType(groupClass.getName(), pojoType.getName());
+    T result = null;
+    if (Objects.nonNull(jsonString)) {
+      try {
+        checkArgument(groupClass != null && pojoType != null);
+        GsonParametrizedType parametrizedType =
+            new GsonParametrizedType(groupClass.getName(), pojoType.getName());
 
-      return gson.fromJson(jsonString, parametrizedType);
-    } catch (Exception e) {
-      log.error(
-          String.format(
-              "Error during deserialisation of json string %s to %s<%s>.",
-              jsonString, groupClass.getSimpleName(), pojoType.getSimpleName()));
-      throw getConvertorException(e);
+        result = gson.fromJson(jsonString, parametrizedType);
+      } catch (Exception e) {
+        log.error(
+            String.format(
+                "Error during deserialisation of json string %s to %s<%s>.",
+                jsonString, groupClass.getSimpleName(), pojoType.getSimpleName()));
+        throw getConvertorException(e);
+      }
     }
+    return result;
   }
 
   /*
@@ -218,19 +232,23 @@ public class GsonConvertor implements JsonConvertor {
   @Override
   public <T> T deserializeGroup(InputStream inputStream, Class<T> groupClass, Class<?> pojoType)
       throws ConvertorException {
-    try {
-      checkArgument(groupClass != null && pojoType != null);
-      GsonParametrizedType parametrizedType =
-          new GsonParametrizedType(groupClass.getName(), pojoType.getName());
+    T result = null;
+    if (Objects.nonNull(inputStream)) {
+      try {
+        checkArgument(groupClass != null && pojoType != null);
+        GsonParametrizedType parametrizedType =
+            new GsonParametrizedType(groupClass.getName(), pojoType.getName());
 
-      return gson.fromJson(new InputStreamReader(inputStream), parametrizedType);
-    } catch (Exception e) {
-      log.error(
-          String.format(
-              "Error during deserialisation of json inputstream %s to %s<%s>.",
-              inputStream, groupClass.getSimpleName(), pojoType.getSimpleName()));
-      throw getConvertorException(e);
+        result = gson.fromJson(new InputStreamReader(inputStream), parametrizedType);
+      } catch (Exception e) {
+        log.error(
+            String.format(
+                "Error during deserialisation of json inputstream %s to %s<%s>.",
+                inputStream, groupClass.getSimpleName(), pojoType.getSimpleName()));
+        throw getConvertorException(e);
+      }
     }
+    return result;
   }
 
   /*
@@ -243,19 +261,23 @@ public class GsonConvertor implements JsonConvertor {
   @Override
   public <T> List<T> deserializeList(InputStream inputStream, Class<T> pojoType)
       throws ConvertorException {
-    try {
-      checkArgument(pojoType != null);
-      GsonParametrizedType parametrizedType =
-          new GsonParametrizedType(List.class.getName(), pojoType.getName());
+    List<T> result = null;
+    if (Objects.nonNull(inputStream)) {
+      try {
+        checkArgument(pojoType != null);
+        GsonParametrizedType parametrizedType =
+            new GsonParametrizedType(List.class.getName(), pojoType.getName());
 
-      return gson.fromJson(new InputStreamReader(inputStream), parametrizedType);
-    } catch (Exception e) {
-      log.error(
-          String.format(
-              "Error during deserialisation of json inputstream %s to List<%s>.",
-              inputStream, pojoType.getSimpleName()));
-      throw getConvertorException(e);
+        result = gson.fromJson(new InputStreamReader(inputStream), parametrizedType);
+      } catch (Exception e) {
+        log.error(
+            String.format(
+                "Error during deserialisation of json inputstream %s to List<%s>.",
+                inputStream, pojoType.getSimpleName()));
+        throw getConvertorException(e);
+      }
     }
+    return result;
   }
 
   /*
@@ -268,19 +290,23 @@ public class GsonConvertor implements JsonConvertor {
   @Override
   public <T> List<T> deserializeList(String jsonString, Class<T> pojoType)
       throws ConvertorException {
-    try {
-      checkArgument(pojoType != null);
-      GsonParametrizedType parametrizedType =
-          new GsonParametrizedType(List.class.getName(), pojoType.getName());
+    List<T> result = null;
+    if (Objects.nonNull(jsonString)) {
+      try {
+        checkArgument(pojoType != null);
+        GsonParametrizedType parametrizedType =
+            new GsonParametrizedType(List.class.getName(), pojoType.getName());
 
-      return gson.fromJson(jsonString, parametrizedType);
-    } catch (Exception e) {
-      log.error(
-          String.format(
-              "Error during deserialisation of json string %s to List<%s>.",
-              jsonString, pojoType.getSimpleName()));
-      throw getConvertorException(e);
+        result = gson.fromJson(jsonString, parametrizedType);
+      } catch (Exception e) {
+        log.error(
+            String.format(
+                "Error during deserialisation of json string %s to List<%s>.",
+                jsonString, pojoType.getSimpleName()));
+        throw getConvertorException(e);
+      }
     }
+    return result;
   }
 
   /*
@@ -292,20 +318,24 @@ public class GsonConvertor implements JsonConvertor {
    */
   @Override
   public <T> List<T> deserializeList(Object object, Class<T> pojoType) throws ConvertorException {
-    try {
-      checkArgument(pojoType != null);
-      JsonElement jsonElement = getJsonElement(object);
-      GsonParametrizedType parametrizedType =
-          new GsonParametrizedType(List.class.getName(), pojoType.getName());
+    List<T> result = null;
+    if (Objects.nonNull(object)) {
+      try {
+        checkArgument(pojoType != null);
+        JsonElement jsonElement = getJsonElement(object);
+        GsonParametrizedType parametrizedType =
+            new GsonParametrizedType(List.class.getName(), pojoType.getName());
 
-      return gson.fromJson(jsonElement, parametrizedType);
-    } catch (Exception e) {
-      log.error(
-          String.format(
-              "Error during deserialisation of object %s to List<%s>.",
-              object, pojoType.getSimpleName()));
-      throw getConvertorException(e);
+        result = gson.fromJson(jsonElement, parametrizedType);
+      } catch (Exception e) {
+        log.error(
+            String.format(
+                "Error during deserialisation of object %s to List<%s>.",
+                object, pojoType.getSimpleName()));
+        throw getConvertorException(e);
+      }
     }
+    return result;
   }
 
   /**
@@ -329,5 +359,12 @@ public class GsonConvertor implements JsonConvertor {
     JsonElement jsonElement =
         (obj instanceof JsonElement) ? (JsonElement) obj : gson.toJsonTree(obj);
     return jsonLever.isNull(jsonElement) ? null : jsonElement;
+  }
+
+  /** The Class Creator. */
+  private static class Creator {
+
+    /** The instance. */
+    private static JsonConvertor INSTANCE = new GsonConvertor();
   }
 }
