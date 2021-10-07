@@ -82,19 +82,19 @@ The different library utils, their capabilities & their maven dependency snippet
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>json-mystique</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.2</version>
 </dependency>
 ```
 
 > **NOTE**<br>
 There are three variants of JsonMystique.<br>
 The `1.x.x` and `0.x.x` versions have reached EOL. `2.x.x` is the only active version as of now<br><br>
-[2.x.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique%7C2.5.0%7Cjar) - Standalone json transformation utility<br>
+[2.x.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique%7C2.5.2%7Cjar) - Standalone json transformation utility<br>
 [1.x.x](http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C1.0.8%7Cjar) - Parallel processing json transformation utility<br>
 [0.x.x](http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C0.0.1%7Cjar) - Sequential processing json transformation utility
 
 > NOTE
-[2.2.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique%7C2.5.0%7Cjar) onwards supports Spring Boot 2.1.X<br>
+[2.2.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique%7C2.5.2%7Cjar) onwards supports Spring Boot 2.1.X<br>
 
 > NOTE<br>
 2.x.x is the only supported version currently since the parallel processing logic is mainstream. The other versions (0.x.x and 1.x.x) have been deprecated.<br>
@@ -109,7 +109,7 @@ Please raise issues, for support if any, on earlier versions.<br>
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>json-mystique-starter</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.2</version>
 </dependency>
 ```
 
@@ -140,7 +140,7 @@ the [sample projects](json-mystique-samples/mystique-web-sample) for usage
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>gson-utils</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.2</version>
 </dependency>
 ```
 
@@ -170,7 +170,7 @@ The utility classes are
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>jackson-utils</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.2</version>
 </dependency>
 ```
 
@@ -182,9 +182,9 @@ raw json objects and serialise deserialise POJOs. The utility classes are
 
 ## Spring Boot 2 Support
 
-JsonMystique completely supports [Spring Boot 2](https://docs.spring.io/spring-boot/docs/2.5.2/api/).<br>
+JsonMystique completely supports [Spring Boot 2](https://docs.spring.io/spring-boot/docs/2.5.5/api/).<br>
 
-[json-mystique](http://repo1.maven.org/maven2/com/balajeetm/mystique/json-mystique/2.5.0/)
+[json-mystique](http://repo1.maven.org/maven2/com/balajeetm/mystique/json-mystique/2.5.2/)
 ___
 
 ```xml
@@ -192,11 +192,11 @@ ___
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>json-mystique</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.2</version>
 </dependency>
 ```
 
-[json-mystique-starter](http://repo1.maven.org/maven2/com/balajeetm/mystique/json-mystique-starter/2.5.0/)
+[json-mystique-starter](http://repo1.maven.org/maven2/com/balajeetm/mystique/json-mystique-starter/2.5.2/)
 ___
 
 ```xml
@@ -204,11 +204,11 @@ ___
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>json-mystique-starter</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.2</version>
 </dependency>
 ```
 
-[gson-utils](http://repo1.maven.org/maven2/com/balajeetm/mystique/gson-utils/2.5.0/)
+[gson-utils](http://repo1.maven.org/maven2/com/balajeetm/mystique/gson-utils/2.5.2/)
 ___
 
 ```xml
@@ -216,11 +216,11 @@ ___
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>gson-utils</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.2</version>
 </dependency>
 ```
 
-[jackson-utils](http://repo1.maven.org/maven2/com/balajeetm/mystique/jackson-utils/2.5.0/)
+[jackson-utils](http://repo1.maven.org/maven2/com/balajeetm/mystique/jackson-utils/2.5.2/)
 ___
 
 ```xml
@@ -228,7 +228,7 @@ ___
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>jackson-utils</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.2</version>
 </dependency>
 ```
 
