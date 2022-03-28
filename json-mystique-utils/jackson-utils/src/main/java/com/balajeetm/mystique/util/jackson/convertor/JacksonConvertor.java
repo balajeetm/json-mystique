@@ -12,8 +12,13 @@ package com.balajeetm.mystique.util.jackson.convertor;
 
 import com.balajeetm.mystique.util.json.convertor.JsonConvertor;
 import com.balajeetm.mystique.util.json.error.ConvertorException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import java.io.InputStream;
@@ -43,7 +48,13 @@ public class JacksonConvertor implements JsonConvertor {
 
   /** Instantiates a new json jackson convertor. */
   private JacksonConvertor() {
-    objectMapper = new ObjectMapper();
+    this.objectMapper = new ObjectMapper();
+    this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    this.objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+    this.objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    this.objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    this.objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+    this.objectMapper.disable(new MapperFeature[]{MapperFeature.DEFAULT_VIEW_INCLUSION});
   }
 
   // Efficient Thread safe Lazy Initialization
