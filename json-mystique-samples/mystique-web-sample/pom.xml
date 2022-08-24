@@ -14,15 +14,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.5</version>
+        <version>2.7.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <jsonmystique.version>2.5.0</jsonmystique.version>
-        <swagger.version>2.9.2</swagger.version>
+        <jsonmystique.version>2.5.3-SNAPSHOT</jsonmystique.version>
     </properties>
 
     <dependencies>
@@ -82,17 +81,6 @@
         </dependency>
 
         <!-- Others -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>

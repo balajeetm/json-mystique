@@ -1,411 +1,416 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<!-- Basics -->
-	<groupId>com.balajeetm.mystique</groupId>
-	<artifactId>json-mystique-root</artifactId>
-	<version>2.5.3-SNAPSHOT</version>
-	<packaging>pom</packaging>
+    <!-- Basics -->
+    <groupId>com.balajeetm.mystique</groupId>
+    <artifactId>json-mystique-root</artifactId>
+    <version>2.5.3-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-	<name>json-mystique-root</name>
-	<description>Json Mystique Parent</description>
+    <name>json-mystique-root</name>
+    <description>Json Mystique Parent</description>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.5</version>
-		<relativePath /> <!-- lookup parent from repository -->
-	</parent>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.3</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
 
-	<dependencyManagement>
-		<dependencies>
-			<!-- Spring -->
-			<!-- Spring AOP + AspectJ -->
-			<!-- Google -->
-			<!-- Apache -->
-			<!-- Logging -->
-			<!-- InHouse -->
-			<!-- Test -->
-			<!-- Others -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring -->
+            <!-- Spring AOP + AspectJ -->
+            <!-- Google -->
+            <!-- Apache -->
+            <!-- Logging -->
+            <!-- InHouse -->
+            <!-- Test -->
+            <!-- Others -->
 
-			<!-- Spring -->
+            <!-- Spring -->
 
-			<!-- Google -->
-			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>31.0.1-jre</version>
-			</dependency>
+            <!-- Google -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava-bom</artifactId>
+                <version>31.1-jre</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.9.1</version>
+            </dependency>
+
+            <!-- Apache -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.11.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.12.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>4.4</version>
+            </dependency>
 
 
-			<dependency>
-				<groupId>com.google.code.gson</groupId>
-				<artifactId>gson</artifactId>
-				<version>2.8.8</version>
-			</dependency>
+            <!-- Others -->
+        </dependencies>
+    </dependencyManagement>
 
-			<!-- Apache -->
-			<dependency>
-				<groupId>commons-io</groupId>
-				<artifactId>commons-io</artifactId>
-				<version>2.11.0</version>
-			</dependency>
+    <dependencies>
+        <!-- Spring -->
+        <!-- Spring AOP + AspectJ -->
+        <!-- Google -->
+        <!-- Apache -->
+        <!-- Object Mappers -->
+        <!-- Logging -->
+        <!-- InHouse -->
+        <!-- Test -->
+        <!-- Others -->
 
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
-				<version>3.12.0</version>
-			</dependency>
+        <!-- Logging -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
 
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-collections4</artifactId>
-				<version>4.4</version>
-			</dependency>
+        <!-- Others -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.2</version>
+            <scope>test</scope>
+        </dependency>
 
-			<!-- Others -->
-		</dependencies>
-	</dependencyManagement>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-	<dependencies>
-		<!-- Spring -->
-		<!-- Spring AOP + AspectJ -->
-		<!-- Google -->
-		<!-- Apache -->
-		<!-- Object Mappers -->
-		<!-- Logging -->
-		<!-- InHouse -->
-		<!-- Test -->
-		<!-- Others -->
+    <modules>
+        <module>json-mystique-utils</module>
+        <module>json-mystique-libs</module>
+        <module>json-mystique-boot</module>
+    </modules>
 
-		<!-- Logging -->
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-		</dependency>
+    <!-- Build Settings -->
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <showDeprecation>true</showDeprecation>
+                        <showWarnings>true</showWarnings>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-eclipse-plugin</artifactId>
+                    <configuration>
+                        <downloadSources>true</downloadSources>
+                        <downloadJavadocs>true</downloadJavadocs>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.3.1</version>
+                    <configuration>
+                        <source>8</source>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jxr-plugin</artifactId>
+                    <configuration>
+                        <outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                                <goal>test-jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <includePom>true</includePom>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.9.1</version>
+                    <configuration>
+                        <outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-report-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <configuration>
+                        <createChecksum>true</createChecksum>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.github</groupId>
+                    <artifactId>site-maven-plugin</artifactId>
+                    <version>0.12</version>
+                    <configuration>
+                        <message>Creating site for ${project.version}</message>
+                        <userName>balajeetm</userName>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>site</goal>
+                            </goals>
+                            <phase>site</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <configuration>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <useReleaseProfile>false</useReleaseProfile>
+                        <releaseProfiles>release</releaseProfiles>
+                        <goals>deploy</goals>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
-		<!-- Others -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.2</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-
-	<modules>
-		<module>json-mystique-utils</module>
-		<module>json-mystique-libs</module>
-		<module>json-mystique-boot</module>
-	</modules>
-
-	<!-- Build Settings -->
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<configuration>
-						<source>${java.version}</source>
-						<target>${java.version}</target>
-						<encoding>${project.build.sourceEncoding}</encoding>
-						<showDeprecation>true</showDeprecation>
-						<showWarnings>true</showWarnings>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-eclipse-plugin</artifactId>
-					<configuration>
-						<downloadSources>true</downloadSources>
-						<downloadJavadocs>true</downloadJavadocs>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>3.3.1</version>
-					<configuration>
-						<source>8</source>
-					</configuration>
-					<executions>
-						<execution>
-							<id>attach-javadocs</id>
-							<phase>verify</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jxr-plugin</artifactId>
-					<configuration>
-						<outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-project-info-reports-plugin</artifactId>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>attach-sources</id>
-							<phase>verify</phase>
-							<goals>
-								<goal>jar-no-fork</goal>
-								<goal>test-jar-no-fork</goal>
-							</goals>
-						</execution>
-					</executions>
-					<configuration>
-						<includePom>true</includePom>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-site-plugin</artifactId>
-					<version>3.9.1</version>
-					<configuration>
-						<outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-report-plugin</artifactId>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-install-plugin</artifactId>
-					<configuration>
-						<createChecksum>true</createChecksum>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>com.github.github</groupId>
-					<artifactId>site-maven-plugin</artifactId>
-					<version>0.12</version>
-					<configuration>
-						<message>Creating site for ${project.version}</message>
-						<userName>balajeetm</userName>
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<goal>site</goal>
-							</goals>
-							<phase>site</phase>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<configuration>
-						<autoVersionSubmodules>true</autoVersionSubmodules>
-						<useReleaseProfile>false</useReleaseProfile>
-						<releaseProfiles>release</releaseProfiles>
-						<goals>deploy</goals>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<artifactId>maven-source-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<artifactId>maven-site-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>com.github.github</groupId>
-				<artifactId>site-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-
-	<reporting>
-		<plugins>
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<bottom>
-						<![CDATA[
+    <reporting>
+        <plugins>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <bottom>
+                        <![CDATA[
 							<P align="right"><FONT SIZE="-2">Copyright &copy; ${year} <A href="https://github.com/balajeetm">Balajee TM</A>. All rights reserved.</FONT></P>
 						]]>
-					</bottom>
-				</configuration>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>javadoc</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-			<plugin>
-				<artifactId>maven-jxr-plugin</artifactId>
-				<configuration>
-					<outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
-				</configuration>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>jxr</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-			<plugin>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-report-plugin</artifactId>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>report</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-		</plugins>
-	</reporting>
+                    </bottom>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>javadoc</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <configuration>
+                    <outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>jxr</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 
-	<!-- Project Information -->
-	<url>http://github.balajeetm.com/json-mystique</url>
+    <!-- Project Information -->
+    <url>http://github.balajeetm.com/json-mystique</url>
 
-	<inceptionYear>2016</inceptionYear>
+    <inceptionYear>2016</inceptionYear>
 
-	<licenses>
-		<license>
-			<name>The Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
-	<developers>
-		<developer>
-			<id>balajeetm</id>
-			<name>Balajee Mohan</name>
-			<email>balajee.tm@gmail.com</email>
-			<url>https://github.com/balajeetm</url>
-			<roles>
-				<role>developer</role>
-			</roles>
-		</developer>
-	</developers>
+    <developers>
+        <developer>
+            <id>balajeetm</id>
+            <name>Balajee Mohan</name>
+            <email>balajee.tm@gmail.com</email>
+            <url>https://github.com/balajeetm</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
 
-	<!-- Environment Settings -->
-	<scm>
-		<connection>scm:git:git@github.com:balajeetm/json-mystique.git</connection>
-		<developerConnection>scm:git:git@github.com:balajeetm/json-mystique.git</developerConnection>
-		<url>http://github.balajeetm.com/json-mystique</url>
-		<tag>HEAD</tag>
-	</scm>
+    <!-- Environment Settings -->
+    <scm>
+        <connection>scm:git:git@github.com:balajeetm/json-mystique.git</connection>
+        <developerConnection>scm:git:git@github.com:balajeetm/json-mystique.git</developerConnection>
+        <url>http://github.balajeetm.com/json-mystique</url>
+        <tag>HEAD</tag>
+    </scm>
 
-	<distributionManagement>
-		<repository>
-			<id>OSSRH</id>
-			<name>OSSRH Release Repository</name>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-		</repository>
-		<snapshotRepository>
-			<id>OSSRH</id>
-			<name>OSSRH Snapshot Repository</name>
-			<uniqueVersion>true</uniqueVersion>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>OSSRH</id>
+            <name>OSSRH Release Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+        <snapshotRepository>
+            <id>OSSRH</id>
+            <name>OSSRH Snapshot Repository</name>
+            <uniqueVersion>true</uniqueVersion>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
-	<mailingLists>
-		<mailingList />
-	</mailingLists>
+    <mailingLists>
+        <mailingList/>
+    </mailingLists>
 
-	<profiles>
-		<profile>
-			<activation>
-				<jdk>[1.8,)</jdk>
-			</activation>
-			<properties>
-				<additionalparam>-Xdoclint:none</additionalparam>
-			</properties>
-		</profile>
-		<profile>
-			<id>samples</id>
-			<modules>
-				<module>json-mystique-samples</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>release</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>3.0.1</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>1.6.8</version>
-						<extensions>true</extensions>
-						<configuration>
-							<serverId>OSSRH</serverId>
-							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-							<autoReleaseAfterClose>false</autoReleaseAfterClose>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <properties>
+                <additionalparam>-Xdoclint:none</additionalparam>
+            </properties>
+        </profile>
+        <profile>
+            <id>samples</id>
+            <modules>
+                <module>json-mystique-samples</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>OSSRH</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<github.global.server>github</github.global.server>
-		<year>2021</year>
-	</properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <github.global.server>github</github.global.server>
+        <year>2021</year>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
 
 </project>

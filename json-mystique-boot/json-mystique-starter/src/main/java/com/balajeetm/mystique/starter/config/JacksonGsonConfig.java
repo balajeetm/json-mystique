@@ -10,15 +10,15 @@
  */
 package com.balajeetm.mystique.starter.config;
 
+import com.balajeetm.mystique.core.module.MystiqueModule;
+import com.balajeetm.mystique.util.jackson.JacksonFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.balajeetm.mystique.core.module.MystiqueModule;
-import com.balajeetm.mystique.util.jackson.JacksonFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /** The Class JacksonGsonConfig. */
 @Configuration
@@ -32,6 +32,11 @@ public class JacksonGsonConfig {
   @Bean
   public MystiqueModule mystiqueModule() {
     return new MystiqueModule();
+  }
+
+  @Bean
+  public ObjectMapperConfigurer objectMapperConfigurer(MystiqueModule mystiqueModule) {
+    return new ObjectMapperConfigurer(mystiqueModule);
   }
 
   /**
@@ -53,11 +58,6 @@ public class JacksonGsonConfig {
     @Bean
     public ObjectMapper mystiqueObjectMapper(JacksonFactory factory) {
       return factory.getObjectMapper();
-    }
-
-    @Bean
-    public ObjectMapperConfigurer objectMapperConfigurer(MystiqueModule mystiqueModule) {
-      return new ObjectMapperConfigurer(mystiqueModule);
     }
   }
 

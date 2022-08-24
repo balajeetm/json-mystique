@@ -4,15 +4,11 @@ management:
       base-path: /manage
       exposure:
         include:
-        - "*"
-  
-mystique:
-  rest:
-    user-key: 4fecb389-cff2-46ee-8a33-11b3ea702f63
-    project-key: bb1f77b4-d73b-4677-bd2c-c6e1fe1d6089
-    endpoint: http://jsonstub.com/mystique/sample/rest
-    
+          - "*"
+
 spring:
+  main:
+    allow-circular-references: true
   devtools:
     livereload:
       enabled: false

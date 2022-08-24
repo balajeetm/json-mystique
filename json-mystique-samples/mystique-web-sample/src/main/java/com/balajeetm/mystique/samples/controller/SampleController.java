@@ -10,12 +10,20 @@
  */
 package com.balajeetm.mystique.samples.controller;
 
+import com.balajeetm.mystique.core.JsonMystique;
+import com.balajeetm.mystique.samples.util.TestModel;
+import com.balajeetm.mystique.util.gson.lever.JsonLever;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+
 import java.net.URI;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -30,17 +38,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
-import com.balajeetm.mystique.core.JsonMystique;
-import com.balajeetm.mystique.samples.constants.SampleConstants;
-import com.balajeetm.mystique.samples.util.MystiqueSampleConfig;
-import com.balajeetm.mystique.samples.util.TestModel;
-import com.balajeetm.mystique.util.gson.lever.JsonLever;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
-import io.swagger.annotations.ApiOperation;
 
 /**
  * The Class SampleController.
@@ -57,8 +54,7 @@ public class SampleController {
   /** The rest template. */
   @Autowired RestTemplate restTemplate;
 
-  /** The config. */
-  @Autowired MystiqueSampleConfig config;
+  @Autowired @LocalServerPort String localPort;
 
   @Qualifier("jsonLever")
   @Autowired
@@ -81,9 +77,6 @@ public class SampleController {
    * @return the test model
    */
   @PostMapping(value = {"/testmodel"})
-  @ApiOperation(
-      value = "Jsonified output of a POJO",
-      tags = {SampleConstants.TAG_SAMPLE})
   public TestModel pojotest(@RequestBody TestModel body) {
     return body;
   }
@@ -95,9 +88,6 @@ public class SampleController {
    * @return the json object
    */
   @GetMapping(value = {"/gson/serialise"})
-  @ApiOperation(
-      value = "Serialization of Gson Jsons",
-      tags = {SampleConstants.TAG_SAMPLE})
   public JsonObject serialise(@RequestParam(value = "msg") String msg) {
     JsonObject jsonObject = new JsonObject();
     jsonObject.addProperty("report", "Gson Serialisation working good!");
@@ -112,16 +102,15 @@ public class SampleController {
    * @return the json element
    */
   @GetMapping(value = {"/resttemplate"})
-  @ApiOperation(
-      value = "Serialization of Response Entity",
-      tags = {SampleConstants.TAG_SAMPLE})
   public ResponseEntity<JsonElement> restTemplate() {
     HttpHeaders headers = new HttpHeaders();
-    headers.set("JsonStub-User-Key", config.getUserKey());
-    headers.set("JsonStub-Project-Key", config.getProjectKey());
     headers.setContentType(MediaType.APPLICATION_JSON);
     RequestEntity<?> requestEntity =
-        new RequestEntity<>(headers, HttpMethod.GET, URI.create(config.getEndpoint()));
+        new RequestEntity<>(
+            headers,
+            HttpMethod.GET,
+            URI.create(
+                String.format("http://localhost:%s/mystique/gson/serialise?msg=test", localPort)));
     ResponseEntity<JsonElement> exchange = restTemplate.exchange(requestEntity, JsonElement.class);
     return exchange;
   }
@@ -133,9 +122,6 @@ public class SampleController {
    * @return the json element
    */
   @PostMapping(value = {"/gson/deserialise"})
-  @ApiOperation(
-      value = "Deserialization of Gson Jsons",
-      tags = {SampleConstants.TAG_SAMPLE})
   public JsonElement deserialise(@RequestBody JsonElement payload) {
     JsonObject jsonObject = new JsonObject();
     jsonObject.addProperty("report", "Gson Deserialisation working good!");
@@ -152,9 +138,6 @@ public class SampleController {
    * @return the json element
    */
   @PostMapping(value = {"/convert"})
-  @ApiOperation(
-      value = "Convertion of one json to another",
-      tags = {SampleConstants.TAG_SAMPLE})
   public JsonElement convert(
       @RequestParam(value = "specName", required = false) String specName,
       @RequestBody JsonElement payload) {
@@ -163,7 +146,6 @@ public class SampleController {
   }
 
   @PostMapping(value = {"/height/{root}"})
-  @ApiOperation(hidden = true, value = "")
   public Integer height(@RequestBody JsonObject payload, @PathVariable String root) {
     JsonElement rootele = lever.get(payload, lever.newJsonArray(root));
     transverse(payload, lever.asJsonObject(rootele));
