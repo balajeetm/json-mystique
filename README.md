@@ -55,16 +55,16 @@ Json mystique ships a set of libraries written in and for Java, useful for json 
 
 ## Dependencies
 
-* The library requires [Java 8+](http://www.oracle.com/technetwork/java/javase/overview/java8-2100321.html)
+* The library requires [Java 17+](https://www.oracle.com/java/technologies/downloads/#java17)
 * The library uses [maven](https://maven.apache.org/) for its build management
 * The library can be primarily used as a stand-alone java lib and depends on
-    * [Gson - 2.8.8](https://mvnrepository.com/artifact/com.google.code.gson/gson) for json String to Java pojo
+    * [Gson - 2.9.1](https://mvnrepository.com/artifact/com.google.code.gson/gson) for json String to Java pojo
       transformations
-    * [Jackson - 2.12.5](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind) for json String
+    * [Jackson - 2.13.3](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind) for json String
       to Java pojo transformations
 * For the [Spring](https://spring.io/) fan-boys, Json Mystique also ships a Spring-Starter, which depends on
-    * [Spring Boot - 2.5.5](https://docs.spring.io/spring-boot/docs/2.5.5/reference/htmlsingle/)
-    * [Spring-Framework - 5.3.10](https://docs.spring.io/spring-framework/docs/5.3.10/reference/html/) for IOC
+    * [Spring Boot - 2.7.3](https://docs.spring.io/spring-boot/docs/2.7.3/reference/htmlsingle/)
+    * [Spring-Framework - 5.3.22](https://docs.spring.io/spring-framework/docs/5.3.22/reference/html/) for IOC
 
 The actual versions can be found in the [pom file](/pom.xml)
 
@@ -82,19 +82,19 @@ The different library utils, their capabilities & their maven dependency snippet
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>json-mystique</artifactId>
-    <version>2.5.2</version>
+    <version>2.5.3</version>
 </dependency>
 ```
 
 > **NOTE**<br>
 There are three variants of JsonMystique.<br>
 The `1.x.x` and `0.x.x` versions have reached EOL. `2.x.x` is the only active version as of now<br><br>
-[2.x.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique%7C2.5.2%7Cjar) - Standalone json transformation utility<br>
+[2.x.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique%7C2.5.3%7Cjar) - Standalone json transformation utility<br>
 [1.x.x](http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C1.0.8%7Cjar) - Parallel processing json transformation utility<br>
 [0.x.x](http://search.maven.org/#artifactdetails%7Ccom.github.balajeetm%7Cjson-mystique%7C0.0.1%7Cjar) - Sequential processing json transformation utility
 
 > NOTE
-[2.2.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique%7C2.5.2%7Cjar) onwards supports Spring Boot 2.1.X<br>
+[2.2.x](http://search.maven.org/#artifactdetails%7Ccom.balajeetm.mystique%7Cjson-mystique%7C2.5.3%7Cjar) onwards supports Spring Boot 2.1.X<br>
 
 > NOTE<br>
 2.x.x is the only supported version currently since the parallel processing logic is mainstream. The other versions (0.x.x and 1.x.x) have been deprecated.<br>
@@ -109,7 +109,7 @@ Please raise issues, for support if any, on earlier versions.<br>
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>json-mystique-starter</artifactId>
-    <version>2.5.2</version>
+    <version>2.5.3</version>
 </dependency>
 ```
 
@@ -140,7 +140,7 @@ the [sample projects](json-mystique-samples/mystique-web-sample) for usage
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>gson-utils</artifactId>
-    <version>2.5.2</version>
+    <version>2.5.3</version>
 </dependency>
 ```
 
@@ -170,7 +170,7 @@ The utility classes are
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>jackson-utils</artifactId>
-    <version>2.5.2</version>
+    <version>2.5.3</version>
 </dependency>
 ```
 
@@ -184,7 +184,7 @@ raw json objects and serialise deserialise POJOs. The utility classes are
 
 JsonMystique completely supports [Spring Boot 2](https://docs.spring.io/spring-boot/docs/2.5.5/api/).<br>
 
-[json-mystique](http://repo1.maven.org/maven2/com/balajeetm/mystique/json-mystique/2.5.2/)
+[json-mystique](http://repo1.maven.org/maven2/com/balajeetm/mystique/json-mystique/2.5.3/)
 ___
 
 ```xml
@@ -192,11 +192,11 @@ ___
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>json-mystique</artifactId>
-    <version>2.5.2</version>
+    <version>2.5.3</version>
 </dependency>
 ```
 
-[json-mystique-starter](http://repo1.maven.org/maven2/com/balajeetm/mystique/json-mystique-starter/2.5.2/)
+[json-mystique-starter](http://repo1.maven.org/maven2/com/balajeetm/mystique/json-mystique-starter/2.5.3/)
 ___
 
 ```xml
@@ -204,11 +204,11 @@ ___
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>json-mystique-starter</artifactId>
-    <version>2.5.2</version>
+    <version>2.5.3</version>
 </dependency>
 ```
 
-[gson-utils](http://repo1.maven.org/maven2/com/balajeetm/mystique/gson-utils/2.5.2/)
+[gson-utils](http://repo1.maven.org/maven2/com/balajeetm/mystique/gson-utils/2.5.3/)
 ___
 
 ```xml
@@ -216,11 +216,11 @@ ___
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>gson-utils</artifactId>
-    <version>2.5.2</version>
+    <version>2.5.3</version>
 </dependency>
 ```
 
-[jackson-utils](http://repo1.maven.org/maven2/com/balajeetm/mystique/jackson-utils/2.5.2/)
+[jackson-utils](http://repo1.maven.org/maven2/com/balajeetm/mystique/jackson-utils/2.5.3/)
 ___
 
 ```xml
@@ -228,7 +228,7 @@ ___
 <dependency>
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>jackson-utils</artifactId>
-    <version>2.5.2</version>
+    <version>2.5.3</version>
 </dependency>
 ```
 

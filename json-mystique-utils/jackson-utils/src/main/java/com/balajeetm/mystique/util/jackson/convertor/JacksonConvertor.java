@@ -10,6 +10,7 @@
  */
 package com.balajeetm.mystique.util.jackson.convertor;
 
+import com.balajeetm.mystique.util.jackson.JacksonFactory;
 import com.balajeetm.mystique.util.json.convertor.JsonConvertor;
 import com.balajeetm.mystique.util.json.error.ConvertorException;
 import com.fasterxml.jackson.databind.JavaType;
@@ -21,7 +22,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -32,19 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JacksonConvertor implements JsonConvertor {
 
-  /** The object mapper. */
-
-  /**
-   * Gets the object mapper.
-   *
-   * @return the object mapper
-   */
-  @Getter private ObjectMapper objectMapper;
-
   /** Instantiates a new json jackson convertor. */
-  private JacksonConvertor() {
-    objectMapper = new ObjectMapper();
-  }
+  private JacksonConvertor() {}
 
   // Efficient Thread safe Lazy Initialization
   // works only if the singleton constructor is non parameterized
@@ -68,7 +57,7 @@ public class JacksonConvertor implements JsonConvertor {
   public <T> T deserialize(String jsonString, Class<T> pojoType) throws ConvertorException {
     T value = null;
     try {
-      value = null != jsonString ? objectMapper.readValue(jsonString, pojoType) : value;
+      value = null != jsonString ? getObjectMapper().readValue(jsonString, pojoType) : value;
     } catch (Exception e) {
       log.error(
           String.format(
@@ -88,7 +77,7 @@ public class JacksonConvertor implements JsonConvertor {
   public <T> T deserialize(Object object, Class<T> pojoType) throws ConvertorException {
     T value = null;
     try {
-      value = null != object ? objectMapper.convertValue(object, pojoType) : value;
+      value = null != object ? getObjectMapper().convertValue(object, pojoType) : value;
     } catch (Exception e) {
       log.error(
           String.format(
@@ -108,7 +97,7 @@ public class JacksonConvertor implements JsonConvertor {
   public <T> T deserialize(InputStream inputStream, Class<T> pojoType) throws ConvertorException {
     T value = null;
     try {
-      value = null != inputStream ? objectMapper.readValue(inputStream, pojoType) : value;
+      value = null != inputStream ? getObjectMapper().readValue(inputStream, pojoType) : value;
     } catch (Exception e) {
       log.error(
           String.format(
@@ -139,7 +128,7 @@ public class JacksonConvertor implements JsonConvertor {
    */
   public String serialize(Object pojo) throws ConvertorException {
     try {
-      return Objects.isNull(pojo) ? null : objectMapper.writeValueAsString(pojo);
+      return Objects.isNull(pojo) ? null : getObjectMapper().writeValueAsString(pojo);
     } catch (Exception e) {
       log.error(String.format("Error during serialisation of object %s.", pojo));
       throw getConvertorException(e);
@@ -160,7 +149,7 @@ public class JacksonConvertor implements JsonConvertor {
     if (Objects.nonNull(inputStream)) {
       try {
         JavaType javaType = getJavaType(groupClass, pojoType);
-        result = (T) objectMapper.readValue(inputStream, javaType);
+        result = (T) getObjectMapper().readValue(inputStream, javaType);
       } catch (Exception e) {
         log.error(
             String.format(
@@ -187,7 +176,7 @@ public class JacksonConvertor implements JsonConvertor {
     if (Objects.nonNull(inputStream)) {
       JavaType javaType = getJavaType(List.class, pojoType);
       try {
-        result = (List<T>) objectMapper.readValue(inputStream, javaType);
+        result = (List<T>) getObjectMapper().readValue(inputStream, javaType);
       } catch (Exception e) {
         log.error(
             String.format(
@@ -212,7 +201,7 @@ public class JacksonConvertor implements JsonConvertor {
     if (Objects.nonNull(object)) {
       JavaType javaType = getJavaType(List.class, pojoType);
       try {
-        result = (List<T>) objectMapper.convertValue(object, javaType);
+        result = (List<T>) getObjectMapper().convertValue(object, javaType);
       } catch (Exception e) {
         log.error(
             String.format(
@@ -252,7 +241,7 @@ public class JacksonConvertor implements JsonConvertor {
     if (Objects.nonNull(jsonString)) {
       JavaType javaType = getJavaType(groupClass, pojoType);
       try {
-        result = objectMapper.readValue(jsonString, javaType);
+        result = getObjectMapper().readValue(jsonString, javaType);
       } catch (Exception e) {
         log.error(
             String.format(
@@ -297,7 +286,7 @@ public class JacksonConvertor implements JsonConvertor {
     if (Objects.nonNull(jsonString)) {
       JavaType javaType = getJavaType(List.class, pojoType);
       try {
-        return (List<T>) objectMapper.readValue(jsonString, javaType);
+        return (List<T>) getObjectMapper().readValue(jsonString, javaType);
       } catch (Exception e) {
         log.error(
             String.format(
@@ -314,5 +303,9 @@ public class JacksonConvertor implements JsonConvertor {
 
     /** The instance. */
     private static JsonConvertor INSTANCE = new JacksonConvertor();
+  }
+
+  private ObjectMapper getObjectMapper() {
+    return JacksonFactory.getInstance().getObjectMapper();
   }
 }

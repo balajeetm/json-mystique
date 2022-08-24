@@ -12,9 +12,6 @@ package com.balajeetm.mystique.samples;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-import springfox.documentation.spring.web.ObjectMapperConfigurer;
 
 /**
  * The Class MystiqueWebSampleApplication.
@@ -31,16 +28,5 @@ public class MystiqueWebSampleApplication {
    */
   public static void main(String[] args) {
     SpringApplication.run(MystiqueWebSampleApplication.class, args);
-  }
-
-  /**
-   * Configurer.
-   *
-   * @return the object mapper configurer
-   */
-  /* This is to fix the bug in springfox*/
-  @Bean
-  public ObjectMapperConfigurer configurer() {
-    return new ObjectMapperConfigurer();
   }
 }

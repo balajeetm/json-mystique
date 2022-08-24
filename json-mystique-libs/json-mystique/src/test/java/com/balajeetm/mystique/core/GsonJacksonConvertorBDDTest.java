@@ -9,18 +9,19 @@
  */
 package com.balajeetm.mystique.core;
 
+import com.balajeetm.mystique.core.module.MystiqueModule;
+import com.balajeetm.mystique.util.jackson.JacksonFactory;
+import com.balajeetm.mystique.util.jackson.convertor.JacksonConvertor;
+import com.balajeetm.mystique.util.json.error.ConvertorException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.gson.JsonElement;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
-
-import com.balajeetm.mystique.core.module.MystiqueModule;
-import com.balajeetm.mystique.util.jackson.convertor.JacksonConvertor;
-import com.balajeetm.mystique.util.json.error.ConvertorException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.google.gson.JsonElement;
 
 /**
  * The Class JsonMystiqueBDDTest.
@@ -35,7 +36,7 @@ public class GsonJacksonConvertorBDDTest {
   /** Instantiates a new gson jackson convertor BDD test. */
   public GsonJacksonConvertorBDDTest() {
     instance = (JacksonConvertor) JacksonConvertor.getInstance();
-    instance.getObjectMapper().registerModule(new MystiqueModule());
+    JacksonFactory.getInstance().getObjectMapper().registerModule(new MystiqueModule());
   }
 
   /** Inits the. */
