@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/balajeetm/json-mystique.svg?branch=master)](https://travis-ci.org/balajeetm/json-mystique)
 
-# Json Mystique
+# Json Mystique change
 
 The umbrella of utilities for Json Manipulation, Json Conversion and Json transformation in Java.<br>
 It is vaguely similar to [lodash's](https://lodash.com/) object manipulation capabilities but adds a lot more punch to
