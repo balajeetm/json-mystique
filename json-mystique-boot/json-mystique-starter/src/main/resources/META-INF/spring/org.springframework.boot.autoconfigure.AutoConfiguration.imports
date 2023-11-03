@@ -1,0 +1,3 @@
+com.balajeetm.mystique.starter.GsonUtilAutoConfig
+com.balajeetm.mystique.starter.JacksonUtilAutoConfig
+com.balajeetm.mystique.starter.MystiqueAutoConfiguration
