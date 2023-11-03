@@ -58,13 +58,13 @@ Json mystique ships a set of libraries written in and for Java, useful for json 
 * The library requires [Java 17+](https://www.oracle.com/java/technologies/downloads/#java17)
 * The library uses [maven](https://maven.apache.org/) for its build management
 * The library can be primarily used as a stand-alone java lib and depends on
-    * [Gson - 2.9.1](https://mvnrepository.com/artifact/com.google.code.gson/gson) for json String to Java pojo
+    * [Gson - 2.11.0](https://mvnrepository.com/artifact/com.google.code.gson/gson) for json String to Java pojo
       transformations
-    * [Jackson - 2.13.3](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind) for json String
+    * [Jackson - 2.17.2](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind) for json String
       to Java pojo transformations
 * For the [Spring](https://spring.io/) fan-boys, Json Mystique also ships a Spring-Starter, which depends on
-    * [Spring Boot - 2.7.3](https://docs.spring.io/spring-boot/docs/2.7.3/reference/htmlsingle/)
-    * [Spring-Framework - 5.3.22](https://docs.spring.io/spring-framework/docs/5.3.22/reference/html/) for IOC
+    * [Spring Boot - 3.3.2](https://docs.spring.io/spring-boot/3.3.2/index.html)
+    * [Spring-Framework - 6.1.11](https://docs.spring.io/spring-framework/docs/6.1.11/reference/html/) for IOC
 
 The actual versions can be found in the [pom file](/pom.xml)
 
