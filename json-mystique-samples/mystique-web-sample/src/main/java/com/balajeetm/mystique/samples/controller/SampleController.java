@@ -23,7 +23,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -54,7 +54,7 @@ public class SampleController {
   /** The rest template. */
   @Autowired RestTemplate restTemplate;
 
-  @Autowired @LocalServerPort String localPort;
+  @Autowired ServerProperties serverProperties;
 
   @Qualifier("jsonLever")
   @Autowired
@@ -110,7 +110,7 @@ public class SampleController {
             headers,
             HttpMethod.GET,
             URI.create(
-                String.format("http://localhost:%s/mystique/gson/serialise?msg=test", localPort)));
+                String.format("http://localhost:%s/mystique/gson/serialise?msg=test", serverProperties.getPort())));
     ResponseEntity<JsonElement> exchange = restTemplate.exchange(requestEntity, JsonElement.class);
     return exchange;
   }
