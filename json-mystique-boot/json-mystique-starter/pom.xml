@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.balajeetm.mystique</groupId>
 		<artifactId>json-mystique-boot</artifactId>
-		<version>3.0.2-SNAPSHOT</version>
+		<version>3.0.0</version>
 	</parent>
 
 	<artifactId>json-mystique-starter</artifactId>
