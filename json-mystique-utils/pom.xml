@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>com.balajeetm.mystique</groupId>
 		<artifactId>json-mystique-root</artifactId>
-		<version>3.0.0</version>
+		<version>3.0.1-SNAPSHOT</version>
 	</parent>
 
 	<modules>
