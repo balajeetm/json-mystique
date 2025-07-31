@@ -10,17 +10,15 @@
  */
 package com.balajeetm.mystique.util.gson.convertor;
 
+import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.Lists;
-import com.google.gson.internal.$Gson$Types;
 
 /**
  * The Class GsonParametrizedType.
@@ -114,10 +112,10 @@ public final class GsonParametrizedType implements ParameterizedType, Serializab
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	@Override
-	public boolean equals(Object other) {
-		return other instanceof ParameterizedType && $Gson$Types.equals(this, (ParameterizedType) other);
-	}
+  @Override
+  public boolean equals(Object other) {
+    return other instanceof ParameterizedType && parameterizedTypeEquals(this, (ParameterizedType) other);
+  }
 
 	/*
 	 * (non-Javadoc)
@@ -151,4 +149,29 @@ public final class GsonParametrizedType implements ParameterizedType, Serializab
 	private static int hashCodeOrZero(Object o) {
 		return o != null ? o.hashCode() : 0;
 	}
+
+  /**
+   * Compares two {@link ParameterizedType} instances for semantic equality.
+   *
+   * <p>This method checks that both types have the same:
+   *
+   * <ul>
+   *   <li>Owner type (e.g., enclosing class)
+   *   <li>Raw type (e.g., List, Map)
+   *   <li>Actual type arguments (e.g., List&lt;String&gt; vs List&lt;Integer&gt;)
+   * </ul>
+   *
+   * This is functionally equivalent to the internal behavior of Gson's {@code $Gson$Types.equals}
+   * and can be used as a safe replacement in modern Java or Gson-based code.
+   *
+   * @param a the first {@code ParameterizedType} to compare
+   * @param b the second {@code ParameterizedType} to compare
+   * @return {@code true} if both parameterized types are structurally equal; {@code false}
+   *     otherwise
+   */
+  private boolean parameterizedTypeEquals(ParameterizedType a, ParameterizedType b) {
+    return Objects.equals(a.getOwnerType(), b.getOwnerType())
+        && Objects.equals(a.getRawType(), b.getRawType())
+        && Arrays.equals(a.getActualTypeArguments(), b.getActualTypeArguments());
+  }
 }
