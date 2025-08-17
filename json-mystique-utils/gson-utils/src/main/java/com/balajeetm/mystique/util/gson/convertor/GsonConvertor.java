@@ -10,6 +10,8 @@
  */
 package com.balajeetm.mystique.util.gson.convertor;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import com.balajeetm.mystique.util.gson.GsonFactory;
 import com.balajeetm.mystique.util.gson.lever.JsonLever;
 import com.balajeetm.mystique.util.json.convertor.JsonConvertor;
@@ -28,8 +30,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.ArrayUtils;
-
-import static com.google.gson.internal.$Gson$Preconditions.checkArgument;
 
 /** The Class GsonConvertor. */
 @Slf4j
