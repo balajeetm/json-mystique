@@ -5,7 +5,7 @@
     <!-- Basics -->
     <groupId>com.balajeetm.mystique</groupId>
     <artifactId>json-mystique-root</artifactId>
-    <version>3.1.1-SNAPSHOT</version>
+    <version>3.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>json-mystique-root</name>
@@ -337,15 +337,15 @@
 
     <distributionManagement>
         <repository>
-            <id>OSSRH</id>
-            <name>OSSRH Release Repository</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+            <id>CENTRAL</id>
+            <name>Central Sonatype Release Repository</name>
+            <url>https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2</url>
         </repository>
         <snapshotRepository>
-            <id>OSSRH</id>
-            <name>OSSRH Snapshot Repository</name>
+            <id>CENTRAL</id>
+            <name>Central Sonatype Snapshot Repository</name>
             <uniqueVersion>true</uniqueVersion>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <url>https://central.sonatype.com/repository/maven-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -393,8 +393,8 @@
                         <version>1.6.13</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>OSSRH</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <serverId>CENTRAL</serverId>
+                            <nexusUrl>https://ossrh-staging-api.central.sonatype.com/</nexusUrl>
                             <autoReleaseAfterClose>false</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
